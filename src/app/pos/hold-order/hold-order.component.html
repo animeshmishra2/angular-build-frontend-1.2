@@ -1,0 +1,91 @@
+<app-header class="no-print"></app-header>
+<div class="container">
+  <div class="main-card">
+    <div
+      fxLayout="row"
+      fxLayoutGap="20px"
+      class="outline-div"
+      fxLayoutAlign="start start"
+    >
+      <div fxFlex="100" fxLayout="column">
+        <div fxFlex fxLayoutAlign="space-between center" class="orderNum">
+          <div fxFlex="40" class="h1-txt">
+            <a appBackButton><mat-icon>arrow_back</mat-icon></a>
+            Orders Kept On Hold</div>
+        </div>
+        <div class="margin-top-25"></div>
+        <div fxFlex fxLayout="column">
+          <div fxLayout="row wrap" fxLayoutGap="30px">
+            <div class="items" *ngFor="let order of orders; let i = index">
+              <!-- <div class="prod-cart-item center mat-elevation-z2" fxLayout="column">
+                                <div fxFlex class="prod-name" [title]="order.prod_name">
+                                    Total Quantity: {{order.total_quantity}}
+                                </div>
+                                <div fxFlex class="prod-price" fxLayout="row">
+                                    <div fxFlex class="new-price">
+                                        &#8377; {{order.total_price}}
+                                    </div>
+                                </div>
+                                <div fxFlex class="cart-stat center">
+                                    <button fxFlex mat-raised-button color="primary">
+                                        Move to Cart</button>
+                                </div>
+                            </div> -->
+
+              <mat-card class="hold-card">
+                <mat-card-header>
+                  <div mat-card-avatar class="hold-header-image"></div>
+                  <mat-card-title
+                    >Order Quantity: {{ order.total_quantity }}</mat-card-title
+                  >
+                  <mat-card-subtitle
+                    >Order No: #{{
+                      order.idcustomer_order_temp
+                    }}</mat-card-subtitle
+                  >
+                </mat-card-header>
+                <!-- <img mat-card-image src="../../../assets/icons/hold-order.png" alt="order" style="width: 150px;"> -->
+                <mat-card-content>
+                  <h3>
+                    Order Amount: &#8377; {{ order.total_price | number }}
+                  </h3>
+                  <p>
+                    <mat-card-subtitle
+                      >Last Modified: {{ getFormattedDate(order.updated_at) }}
+                    </mat-card-subtitle>
+                  </p>
+                </mat-card-content>
+                <mat-card-actions>
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    (click)="moveToCart(order)"
+                  >
+                    Move to Cart
+                  </button>
+                  <button
+                    mat-raised-button
+                    color="warn"
+                    (click)="discardOrder(order.idcustomer_order_temp)"
+                  >
+                    Discard
+                  </button>
+                </mat-card-actions>
+              </mat-card>
+            </div>
+
+            <div class="items" *ngIf="orders.length == 0"></div>
+          </div>
+
+          <div
+            *ngIf="orders.length == 0"
+            style="height: 550px; text-align: center"
+          >
+            <img src="../../../assets/icons/nothing-found.png" width="400px" />
+            <h2>No Orders on Hold for Today.</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

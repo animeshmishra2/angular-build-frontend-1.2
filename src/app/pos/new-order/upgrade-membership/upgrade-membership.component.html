@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>Upgrade Membership</h1>
+<form [formGroup]="customForm" (ngSubmit)="onSubmit()">
+    <div mat-dialog-content>
+        <mat-form-field appearance="fill">
+            <mat-label>Membership Type</mat-label>
+            <mat-select formControlName="membership">
+                <mat-option *ngFor="let plan of membership" [value]="plan.id">{{plan.descriptiom}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions>
+    <button mat-raised-button color="primary" (click)="onDismiss(false)">Cancel</button>
+    <button mat-raised-button color="warn" [disabled]="submitted">Upgrade</button>
+    </div>
+</form>

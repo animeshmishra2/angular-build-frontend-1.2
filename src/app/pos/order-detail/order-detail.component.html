@@ -1,0 +1,148 @@
+<app-header></app-header>
+<div class="adm-container">
+  <div class="main-card">
+    <div fxLayout="row" fxLayoutGap="20px" class="outline-div" fxLayoutAlign="start start">
+      <div fxFlex="100" fxLayout="column" fxLayoutGap="10px">
+        <div fxFlex fxLayoutAlign="space-between center" class="orderNum">
+          <div fxFlex="40" class="h1-txt">
+            <a appBackButton><mat-icon>arrow_back</mat-icon></a>
+            Orders Detail
+          </div>
+          <div fxFlex="60" fxLayoutAlign="end center" fxLayoutGap="10px">
+            <button mat-raised-button color="primary" (click)="printReceipt()" *ngIf="!isCancel">Print Bill</button>
+            <!-- <button mat-raised-button color="warn" (click)="cancelOrder(true)" *ngIf="isCancel">Cancel Complete
+              Order</button> -->
+            <button mat-raised-button color="accent" (click)="cancelOrder(false)" *ngIf="isCancel"
+              [disabled]="selection.selected.length == 0">Cancel Selected
+              Items</button>
+          </div>
+        </div>
+        <table mat-table [dataSource]="dataSource" matSort>
+          <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef [hidden]="!isCancel">
+              <!-- <mat-checkbox (change)="$event ? toggleAllRows() : null" [checked]="selection.hasValue() && isAllSelected()"
+              [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+            </mat-checkbox> -->
+            </th>
+            <td mat-cell *matCellDef="let row" fxLayoutGap="5px" [hidden]="!isCancel">
+              <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)" [disabled]="returnActive(row)">
+              </mat-checkbox>
+              <mat-form-field fxFlex style="width: 50px; padding-right: 0px;"
+                *ngIf="selection.isSelected(row) && row.quantity > 1">
+                <mat-label>Can Qty</mat-label>
+                <input matInput [placeholder]="row.quantity" [(ngModel)]="row.cancel_quantity" autocomplete="off"
+                  [disabled]="row.quantity == 1" [max]="row.quantity" type="number" />
+              </mat-form-field>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="brand">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Brand</th>
+            <td mat-cell *matCellDef="let row">
+              {{ row.brand }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="prod_name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Product</th>
+            <td mat-cell *matCellDef="let row" [title]="row.prod_name">{{ row.prod_name.substring(0,15) }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Description
+            </th>
+            <td mat-cell *matCellDef="let row" [title]="row.remark">{{ row.remark.substring(0,15) }}</td>
+          </ng-container>
+          <ng-container matColumnDef="hsn">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Barcode</th>
+            <td mat-cell *matCellDef="let row">
+              {{ row.barcode }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="total_quantity">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Qty</th>
+            <td mat-cell *matCellDef="let row">
+              {{ row.total_quantity }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="total_discount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Discount</th>
+            <td mat-cell *matCellDef="let row">
+              {{ row.total_discount }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="quantity">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>QTY</th>
+            <td mat-cell *matCellDef="let row">
+              {{ row.quantity }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="sgst_percent">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>SGST% / TSGST</th>
+            <td mat-cell *matCellDef="let row">
+              {{ row.sgst_percent }} / {{ row.total_sgst | number }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="cgst_percent">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>CGST%</th>
+            <td mat-cell *matCellDef="let row">
+              {{ row.cgst_percent }} / {{ row.total_cgst | number }}
+            </td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="discount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Discount</th>
+            <td mat-cell *matCellDef="let row">
+              {{ row.discount | number }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="total_price">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Total Price
+            </th>
+            <td mat-cell *matCellDef="let row">
+              {{ row.total_price | number }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="unit_mrp">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>MRP</th>
+            <td mat-cell *matCellDef="let row">
+              {{ row.unit_mrp | number }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="unit_selling_price">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Sell Price</th>
+            <td mat-cell *matCellDef="let row">
+              {{ row.unit_selling_price | number }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="pkg">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Package Detail</th>
+            <td mat-cell *matCellDef="let row">
+              {{ row.unit_selling_price | number }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="return_exch">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Retun/Exch</th>
+            <td mat-cell *matCellDef="let row">
+              {{ row.return_type }} / {{ row.return_duration }}
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data found</td>
+          </tr>
+        </table>
+        <br />
+        <br />
+      </div>
+      <br>
+    </div>
+  </div>
+</div>

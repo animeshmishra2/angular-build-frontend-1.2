@@ -1,0 +1,50 @@
+<!-- your-component.component.html -->
+
+<form [formGroup]="formGroup" class="dialog-form">
+    <!-- MatFormField with MatInput -->
+    <mat-form-field class="form-field">
+        <mat-label>Mrp Margin</mat-label>
+        <input matInput placeholder="MRP Margin" formControlName="mrp_margin">
+        <mat-error *ngIf="mrp_margin.hasError('required')">
+            Field is required
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="form-field">
+        <mat-label>Instance Price</mat-label>
+        <input matInput placeholder="Instance Price" formControlName="instant_price">
+        <mat-error *ngIf="instant_price.hasError('required')">
+          Field is required
+        </mat-error>
+    </mat-form-field>
+
+      <mat-form-field class="form-field">
+        <mat-label>Product</mat-label>
+        <input matInput placeholder="Product" formControlName="product">
+        <mat-error *ngIf="product.hasError('required')">
+          Field is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="form-field">
+        <mat-label>Co Partner</mat-label>
+        <input matInput placeholder="Co Partner" formControlName="copartner">
+        <mat-error *ngIf="copartner.hasError('required')">
+          Field is required
+        </mat-error>
+      </mat-form-field>
+  
+      <mat-form-field class="form-field">
+        <mat-label>Land</mat-label>
+        <input matInput placeholder="Land" formControlName="land">
+        <mat-error *ngIf="land.hasError('required')">
+          Field is required
+        </mat-error>
+      </mat-form-field>
+    <!-- Add more fields or buttons if needed -->
+  
+    <!-- Example button to retrieve input field value -->
+    <button (click)="onDialogClose()">Ok</button>
+    
+  </form>
+  

@@ -1,0 +1,65 @@
+<div fxFlex="100" class="inner-card mat-elevation-z1" fxLayout="column">
+    <div fxFlex="10" class="h1-txt">
+        {{(this.row.idcategory) ? "Update" : "Add New"}} Category
+    </div>
+    <div class="margin-top-25"></div>
+    <form fxLayout="column" [formGroup]="lForm" (ngSubmit)="onSubmit()" fxFlex="100">
+        <div fxLayout="column" fxLayoutGap="40px">
+            <div fxFlex fxLayout="row" fxLayoutGap="10px">
+                <mat-form-field fxFlex>
+                    <mat-label>Name</mat-label>
+                    <input matInput placeholder="Enter name" formControlName="name" autocomplete="off" required>
+                    <mat-error *ngIf="!lForm.controls['name'].valid && lForm.controls['name'].touched">
+                        Enter a valid name.
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                    <mat-label>Status</mat-label>
+                    <mat-select formControlName="status">
+                        <mat-option value="1" style="color: green">Active</mat-option>
+                        <mat-option value="0" style="color: red">In-Active</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div fxFlex fxLayout="row" fxLayoutGap="10px">
+                <mat-form-field fxFlex>
+                    <mat-label>Description</mat-label>
+                    <textarea matInput placeholder="Enter Detail" formControlName="description" autocomplete="off"
+                        required></textarea>
+                    <mat-error *ngIf="!lForm.controls['description'].valid && lForm.controls['description'].touched">
+                        Enter valid description.
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div fxFlex fxLayout="row" fxLayoutGap="10px">
+                <mat-form-field fxFlex>
+                    <mat-label>Ret & Exch Applicable</mat-label>
+                    <mat-select formControlName="has_return_rule">
+                        <mat-option value="Y">Yes</mat-option>
+                        <mat-option value="N">No</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                    <mat-label>Return or Exchange</mat-label>
+                    <mat-select formControlName="ret_type" [disabled]="!(lForm.controls['has_return_rule'].value == 'Y')">
+                        <mat-option value="RET">Return</mat-option>
+                        <mat-option value="EXCH">Exchange</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                    <mat-label>Return or Exchange Duration</mat-label>
+                    <input matInput placeholder="Enter days" formControlName="ret_duration" type="number" min="0"
+                        autocomplete="off" [disabled]="!(lForm.controls['has_return_rule'].value == 'Y')">
+                </mat-form-field>
+            </div>
+
+        </div>
+        <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
+            <button [disabled]="loading || lForm.invalid" mat-raised-button color="primary" type="submit">
+                {{(this.row.idcategory) ? "Update" : "Add New"}}
+            </button>
+            <button mat-raised-button type="button" (click)="cancel()">Cancel</button>
+        </div>
+    </form>
+</div>

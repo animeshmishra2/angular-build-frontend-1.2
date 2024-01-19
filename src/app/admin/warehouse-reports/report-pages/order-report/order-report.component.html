@@ -1,0 +1,103 @@
+<app-header></app-header>
+<div class="wh-reports-container">
+    <div class="main-card">
+        <div class="h1-txt p-2">
+            <a appBackButton><mat-icon>arrow_back</mat-icon></a>
+            Order Report
+        </div>
+        <div class="p-2">
+            <p-table #dt1 class="p-2" [value]="tableData" [tableStyle]="{ 'min-width': '50rem' }"
+                styleClass="p-datatable-sm">
+                <ng-template pTemplate="caption">
+                    <div class="flex gap-2">
+                        <button pButton label="Clear" class="p-button-outlined"
+                            icon="pi pi-filter-slash" (click)="dt1.clear()"></button>
+                        <p-calendar [(ngModel)]="dateRange" selectionMode="range"
+                            placeholder="Choose your date range" [readonlyInput]="true"
+                            [appendTo]="'body'"></p-calendar>
+                        <button pButton label="Search" class="p-button-outlined p-button-success"
+                            icon="pi pi-search" (click)="filterByDate()"></button>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Order No</th>
+                        <th>Purchase Date</th>
+                        <th>Customer name</th>
+                        <th>Counter Name</th>
+                        <th>Biller name</th>
+                        <th>Discount Coupon</th>
+                        <th>Profit</th>
+                        <th>Action</th>
+                    </tr>
+                    <tr>
+                        <th><p-columnFilter type="text" field="Order_No"></p-columnFilter></th>
+                        <th><p-columnFilter type="text" field="Date"></p-columnFilter></th>
+                        <th><p-columnFilter type="text" field="Customer_name"></p-columnFilter></th>
+                        <th><p-columnFilter type="text" field="Counter_Name"></p-columnFilter></th>
+                        <th><p-columnFilter type="text" field="Biller_name"></p-columnFilter></th>
+                        <th><p-columnFilter type="text" field="Discount_Coupon"></p-columnFilter>
+                        </th>
+                        <th><p-columnFilter type="text" field="Profit_per_bill"></p-columnFilter>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-product let-i="rowIndex">
+                    <p-menu #menu [model]="actionMenuItems" [popup]="true" [appendTo]="'body'"
+                        [baseZIndex]="10000"></p-menu>
+                    <tr *ngIf="i === 0">
+                        <td><b>Total</b></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><b>{{ calculateTotalQuantity() }}</b></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>{{ product.Order_No }}</td>
+                        <td>{{ product.Date | date:'dd/MM/yyyy'}}</td>
+                        <td>{{ product.Customer_name }}</td>
+                        <td>{{ product.Counter_Name }}</td>
+                        <td>{{ product.Biller_name }}</td>
+                        <td>{{ product.Discount_Coupon }}</td>
+                        <td>{{ product.Profit_per_bill }}</td>
+                        <td><button pButton type="button" icon="pi pi-ellipsis-v"
+                                (click)="menu.toggle($event);passEvent(product)"
+                                class="p-button-outlined p-button-rounded p-button-sm"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+
+<p-dialog [(visible)]="showOrder" [modal]="true" [style]="{ width: '50vw' }"
+    [draggable]="false" [resizable]="false">
+    <p-table [value]="selectedProducts">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Order No</th>
+                <th>Purchase Date</th>
+                <th>Customer name</th>
+                <th>Counter Name</th>
+                <th>Biller name</th>
+                <th>Discount Coupon</th>
+                <th>Profit</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+            <tr>
+                <td>{{ product.Order_No }}</td>
+                <td>{{ product.Date | date:'dd/MM/yyyy'}}</td>
+                <td>{{ product.Customer_name }}</td>
+                <td>{{ product.Counter_Name }}</td>
+                <td>{{ product.Biller_name }}</td>
+                <td>{{ product.Discount_Coupon }}</td>
+                <td>{{ product.Profit_per_bill }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-dialog>

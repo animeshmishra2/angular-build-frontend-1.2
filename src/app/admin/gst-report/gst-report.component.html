@@ -1,0 +1,136 @@
+<app-header></app-header>
+<div class="wh-reports-container">
+    <!-- <p-button (click)="exportExcelTest()" label="create"></p-button> -->
+    <p-dropdown [options]="gstReports" class="p-1" [(ngModel)]="selectedReport"
+        placeholder="Select a GST Report"></p-dropdown>
+
+    <div class="report-container p-1">
+        <!-- <div class="border-1 border-900 bg-white gst3B"> -->
+        <div *ngIf="selectedReport == 'GST 3B'" class="minus-margin">
+            <div class="text-right">
+                <button pButton label="Export Excel" icon="pi pi-file-excel"
+                    class="p-button-success p-button-outlined bg-white mb-3"
+                    (click)="generateGST3B()"></button>
+            </div>
+            <div class="border-1 border-900 bg-white gst3B">
+                <table>
+                    <tr *ngFor="let row of excelData">
+                        <td *ngFor="let cell of row">
+                            {{ cell }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div *ngIf="selectedReport == 'GST 1RDetailed'">
+
+            <div class="flex gap-2 justify-content-end float">
+                <button pButton label="Export Excel" icon="pi pi-file-excel"
+                    class="p-button-success p-button-outlined bg-white"
+                    (click)="exportExcelGeneric()"></button>
+                <!-- <button pButton label="Export PDF" icon="pi pi-file-pdf"
+                    (click)="exportPdfGeneric()"
+                    class="p-button-danger p-button-outlined bg-white"></button> -->
+            </div>
+            <p-table [value]="invoiceData" responsiveLayout="scroll"
+                styleClass="p-datatable-sm p-datatable-gridlines" [paginator]="true" [rows]="7"
+                [showCurrentPageReport]="true" class="m-1" [tableStyle]="{ 'min-width': '50rem' }"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [rowsPerPageOptions]="[5, 10, 20]">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th rowspan="2">S.No</th>
+                        <th rowspan="2">Desc</th>
+                        <th rowspan="2">GSTIN</th>
+                        <th rowspan="2">Invoice Date</th>
+                        <th rowspan="2">Invoice No.</th>
+                        <th rowspan="2">Invoice Value</th>
+                        <th rowspan="2">Local/Central</th>
+                        <th rowspan="2">Invoice Type: HSN</th>
+                        <th rowspan="2">Code</th>
+                        <th rowspan="2">Quantity</th>
+                        <th rowspan="2">Amount</th>
+                        <th rowspan="2">Taxable Amount</th>
+                        <th class="text-center" colspan="2">SGST</th>
+                        <th class="text-center" colspan="2">CGST</th>
+                        <th class="text-center" colspan="2">IGST</th>
+                        <th rowspan="2">Cess</th>
+                        <th rowspan="2">Total GST</th>
+                    </tr>
+                    <tr class="text-center">
+                        <th>%age</th>
+                        <th>Amount</th>
+                        <th>%age</th>
+                        <th>Amount</th>
+                        <th>%age</th>
+                        <th>Amount</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-product>
+                    <tr>
+                        <td>{{ product.SNo }}</td>
+                        <td>{{ product.Desc }}</td>
+                        <td>{{ product.GSTIN }}</td>
+                        <td>{{ product.InvoiceDate }}</td>
+                        <td>{{ product.InvoiceNo }}</td>
+                        <td>{{ product.InvoiceValue }}</td>
+                        <td>{{ product.LocalCentral }}</td>
+                        <td>{{ product.InvoiceType }}</td>
+                        <td>{{ product.HSNCode }}</td>
+                        <td>{{ product.Quantity }}</td>
+                        <td>{{ product.Amount }}</td>
+                        <td>{{ product.TaxableAmount }}</td>
+                        <td>{{ product.SGST.Percentage }}</td>
+                        <td>{{ product.SGST.Amount }}</td>
+                        <td>{{ product.CGST.Percentage }}</td>
+                        <td>{{ product.CGST.Amount }}</td>
+                        <td>{{ product.IGST.Percentage }}</td>
+                        <td>{{ product.IGST.Amount }}</td>
+                        <td>{{ product.Cess }}</td>
+                        <td>{{ product.TotalGST }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <div *ngIf="selectedReport == 'GST 1RSummary'">
+            <div class="flex gap-2 justify-content-end float">
+                <button pButton label="Export Excel" icon="pi pi-file-excel"
+                    class="p-button-success p-button-outlined bg-white" (click)="generateGSTSummary()"></button>
+                <button pButton label="Export PDF" icon="pi pi-file-pdf"
+                    class="p-button-danger p-button-outlined bg-white" [disabled]="true"></button>
+            </div>
+            <p-table [value]="invoiceSummary" responsiveLayout="scroll"
+                styleClass="p-datatable-sm p-datatable-gridlines" class="m-1"
+                [tableStyle]="{ 'min-width': '50rem' }">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Description</th>
+                        <th>Count</th>
+                        <th>Taxable</th>
+                        <th>SGST</th>
+                        <th>CGST</th>
+                        <th>IGST</th>
+                        <th>Cess</th>
+                        <th>Total GST</th>
+                        <th>Invoice Amount</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-product>
+                    <tr>
+                        <td>{{ product.Description }}</td>
+                        <td>{{ product.Count }}</td>
+                        <td>{{ product.Taxable }}</td>
+                        <td>{{ product.SGST }}</td>
+                        <td>{{ product.CGST }}</td>
+                        <td>{{ product.IGST }}</td>
+                        <td>{{ product.Cess }}</td>
+                        <td>{{ product['Total GST'] }}</td>
+                        <td>{{ product['Invoice Amount'] }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

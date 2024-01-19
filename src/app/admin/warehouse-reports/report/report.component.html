@@ -1,0 +1,215 @@
+<app-header></app-header>
+<div class="wh-reports-container">
+    <div class="main-card">
+        <div fxLayout="row" fxLayoutGap="20px" class="outline-div"
+            fxLayoutAlign="space-around start">
+            <div fxFlex="100" fxLayout="column">
+                <div fxFlex fxLayoutAlign="space-between center" class="orderNum">
+                    <div class="h1-txt">
+                        <a appBackButton><mat-icon>arrow_back</mat-icon></a>
+                        {{ ReportName || 'Report'}}
+                    </div>
+                    <div fxFlex="31.5" class="info-text" fxLayoutGap="10px"
+                        fxLayoutAlign="center center">
+                        <!-- <button mat-raised-button color="primary" (click)="editItem({})">
+                            <mat-icon>add_circle_outline</mat-icon>
+                            Add New
+                        </button> -->
+
+                    </div>
+                </div>
+                <div fxFlex fxLayout="row">
+                    <div fxFlex="98" fxLayout="column" class="leftCol">
+                        <div fxFlex="30" fxLayoutGap="1rem">
+                            <mat-form-field appearance="standard" fxFlex="33.5">
+                                <mat-label>Filter</mat-label>
+                                <input matInput (keyup)="applyFilter($event)"
+                                    placeholder="Search Here" #input autocomplete="off">
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" fxFlex="13.5">
+                                <mat-label>Choose a From date</mat-label>
+                                <input matInput [matDatepicker]="fpicker" readonly [max]="todayDate"
+                                    [(ngModel)]="from_date" />
+                                <mat-hint>MM/DD/YYYY</mat-hint>
+                                <mat-datepicker-toggle matSuffix
+                                    [for]="fpicker"></mat-datepicker-toggle>
+                                <mat-datepicker #fpicker></mat-datepicker>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" fxFlex="13.5">
+                                <mat-label>Choose a To date</mat-label>
+                                <input matInput [matDatepicker]="tpicker" readonly [max]="todayDate"
+                                    [(ngModel)]="to_date" />
+                                <mat-hint>MM/DD/YYYY</mat-hint>
+                                <mat-datepicker-toggle matSuffix
+                                    [for]="tpicker"></mat-datepicker-toggle>
+                                <mat-datepicker #tpicker></mat-datepicker>
+                            </mat-form-field>
+
+                            <div class="flex gap-2">
+                                <button mat-raised-button class="basic-button resizebtn"
+                                    (click)="tableFilter()">Search</button>
+                                <button mat-raised-button class="success-button" class="resizebtn"
+                                    (click)="exportExcel()">
+                                    <mat-icon>article</mat-icon>
+                                    Export Excel
+                                </button>
+                                <button mat-raised-button color="error" class="resizebtn"
+                                    (click)="exportPdf()">
+                                    <mat-icon>picture_as_pdf</mat-icon>
+                                    Export PDF
+                                </button>
+                            </div>
+                            <!-- <button mat-raised-button class="basic-button resizebtn" (click)="tableFilter()">Search</button>
+                            <button mat-raised-button class="success-button" class="resizebtn" (click)="exportExcel()">
+                                <mat-icon>article</mat-icon>
+                                Export Excel
+                            </button>
+                            <button mat-raised-button color="error" class="resizebtn" (click)="exportPdf()">
+                                <mat-icon>picture_as_pdf</mat-icon>
+                                Export PDF
+                            </button> -->
+                        </div>
+
+                        <div class="mat-elevation-z2" style="margin-bottom: 2rem;" fxFlex>
+                            <!-- <table mat-table [dataSource]="dataSource" matSort>
+
+                                <ng-container matColumnDef="select">
+                                    <th mat-header-cell *matHeaderCellDef>
+                                        <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                                            [checked]="selection.hasValue() && isAllSelected()"
+                                            [indeterminate]="selection.hasValue() && !isAllSelected()">
+                                        </mat-checkbox>
+                                    </th>
+                                    <td mat-cell *matCellDef="let row">
+                                        <mat-checkbox (click)="$event.stopPropagation()"
+                                            (change)="$event ? selection.toggle(row) : null"
+                                            [checked]="selection.isSelected(row)">
+                                        </mat-checkbox>
+                                    </td>
+                                </ng-container>
+
+                                <ng-container *ngFor="let column of DisplayedColumns">
+                                    <ng-container matColumnDef="{{column}}">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            {{column | titleCase}} </th>
+                                        <td mat-cell *matCellDef="let row"> {{ row[column] }}
+                                        </td>
+                                    </ng-container>
+                                </ng-container>
+
+                                <ng-container matColumnDef="name">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+                                    <td mat-cell *matCellDef="let row"> {{row.name}}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="email">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+                                    <td mat-cell *matCellDef="let row"> {{row.email}} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="contact">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Contact </th>
+                                    <td mat-cell *matCellDef="let row"> {{row.contact}} </td>
+                                </ng-container> -->
+
+                            <!-- <ng-container matColumnDef="action" *ngIf="true">
+                                    <th mat-header-cell *matHeaderCellDef> Action </th>
+                                    <td mat-cell *matCellDef="let row">
+                                        <button mat-mini-fab color="primary" aria-label="Edit" (click)="editItem(row)">
+                                            <mat-icon>edit</mat-icon>
+                                        </button> &nbsp;
+                                        <button mat-mini-fab color="warn" aria-label="Delete">
+                                            <mat-icon>delete</mat-icon>
+                                        </button>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="updatedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: updatedColumns;"></tr>
+                                <tr class="mat-row" *matNoDataRow>
+                                    <td class="mat-cell" colspan="4">No data matching the filter
+                                        "{{input.value}}"</td>
+                                </tr>
+                            </table> -->
+                            <!-- <mat-paginator [pageSizeOptions]="[5, 10]"
+                                aria-label="Select page of results">
+                            </mat-paginator> -->
+                            <!-- <p-table [value]="tableData"
+                                [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
+                                [tableStyle]="{ 'min-width': '50rem' }"
+                                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                                [rowsPerPageOptions]="[10, 25, 50]">
+                                [(selection)]="selectedRecords"
+                                dataKey="id"
+                                <ng-template pTemplate="caption">
+                                    <p-multiSelect [options]="cols" [(ngModel)]="exportColumns"
+                                        optionLabel="title"
+                                        selectedItemsLabel="{0} columns selected"
+                                        [style]="{'min-width': '200px'}"
+                                        placeholder="Choose Columns"></p-multiSelect>
+                                </ng-template>
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th style="width: 4rem">
+                                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                        </th>
+                                        <th *ngFor="let col of exportColumns">
+                                            {{col.title | titleCase}}
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-product>
+                                    <tr>
+                                        <td>
+                                            <p-tableCheckbox [value]="product"></p-tableCheckbox>
+                                        </td>
+                                        <td *ngFor="let col of exportColumns">
+                                            {{product[col.dataKey]}}
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table> -->
+                            <p-table [value]="tableData" [(selection)]="selectedRecords" [paginator]="true"
+                            [rows]="5"
+                            [showCurrentPageReport]="true"
+                            [tableStyle]="{ 'min-width': '50rem' }"
+                            currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+                            [rowsPerPageOptions]="[10, 25, 50]">
+                                <ng-template pTemplate="caption">
+                                    <p-multiSelect [options]="cols" [(ngModel)]="exportColumns"
+                                        optionLabel="title"
+                                        selectedItemsLabel="{0} columns selected"
+                                        [style]="{'min-width': '200px'}"
+                                        placeholder="Choose Columns"></p-multiSelect>
+                                </ng-template>
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th style="width: 3rem">
+                                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                        </th>
+                                        <th *ngFor="let col of exportColumns">
+                                            {{col.title | titleCase}}
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-product>
+                                    <tr>
+                                        <td>
+                                            <p-tableCheckbox [value]="product"></p-tableCheckbox>
+                                        </td>
+                                        <td *ngFor="let col of exportColumns">
+                                            {{product[col.title]}}
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

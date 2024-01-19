@@ -1,0 +1,93 @@
+<div fxFlex="100" class="inner-card mat-elevation-z1" fxLayout="column">
+    <div fxFlex="10" class="h1-txt">
+        {{(this.row.idproduct_master) ? "Update" : "Add New"}} Product to Product Master
+    </div>
+    <div class="margin-top-25"></div>
+    <form fxLayout="column" [formGroup]="lForm" (ngSubmit)="onSubmit()" fxFlex="100">
+        <div fxLayout="column" fxLayoutGap="40px">
+            <div fxFlex fxLayout="row" fxLayoutGap="10px">
+                <mat-form-field fxFlex>
+                    <mat-label>Name</mat-label>
+                    <input matInput placeholder="Enter name" formControlName="name" autocomplete="off" required>
+                    <mat-error *ngIf="!lForm.controls['name'].valid && lForm.controls['name'].touched">
+                        Enter a valid name.
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                    <mat-label>Barcode</mat-label>
+                    <input matInput placeholder="Enter Barcode" formControlName="bar" autocomplete="off" required>
+                    <mat-error *ngIf="!lForm.controls['bar'].valid && lForm.controls['bar'].touched">
+                        Enter a valid barcode.
+                    </mat-error>
+                </mat-form-field>
+            </div> 
+            <div fxFlex fxLayout="row" fxLayoutGap="10px">
+                <mat-form-field fxFlex>
+                    <mat-label>Category</mat-label>
+                    <mat-select formControlName="category" (selectionChange)="catChanges($event.value)">
+                        <mat-option *ngFor="let cat of cats" [value]="cat.idcategory" >{{cat.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                    <mat-label>Sub Category</mat-label>
+                    <mat-select formControlName="subcategory" (selectionChange)="scatChanges($event.value)">
+                        <mat-option *ngFor="let scat of scats" [value]="scat.idsub_category" >{{scat.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                    <mat-label>Sub Sub Category</mat-label>
+                    <mat-select formControlName="subsubcategory" >
+                        <mat-option *ngFor="let sscat of sscats" [value]="sscat.idsub_sub_category" >{{sscat.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div fxFlex fxLayout="row" fxLayoutGap="10px">
+                <mat-form-field fxFlex>
+                    <mat-label>Barand</mat-label>
+                    <mat-select formControlName="brand" >
+                        <mat-option *ngFor="let brand of brands" [value]="brand.idbrand" >{{brand.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                    <mat-label>CGST</mat-label>
+                    <input type="number" matInput placeholder="Enter CGST" formControlName="cgst" autocomplete="off" required>
+                    <mat-error *ngIf="!lForm.controls['cgst'].valid && lForm.controls['cgst'].touched">
+                        Enter a valid CGST.
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                    <mat-label>SGST</mat-label>
+                    <input matInput placeholder="Enter SGST" formControlName="sgst" autocomplete="off" required>
+                    <mat-error *ngIf="!lForm.controls['sgst'].valid && lForm.controls['sgst'].touched">
+                        Enter a valid SGST.
+                    </mat-error>
+                </mat-form-field>
+            </div> 
+
+            <div fxFlex fxLayout="row" fxLayoutGap="10px">
+                <mat-form-field fxFlex>
+                    <mat-label>Description</mat-label>
+                    <textarea matInput placeholder="Enter Detail" formControlName="description" autocomplete="off"
+                        required></textarea>
+                    <mat-error *ngIf="!lForm.controls['description'].valid && lForm.controls['description'].touched">
+                        Enter valid description.
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                    <mat-label>Status</mat-label>
+                    <mat-select formControlName="status" >
+                        <mat-option value="1" style="color: green">Active</mat-option>
+                        <mat-option value="0" style="color: red">In-Active</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+        </div>
+        <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
+            <button [disabled]="loading || lForm.invalid" mat-raised-button color="primary" type="submit">
+                {{(this.row.idproduct_master) ? "Update" : "Add New"}}
+            </button>
+            <button mat-raised-button type="button" (click)="cancel()">Cancel</button>
+        </div>
+    </form>
+</div>

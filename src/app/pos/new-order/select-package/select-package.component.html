@@ -1,0 +1,59 @@
+<button mat-icon-button class="close-button" [mat-dialog-close]="true">
+    <img src="../../../../assets/icons/close-button.png" class="close-icon" class="bt" />
+  </button>
+<div class="main-card" fxLayout="column">
+    <h2>Select Available Package / Offer</h2>
+    <div fxFlex fxLayout="column" class="mat-elevation-z4 cart-item" style="margin: 2px 2px"
+        *ngFor="let item of pkg; let j = index">
+        <div fxFlex fxLayout="row" fxLayoutGap="5px" style="padding: 5px">
+            <div fxFlex="53" fxLayout="row">
+                <div fxFlex="12" fxLayout="center center">
+                    <img src="assets/icons/package.png" class="cart-img" />
+                </div>
+                <div fxFlex="88" fxLayout="column">
+                    <div fxFlex="70" fxLayoutAlign="start center ">{{item.name}}</div>
+                    <!-- <div>weight</div> -->
+                    <div class="item-price" fxLayout="row"  fxFlex="30">
+                        <div fxFlex="25">
+                            Validity
+                        </div>
+                        <div fxFlex="25">
+                            {{moment(item.valid_from).format('DD-MMM-YYYY')}}
+                        </div>
+
+                        <div fxFlex="25">
+                            {{moment(item.valid_till).format('DD-MMM-YYYY')}}
+                        </div>
+                        <div fxFlex="25"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div fxFlex="35" fxLayout="column" fxLayoutAlign="center center" *ngIf="item.idpackage_master == 1">
+                <div fxFlex fxLayoutAlign="center center" class="discount-per">
+                    Valid on adding Products
+                </div>
+                <div fxFlex class="discount-amt">
+                    Additional Amount: &#8377; {{ item.additional_tag_amount | number : "0.2-2" }}
+                </div>
+            </div>
+            <div fxFlex="35" fxLayout="column" fxLayoutAlign="center center" *ngIf="item.idpackage_master == 2">
+                <div fxFlex fxLayoutAlign="center center" class="discount-per">
+                    Valid on total of &#8377; {{ item.base_trigger_amount | number : "0.2-2" }}
+                </div>
+                <div fxFlex class="discount-amt">
+                    Additional Amount: &#8377; {{ item.additional_tag_amount | number : "0.2-2" }}
+                </div>
+            </div>
+            <div fxFlex="35" fxLayout="column" fxLayoutAlign="center center" *ngIf="item.idpackage_master == 3">
+                <div fxFlex fxLayoutAlign="center center" class="discount-per">
+                    First {{item.trigger_prod[0]?.package_item_qty}} Quantity at {{ ((!!item.base_trigger_amount) ? item.base_trigger_amount : item.trigger_prod[0]?.selling_price ) | number : "0.2-2" }} then at {{ ((!!item.additional_tag_amount) ? item.additional_tag_amount : item.trigger_prod[0]?.selling_price ) | number : "0.2-2" }}.
+                </div>
+            </div>
+            <div fxFlex="12" class="final-price" fxLayoutAlign="end center">
+                <button mat-stroked-button color="primary" (click)="select(item)"><mat-icon>check</mat-icon>
+                    Select</button>
+            </div>
+        </div>
+    </div>
+</div>

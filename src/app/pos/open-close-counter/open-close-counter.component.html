@@ -1,0 +1,145 @@
+<app-header></app-header>
+<div class="container">
+    <div fxLayout="column">
+        <div class="padding-20"></div>
+        <div fxLayout="row" fxFlex>
+            <h1 fxFlex>
+            </h1>
+        </div>
+        <div class="padding-20"></div>
+        <div fxFlex>
+            <div fxLayout="column" fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="40px">
+                <mat-card fxFlex="60">
+                    <form fxLayout="column" fxLayoutGap="10px" [formGroup]="mainForm" (ngSubmit)="onSubmit()"
+                        fxFlex="100">
+                        <div fxFlex>
+                            <h1 fxFlex>{{(isFromOpenCounter) ? 'Open' : 'Close'}} Counter
+                            </h1>
+                        </div>
+                        <div fxFlex>
+                            <div fxLayout="row" fxLayoutGap="40px">
+                                <mat-form-field fxFlex>
+                                    <mat-label>Select Counter</mat-label>
+                                    <mat-select formControlName="counter" [disabled]="!isFromOpenCounter">
+                                        <mat-option *ngFor="let counter of counters" required [value]="counter.idcounter" >
+                                          {{counter.name}}
+                                        </mat-option>
+                                      </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div fxFlex fxFlexLayout="center center">
+                            <h1 class="center">Cash Drawer</h1>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                            <div fxFlex="18">
+                                <mat-form-field fxFlex>
+                                    <mat-label>No. of &#8377;1 Bills</mat-label>
+                                    <input type="number" matInput placeholder="Qty" formControlName="n1"
+                                        autocomplete="off">
+                                    <mat-hint *ngIf="mainForm.controls['n1'].touched &&  mainForm.controls['n1'].value > 0">Total: &#8377;{{mainForm.controls['n1'].value * 1}}</mat-hint>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex="18">
+                                <mat-form-field fxFlex>
+                                    <mat-label>No. of &#8377;2 Bills</mat-label>
+                                    <input type="number" matInput placeholder="Qty" formControlName="n2"
+                                        autocomplete="off">
+                                        <mat-hint *ngIf="mainForm.controls['n2'].touched &&  mainForm.controls['n2'].value > 0">Total: &#8377;{{mainForm.controls['n2'].value * 2}}</mat-hint>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex="18">
+                                <mat-form-field fxFlex>
+                                    <mat-label>No. of &#8377;5 Bills</mat-label>
+                                    <input type="number" matInput placeholder="Qty" formControlName="n5"
+                                        autocomplete="off">
+                                        <mat-hint *ngIf="mainForm.controls['n5'].touched &&  mainForm.controls['n5'].value > 0">Total: &#8377;{{mainForm.controls['n5'].value * 5}}</mat-hint>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex="18">
+                                <mat-form-field fxFlex>
+                                    <mat-label>No. of &#8377;10 Bills</mat-label>
+                                    <input type="number" matInput placeholder="Qty" formControlName="n10"
+                                        autocomplete="off">
+                                        <mat-hint *ngIf="mainForm.controls['n10'].touched &&  mainForm.controls['n10'].value > 0">Total: &#8377;{{mainForm.controls['n10'].value * 10}}</mat-hint>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex="18">
+                                <mat-form-field fxFlex>
+                                    <mat-label>No. of &#8377;20 Bills</mat-label>
+                                    <input type="number" matInput placeholder="Qty" formControlName="n20"
+                                        autocomplete="off">
+                                        <mat-hint *ngIf="mainForm.controls['n20'].touched &&  mainForm.controls['n20'].value > 0">Total: &#8377;{{mainForm.controls['n20'].value * 20}}</mat-hint>
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="space-between center">
+
+                            <div fxFlex="18">
+                                <mat-form-field fxFlex>
+                                    <mat-label>No. of &#8377;50 Bills</mat-label>
+                                    <input type="number" matInput placeholder="Qty" formControlName="n50"
+                                        autocomplete="off">
+                                        <mat-hint *ngIf="mainForm.controls['n50'].touched &&  mainForm.controls['n50'].value > 0">Total: &#8377;{{mainForm.controls['n50'].value * 50}}</mat-hint>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex="18">
+                                <mat-form-field fxFlex>
+                                    <mat-label>No. of &#8377;100 Bills</mat-label>
+                                    <input type="number" matInput placeholder="Qty" formControlName="n100"
+                                        autocomplete="off">
+                                        <mat-hint *ngIf="mainForm.controls['n100'].touched &&  mainForm.controls['n100'].value > 0">Total: &#8377;{{mainForm.controls['n100'].value * 100}}</mat-hint>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex="18">
+                                <mat-form-field fxFlex>
+                                    <mat-label>No. of &#8377;200 Bills</mat-label>
+                                    <input type="number" matInput placeholder="Qty" formControlName="n200"
+                                        autocomplete="off">
+                                        <mat-hint *ngIf="mainForm.controls['n200'].touched &&  mainForm.controls['n200'].value > 0">Total: &#8377;{{mainForm.controls['n200'].value * 200}}</mat-hint>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex="18">
+                                <mat-form-field fxFlex>
+                                    <mat-label>No. of &#8377;500 Bills</mat-label>
+                                    <input type="number" matInput placeholder="Qty" formControlName="n500"
+                                        autocomplete="off">
+                                        <mat-hint *ngIf="mainForm.controls['n500'].touched &&  mainForm.controls['n500'].value > 0">Total: &#8377;{{mainForm.controls['n500'].value * 500}}</mat-hint>
+                                </mat-form-field>
+                            </div>
+
+
+                            <div fxFlex="18">
+                                <mat-form-field fxFlex>
+                                    <mat-label>No. of &#8377;2000 Bills</mat-label>
+                                    <input type="number" matInput placeholder="Qty" formControlName="n2000"
+                                        autocomplete="off">
+                                        <mat-hint *ngIf="mainForm.controls['n2000'].touched &&  mainForm.controls['n2000'].value > 0">Total: &#8377;{{mainForm.controls['n2000'].value * 2000}}</mat-hint>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
+                            <button [disabled]="loading || mainForm.controls['counter']?.value?.length == 0" mat-raised-button color="primary" type="submit">{{(isFromOpenCounter) ? 'Open' : 'Close'}}
+                                Counter!</button>
+                            <button mat-raised-button [routerLink]="'[/]'">Cancel</button>
+                        </div>
+
+                    </form>
+                </mat-card>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="padding-40"></div>
+</div>

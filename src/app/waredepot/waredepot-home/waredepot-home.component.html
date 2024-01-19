@@ -1,0 +1,132 @@
+<app-header></app-header>
+<div class="wh-container">
+    <div fxLayout="column">
+        <div class="padding-20"></div>
+        <div fxLayout="row" fxFlex>
+            <h1 fxFlex>
+            </h1>
+        </div>
+        <!-- <div class="padding-20"></div> -->
+        <div fxFlex>
+            <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="40px">
+                <mat-card fxFlex="80" fxLayout="column">
+                    <h1 fxFlex class="center">
+                        Hello {{name}}
+                    </h1>
+                    <div class="padding-20">
+
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="50px">
+
+                        <mat-card fxFlex class="center" [ngClass]="bl5" (mouseover)="bl5='mat-elevation-z6'"
+                            (mouseout)="bl5='mat-elevation-z2'" [routerLink]="['order-to-warehouse']"
+                            style="display: none;">
+                            <img mat-card-image src="assets/icons/shelf.png" alt="Inventory">
+                            <mat-card-content>
+                                <h2>
+                                    Warehouse Order
+                                </h2>
+                            </mat-card-content>
+                        </mat-card>
+                        <mat-card fxFlex class="center" [ngClass]="bl11" (mouseover)="bl11 = 'mat-elevation-z6'"
+                            (mouseout)="bl11 = 'mat-elevation-z2'" [routerLink]="['vendor']">
+                            <img mat-card-image src="assets/icons/delivery.png" alt="Vendor" />
+                            <mat-card-content>
+                                <h2>Manage Vendor</h2>
+                            </mat-card-content>
+                        </mat-card>
+                        <mat-card fxFlex class="center" [ngClass]="bl12" (mouseover)="bl12 = 'mat-elevation-z6'"
+                            (mouseout)="bl12 = 'mat-elevation-z2'" [routerLink]="['bills']">
+                            <img mat-card-image src="assets/icons/invoice.png" alt="Bills" />
+                            <mat-card-content>
+                                <h2>Manage Bills</h2>
+                            </mat-card-content>
+                        </mat-card>
+                        <mat-card fxFlex class="center" [ngClass]="bl4" (mouseover)="bl4 = 'mat-elevation-z6'"
+                            (mouseout)="bl4 = 'mat-elevation-z2'" [routerLink]="['/warehouse/inventory']"
+                            >
+                            <img mat-card-image src="assets/icons/shelf.png" alt="Inventory" />
+                            <mat-card-content>
+                                <h2>Manage Inventory</h2>
+                            </mat-card-content>
+                        </mat-card>
+                        <mat-card fxFlex class="center" style="margin: 0 10px;" [ngClass]="bl1" 
+                        (mouseover)="bl1 = 'mat-elevation-z6'"
+                        (mouseout)="bl1 = 'mat-elevation-z2'" 
+                        [routerLink]="['/inventory/requirement-request']">
+                        <img mat-card-image src="assets/icons/demand.png" alt="Product Request" />
+                        <mat-card-content>
+                            <h2>Product Request</h2>
+                        </mat-card-content>
+                    </mat-card>
+                    <mat-card fxFlex class="center" style="margin: 0 10px;" [ngClass]="bl2" 
+                        (mouseover)="bl2 = 'mat-elevation-z6'"
+                        (mouseout)="bl2 = 'mat-elevation-z2'" 
+                        [routerLink]="['/inventory/requirement-request/1']">
+                        <img mat-card-image src="assets/icons/supply-chain.png" alt="Received Requests" />
+                        <mat-card-content>
+                            <h2>Received Requests</h2>
+                        </mat-card-content>
+                    </mat-card>
+                       
+                    </div>
+                    <div fxLayout="column" fxLayoutGap="10px" style="margin-top: 20px;border: 3px solid #acacac;padding: 10px;border-radius: 15px">
+                        <h2>Manage transfer</h2>
+                        <div style="margin-top: 20px;border: 3px solid #acacac;padding: 10px;border-radius: 15px">
+                            <mat-card fxFlex class="center" style="margin: 0 10px;" [ngClass]="bl1" 
+                                (mouseover)="bl1 = 'mat-elevation-z6'"
+                                (mouseout)="bl1 = 'mat-elevation-z2'" 
+                                [routerLink]="['/inventory/requirement-request']">
+                                <img mat-card-image src="assets/icons/demand.png" alt="Product Request" />
+                                <mat-card-content>
+                                    <h2>Product Request</h2>
+                                </mat-card-content>
+                            </mat-card>
+                            <mat-card fxFlex class="center" style="margin: 0 10px;" [ngClass]="bl2" 
+                                (mouseover)="bl2 = 'mat-elevation-z6'"
+                                (mouseout)="bl2 = 'mat-elevation-z2'" 
+                                [routerLink]="['/inventory/requirement-request/1']">
+                                <img mat-card-image src="assets/icons/supply-chain.png" alt="Received Requests" />
+                                <mat-card-content>
+                                    <h2>Received Requests</h2>
+                                </mat-card-content>
+                            </mat-card>
+                        </div>
+                        <div style="margin-top: 20px;border: 3px solid #acacac;padding: 10px;border-radius: 15px">
+                            <mat-card fxFlex class="center" style="margin: 0 10px;" [ngClass]="bl1" 
+                                (mouseover)="bl1 = 'mat-elevation-z6'"
+                                (mouseout)="bl1 = 'mat-elevation-z2'" [routerLink]="['/warehouse/warehouse-direct-transfer-list']">
+                                <img mat-card-image src="assets/icons/demand.png" alt="Product Request" />
+                                <mat-card-content>
+                                    <h2>Direct Transfer</h2>
+                                </mat-card-content>
+                            </mat-card>
+                            <mat-card fxFlex class="center" style="margin: 0 10px;" [ngClass]="bl1" 
+                                (mouseover)="bl1 = 'mat-elevation-z6'"
+                                (mouseout)="bl1 = 'mat-elevation-z2'" 
+                                [routerLink]="['/warehouse/bill-transfer/list']">
+                                <img mat-card-image src="assets/icons/demand.png" alt="Product Request" />
+                                <mat-card-content>
+                                    <h2>Bill Transfer</h2>
+                                </mat-card-content>
+                            </mat-card>
+                            <mat-card fxFlex class="center" style="margin: 0 10px;" [ngClass]="bl1" 
+                                (mouseover)="bl1 = 'mat-elevation-z6'"
+                                (mouseout)="bl1 = 'mat-elevation-z2'" 
+                                [routerLink]="['/warehouse/automatic-transfer-list']">
+                                <img mat-card-image src="assets/icons/demand.png" alt="Product Request" />
+                                <mat-card-content>
+                                    <h2>Automatic Transfer</h2>
+                                </mat-card-content>
+                            </mat-card>
+                        </div>
+                    </div>
+                </mat-card>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="padding-40"></div>
+</div>

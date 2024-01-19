@@ -1,0 +1,234 @@
+<div>
+  <!-- my-dialog.component.html -->
+<!-- <h2 class="no-print" style="width: 500px; text-align: center;">Preview</h2> -->
+<div id="print-section">
+  <div class="no-print" style="text-align: end">
+    <!-- <button mat-raised-button class="no-print" color="primary" (click)="printRecipt()">
+      Print
+    </button> -->
+  </div>
+  <div class="recipt-header">
+    <h3 class="sub-heading">GST Invoice</h3>
+    <h2 class="main-heading">Ghar Ghar Baazar</h2>
+    <p class="sub-heading" style="font-size: 10px;">Unit of Guru Vardaan Consumer Products Pvt. Ltd.</p>
+    <p class="sub-heading">{{user.sw_address}}</p>
+    <p class="sub-heading">{{user.sw_city}}-{{user.sw_pin}} Ph-{{user.sw_contact}}</p>
+    <h3 class="main-heading">GSTIN : 09AAICG0011C1ZB</h3>
+  </div>
+  <div class="recipt-body">
+   <div style="overflow: auto; height: 500px; width: 530px; overflow-x: auto; overflow-y: auto;">
+    <table class="normal-lineheight" style="border-spacing: 0px; width: 520px;">
+      <tr>
+        <td class="btop">System User: </td>
+        <td class="btop">{{user?.email}}</td>
+        <!-- {{getName(detail) }} -->
+        <td class="btop">Bill No: </td>
+        <td class="btop">{{ detail?.bill_number }}</td>
+      </tr>
+      <tr>
+        <td>Phone :</td>
+        <td>{{detail?.vendor?.phone}}</td>
+        <td>Date</td>
+        <td>{{ moment(detail.created_at).format('DD-MM-YY') }}</td>
+      </tr>
+      <tr>
+        <td>Vendor:</td>
+        <td>{{ detail?.vendor?.name }}</td>
+        <td>Time:</td>
+        <td>{{ moment(detail.created_at).format('h:mm a') }}</td>
+      </tr>
+      <tr>
+        <td>GSTNO:</td>
+        <td>{{ detail?.vendor?.gst }}</td>
+      </tr>
+    </table>
+    <table style="border-spacing: 0px; width: 520px;">
+
+      <tr class="normal-lineheight">
+        <td class="btop" colspan="2">#</td>
+        <td class="btop" colspan="8">Discription</td>
+      </tr>
+      <tr style="border-bottom: 3px solid black;max-height: 300px;" class="normal-lineheight">
+        <td class="bbot"></td>
+        <td class="bbot"></td>
+        <td class="bbot">MRP</td>
+        <td class="bbot">HSN</td>
+        <td class="bbot">Qty</td>
+        <td class="bbot">Rate</td>
+        <td class="bbot">Instant Disc</td>
+        <td class="bbot">Product Disc</td>
+        <td class="bbot">Land Disc</td>
+        <td class="bbot">Copartner Disc</td>
+        <td class="bbot">Final Price</td>
+        <td class="bbot">C/SGST</td>
+        <td class="bbot">Amount</td>
+      </tr>
+      <ng-container *ngFor="let item of detail.products; let i = index">
+        <tr class="normal-lineheight">
+          <td>{{ i + 1 }}</td>
+          <td colspan="5"><b style="padding-top: 2px;">{{ item.prod_name | uppercase}}</b></td>
+        </tr>
+        <tr class="normal-lineheight">
+          <td></td>
+          <td></td>
+          <td>{{ item["mrp"] | number : '1.2-2' }}</td>
+          <td>{{item["hsn"]}}</td>
+          <td>{{ item["nquantity"] }}</td>
+          <td>{{ item["mrp"] | number : '1.2-2'}}</td>
+          <td>{{ item["instant_price"] | number : '1.2-2' }}</td>
+          <td>
+            {{ item["product"] | number : '1.2-2' }}
+            (%{{
+              ((item["mrp"] - item["product"]) / item["mrp"] * 100) | number : "0.2-2"
+            }})
+          </td>
+          <td>
+            {{ item["land"] | number : '1.2-2' }}
+            (%{{
+              ((item["mrp"] - item["land"]) / item["mrp"] * 100) | number : "0.2-2"
+            }})
+          </td>
+          <td>
+            {{ item["copartner"] | number : '1.2-2' }}
+            (%{{
+              ((item["mrp"] - item["copartner"]) / item["mrp"] * 100) | number : "0.2-2"
+            }})
+          </td>
+          <td>{{item["selling_price"]}}</td>
+          <td>{{item["cgst"]}}</td>
+          <td>{{ (item["totalAmount"]) | number : '1.2-2' }}</td>
+        </tr>
+      </ng-container>
+      <tfoot>
+        <tr>
+          <td colspan="10" class="btop bbot">Total Items :{{ detail?.products?.length }}</td>
+          <td colspan="4" class="btop bbot center">Total Qty: {{ detail?.quantity }}</td>
+        </tr>
+        <tr>
+          <td colspan="8" style="text-align: center">
+            Above prices are inclusive of all taxes*
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <!-- <table style="width: 400px;">
+      <tr>
+        <td class="btop" style="font-weight: bold;">
+          GST Details
+        </td>
+      </tr>
+    </table>
+    <table class="right" style="width: 400px;">
+      <tr class="center">
+        <td class="btop bbot" style="width: 20%;">GST%</td>
+        <td class="btop bbot" style="width: 20%;">Taxable</td>
+        <td class="btop bbot" style="width: 20%;">CGST</td>
+        <td class="btop bbot" style="width: 20%;">SGST</td>
+        <td class="btop bbot" style="width: 20%;">Tot GST</td>
+      </tr>
+      <tr *ngIf="gst['p-0']['taxable'] > 0" class="normal-lineheight">
+        <td style="padding-top: 2px;">0.00%</td>
+        <td>{{gst['p-0']["taxable"] | number : '1.2-2'}}</td>
+        <td>{{gst['p-0']["cgst"] | number : '1.2-2' }}</td>
+        <td>{{gst['p-0']["sgst"] | number : '1.2-2' }}</td>
+        <td>{{gst['p-0']["totalTax"] | number : '1.2-2' }}</td>
+      </tr>
+
+      <tr *ngIf="gst['p-5']['taxable'] > 0" class="normal-lineheight">
+        <td style="padding-top: 2px;">5.00%</td>
+        <td>{{gst['p-5']["taxable"] | number : '1.2-2' }}</td>
+        <td>{{gst['p-5']["cgst"] | number : '1.2-2' }}</td>
+        <td>{{gst['p-5']["sgst"] | number : '1.2-2' }}</td>
+        <td>{{gst['p-5']["totalTax"] | number : '1.2-2' }}</td>
+      </tr>
+
+      <tr *ngIf="gst['p-12']['taxable'] > 0" class="normal-lineheight">
+        <td style="padding-top: 2px;">12.00%</td>
+        <td>{{gst['p-12']["taxable"] | number : '1.2-2' }}</td>
+        <td>{{gst['p-12']["cgst"] | number : '1.2-2' }}</td>
+        <td>{{gst['p-12']["sgst"] | number : '1.2-2' }}</td>
+        <td>{{gst['p-12']["totalTax"] | number : '1.2-2' }}</td>
+      </tr>
+
+      <tr *ngIf="gst['p-18']['taxable'] > 0" class="normal-lineheight">
+        <td style="padding-top: 2px;">18.00%</td>
+        <td>{{gst['p-18']["taxable"] | number : '1.2-2' }}</td>
+        <td>{{gst['p-18']["cgst"] | number : '1.2-2' }}</td>
+        <td>{{gst['p-18']["sgst"] | number : '1.2-2' }}</td>
+        <td>{{gst['p-18']["totalTax"] | number : '1.2-2' }}</td>
+      </tr>
+
+      <tr >
+        <td class="btop bbot left"><b>Totals</b></td>
+        <td class="btop bbot">{{gst['tot']["taxable"] | number : '1.2-2' }}</td>
+        <td class="btop bbot">{{gst['tot']["cgst"] | number : '1.2-2' }}</td>
+        <td class="btop bbot">{{gst['tot']["sgst"] | number : '1.2-2' }}</td>
+        <td class="btop bbot">{{gst['tot']["totalTax"] | number : '1.2-2' }}</td>
+      </tr>
+    </table> -->
+    <table style="border-spacing: 0px; width: 520px;">
+      <tr class="right normal-lineheight">
+        <td colspan="2"></td>
+        <td colspan="2">Sub Total</td>
+        <td colspan="4">{{(totalPriceMRP) | number : '1.2-2'}}</td>
+      </tr>
+      <tr class="right normal-lineheight">
+        <td colspan="2"></td>
+        <td colspan="2"></td>
+        <td colspan="4"></td>
+      </tr>
+      <tr class="right normal-lineheight" *ngIf="roundOff != 0">
+        <td colspan="2"></td>
+        <td colspan="2">Round Off</td>
+        <td colspan="4"></td>
+      </tr>
+      <tr class="right">
+        <td class="btop bbot" colspan="2"></td>
+        <td class="btop bbot" colspan="2"><b>Net Payable</b></td>
+        <td class="btop bbot" colspan="4"><b>{{(totalPriceMRP) | number : '1.2-2'}}</b></td>
+      </tr>
+      <!-- <tr >
+        <td colspan="4" class=" bbot"><b>{{amt | titlecase}} Rupees</b></td>
+      </tr> -->
+    </table>
+    <!-- <table>
+      <tr>
+        <td colspan="4">
+         <ng-container *ngIf="detail?.idmembership_plan === 2 || detail?.idmembership_plan === 3 || detail?.idmembership_plan === 4">
+            <h4 style="font-weight: bold;text-align: center; margin: 0px;">You have been credited with total point of 
+              {{ detail?.idmembership_plan == 2 ? (detail?.product_discount | number : '1.2-2') :
+              (detail?.idmembership_plan == 3 ? (detail?.land_discount | number : '1.2-2') :
+              (detail?.idmembership_plan == 4 ? (detail?.copartner_discount | number : '1.2-2') :
+              (detail?.instant_discount | number : '1.2-2'))) }}
+              in your wallet. &nbsp;</h4>
+            <h3>
+              Your new updated wallet balance is {{ detail?.wallet_balance |
+                number : '1.2-2' }}
+            </h3>
+         </ng-container>
+         <ng-container *ngIf="detail?.idmembership_plan === 1">
+            <h4 style="font-weight: bold;text-align: center; margin: 0px;">Total Save On This Bill : &nbsp;{{ detail.instant_discount | number : '1.2-2' }}</h4>
+         </ng-container>
+          
+        </td>
+        <td>
+          <h4></h4>
+        </td>
+      </tr>
+    </table> -->
+    <!-- <h5 style="margin: 0px;">E & O.E Subject to LUCKNOW Jurisdiction</h5>
+    <h3 style="text-align: center;font-family: cursive;
+    font-style: italic; margin: 0px;"  class="sub-heading">!!! Thank you !!! Visit Again !!!</h3> -->
+    <div class="no-print" style="text-align: center; margin-top: 20px; width: 520px;">
+      <button mat-raised-button class="no-print" color="primary" (click)="printRecipt()">
+        Print
+      </button>&nbsp;&nbsp;
+      <button mat-raised-button class="no-print" color="primary" (click)="close()">
+        close
+      </button>
+    </div>
+  </div>
+  </div>
+</div>
+</div>

@@ -1,0 +1,91 @@
+<h1 mat-dialog-title>
+    Customer {{data.type | titlecase}}
+</h1>
+<div *ngIf="loaded">
+    <form [formGroup]="customForm" (ngSubmit)="onSubmit()">
+        <div mat-dialog-content>
+
+
+            <div fxLayout="column">
+                <div fxLayout="row">
+                    <div fxFlex>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Name</mat-label>
+                            <input matInput placeholder="Enter your name." formControlName="name" autocomplete="off"
+                                required>
+                            <mat-error
+                                *ngIf="!customForm.controls['name'].valid && customForm.controls['name'].touched">
+                                Enter a valid name.
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Contact/Phone</mat-label>
+                            <input matInput placeholder="Enter your contact." formControlName="contact"
+                                autocomplete="off" required>
+                            <mat-error
+                                *ngIf="!customForm.controls['contact'].valid && customForm.controls['contact'].touched">
+                                Enter a valid contact.
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxFlex="row">
+                    <div fxFlex>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Email Id</mat-label>
+                            <input matInput placeholder="Enter your email." formControlName="email" autocomplete="off">
+                            <mat-error
+                                *ngIf="!customForm.controls['email'].valid && customForm.controls['email'].touched">
+                                Enter a valid email.
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Membership Type</mat-label>
+                            <mat-select formControlName="membership">
+                                <mat-option *ngFor="let plan of membership" [value]="plan.id">{{plan.descriptiom}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxFlex="row">
+                    <div fxFlex>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Address</mat-label>
+                            <textarea matInput placeholder="Address goes here..." formControlName="address"></textarea>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxFlex="row">
+                    <div fxFlex>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Pin Code</mat-label>
+                            <input matInput placeholder="Enter your pin." formControlName="pin" autocomplete="off">
+                            <mat-error *ngIf="!customForm.controls['pin'].valid && customForm.controls['pin'].touched">
+                                Enter a valid pin.
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Landmark</mat-label>
+                            <input matInput placeholder="Enter your Landmark." formControlName="landmark"
+                                autocomplete="off">
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div mat-dialog-actions>
+            <button mat-raised-button color="primary" type="submit" [disabled]="submitted">Register Details</button>
+            <button mat-raised-button color="warn" (click)="onDismiss(false)">Cancel</button>
+        </div>
+    </form>
+</div>
+<div *ngIf="!loaded">
+    Loading...
+</div>

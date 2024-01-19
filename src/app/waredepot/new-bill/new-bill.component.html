@@ -1,0 +1,224 @@
+<app-header></app-header>
+<div class="wh-container">
+    <div class="main-card">
+        <div fxLayout="row" fxLayoutGap="20px" class="outline-div" fxLayoutAlign="start start">
+            <div fxFlex="100" fxLayout="column">
+                <div fxFlex fxLayoutAlign="space-between center" class="orderNum">
+                    <div fxFlex="40" class="h1-txt">
+                        <a appBackButton><mat-icon>arrow_back</mat-icon></a>
+                        Vendor Bills
+                    </div>
+                    <div fxFlex="15" class="info-text" fxLayoutAlign="center center">
+                        <button mat-raised-button color="primary" [routerLink]="['/warehouse/add-edit-bill']">
+                            <mat-icon>add_circle_outline</mat-icon>
+                            Add New Bill
+                        </button>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutGap="10px" class="margin-top-25">
+                    <div fxFlex="2">
+                        <mat-icon aria-hidden="false" aria-label="Search" class="search-icon info-text">search
+                        </mat-icon>
+                    </div>
+                    <div fxFlex="30">
+                        <mat-form-field  fxFlex>
+                            <mat-label>Enter Bill Number</mat-label>
+                            <input matInput [(ngModel)]="orderNum" autocomplete="off" />
+                            <button *ngIf="orderNum" matSuffix mat-icon-button aria-label="Clear" (click)="orderNum=''">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="10">
+                        <mat-form-field  fxFlex="95">
+                            <mat-label>Vendor</mat-label>
+                            <mat-select [(ngModel)]="vendor">
+                                <mat-option value="0">All</mat-option>
+                                <mat-option *ngFor="let vendor of vendors" [value]="vendor.idvendor">{{vendor.name}} -
+                                    {{vendor.gst}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="50" fxLayoutGap="10px">
+                        <div fxFlex>
+                            <mat-form-field  fxFlex>
+                                <mat-label>Choose a From date</mat-label>
+                                <input matInput [matDatepicker]="fpicker" readonly [max]="todayDate"
+                                    [(ngModel)]="from_date" />
+                                <mat-hint>MM/DD/YYYY</mat-hint>
+                                <mat-datepicker-toggle matSuffix [for]="fpicker"></mat-datepicker-toggle>
+                                <mat-datepicker #fpicker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex>
+                            <mat-form-field  fxFlex>
+                                <mat-label>Choose a To date</mat-label>
+                                <input matInput [matDatepicker]="tpicker" readonly [max]="todayDate"
+                                    [(ngModel)]="to_date" />
+                                <mat-hint>MM/DD/YYYY</mat-hint>
+                                <mat-datepicker-toggle matSuffix [for]="tpicker"></mat-datepicker-toggle>
+                                <mat-datepicker #tpicker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div fxFlex="8" fxLayoutAlign="center center">
+                        <button fxFlex="90" mat-flat-button color="primary" (click)="getAll()">Search</button>
+                        <div fxFlex="10"></div>
+                    </div>
+                </div>
+
+                <div class="mat-elevation-z4" fxFlex class="tbl">
+                    <table mat-table [dataSource]="dataSource" matSort>
+                        <ng-container matColumnDef="bill_number">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Bill #</th>
+                            <td mat-cell *matCellDef="let row">{{
+                                row.bill_number }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="vendor" >
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Vendor</th>
+                            <td mat-cell *matCellDef="let row">
+                                {{ (!!row.vendor_name) ? row.vendor_name.substring(0,15) : '' }}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="total">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Total Amount
+                            </th>
+                            <td mat-cell *matCellDef="let row">
+                                &#8377; {{ row.total  }}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="pending_value">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Pending Article Amount 
+                            </th>
+                            <td mat-cell *matCellDef="let row">
+                                &#8377;  {{ row?.pending_value ? row?.pending_value : 0  }}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="bill_remark">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Bill Remark
+                            </th>
+                            <td mat-cell *matCellDef="let row">
+                                {{ row?.bill_remark ? row?.bill_remark : 'No Remark'  }}
+                            </td>
+                        </ng-container>
+                        <!-- <ng-container matColumnDef="is_paid">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>IsPaid</th>
+              <td mat-cell *matCellDef="let row">
+                {{ row.is_paid == 1 ? "Y" : "N" }}
+              </td>
+            </ng-container> -->
+                        <!-- <ng-container matColumnDef="is_delivery">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                IsDelivered
+              </th>
+              <td mat-cell *matCellDef="let row">
+                {{ row.is_delivery == 1 ? "Y" : "N" }}
+              </td>
+            </ng-container> -->
+                        <ng-container matColumnDef="items">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>items / Qty</th>
+                            <td mat-cell *matCellDef="let row">
+                                {{ row.items +"/"+ row.quantity }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="paid">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Total Bill Payment
+                            </th>
+                            <td mat-cell *matCellDef="let row">
+                                &#8377;  {{ row.paid }}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="created_at">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Added On</th>
+                            <td mat-cell *matCellDef="let row">
+                                {{ moment(row.created_at).format('DD-MM-YYYY h:mm:ss a') }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="action">
+                            
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+                            <td mat-cell *matCellDef="let row" class="action-cell">
+                                <div class="button-container">
+                                    <button mat-mini-fab color="primary" aria-label="wysiwyg" (click)="openDetails(row)">
+                                        <mat-icon>wysiwyg</mat-icon>
+                                    </button>
+                                    <button mat-mini-fab color="primary" aria-label="Edit" (click)="editItem(row)">
+                                        <mat-icon>edit</mat-icon>
+                                    </button>
+                                </div>
+                            </td>
+                            
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell" colspan="4">No data found</td>
+                        </tr>
+                    </table>
+                    <mat-paginator [pageSizeOptions]="[5, 10,50,100,200]" aria-label="Select page of results">
+                    </mat-paginator>
+                </div>
+                <div class="mat-elevation-z4" fxFlex class="tbl" class="snap-div">
+                    <div fxLayout="column">
+                        <div fxLayout="row">
+                            <div fxFlex fxLayoutAlign="center center">
+                                <div class="number-snap">Payment Snapshot </div>
+                            </div>
+                        </div>
+                        <div fxLayout="row" class="margin-top-25">
+                            <div fxFlex fxLayoutAlign="center center">
+                                <div class="number-snap">&#8377;{{totalAmount | number : "0.2-2"}}</div>
+                            </div>
+                            <div fxFlex fxLayoutAlign="center center">
+                                <div class="number-snap">&#8377;{{totalPaid | number : "0.2-2"}}</div>
+                            </div>
+                            <div fxFlex fxLayoutAlign="center center">
+                                <div class="number-snap">&#8377;{{(totalAmount - totalPaid) | number : "0.2-2"}}</div>
+                            </div>
+
+                            <div fxFlex fxLayoutAlign="center center">
+                                <div class="number-snap">&#8377;{{totalarticleAmount | number : "0.2-2"}}</div>
+                            </div>
+                        </div>
+                        <div fxLayout="row">
+                            <div fxFlex fxLayoutAlign="center center">
+                                Total Amount
+                            </div>
+                            <div fxFlex fxLayoutAlign="center center">
+                                Total Paid
+                            </div>
+                            <div fxFlex fxLayoutAlign="center center">
+                                Total Pending
+                            </div>
+                            <div fxFlex fxLayoutAlign="center center">
+                                Total Pending Article Amount
+                            </div>
+                        </div>
+                        <div fxFlex style="height:20px;">&nbsp;</div>
+                        <div fxLayout="row">
+                            <div fxFlex fxLayoutAlign="center center">
+                                <div>{{ moment(from_date).format('DD MMM YYYY') }} - {{ moment(to_date).format('DD MMM
+                                    YYYY') }}</div>
+                            </div>
+                        </div>
+                        <div fxLayout="row">
+                            <div fxFlex fxLayoutAlign="center center">
+                                From Date - Till Date
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,61 @@
+.recipt-header {
+  text-align: center;
+}
+.recipt-header h4,
+.recipt-header h1,
+.recipt-header h2,
+.recipt-header h3 {
+  line-height: 3px;
+}
+.recipt-header p {
+  line-height: 3px;
+}
+.main-heading{
+  font-size: 13px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.sub-heading{
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+p{
+  font-size: 11px;
+}
+.recipt-body{
+  font-size: 11px;
+  width: 72mm;
+}
+.recipt-header{
+  width: 72mm;
+}
+@media print {
+  #print-section {
+    margin: 10px 10px 0 0;
+  }
+  .no-print {
+    display: none;
+  }
+}
+.bdr {
+  outline: thin solid;
+}
+.right {
+  text-align: right;
+}
+.center {
+  text-align: center;
+}
+.btop {
+  border-top: 2px solid black;
+}
+.bbot {
+  border-bottom: 2px solid black;
+}
+table{
+  border-spacing: 0px;
+}
+.normal-lineheight{
+  line-height: normal;
+}

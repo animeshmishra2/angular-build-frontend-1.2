@@ -1,0 +1,155 @@
+<div class="inner-card mat-elevation-z1" fxLayout="column" style="overflow: auto; max-height: 600px;">
+    <div fxFlex="10" class="h1-txt">
+        {{(this.row.idstore_warehouse) ? "Update" : "Add New"}} Vendors
+    </div>
+    <div class="margin-top-25"></div>
+    <form fxLayout="column" [formGroup]="lForm" (ngSubmit)="onSubmit()" fxFlex="100">
+        <div fxLayout="column">
+            <div fxFlex fxLayout="row" fxLayoutGap="10px">
+                <mat-form-field fxFlex>
+                    <mat-label>Name</mat-label>
+                    <input matInput placeholder="Enter name" formControlName="name" autocomplete="off" required>
+                    <mat-error *ngIf="!lForm.controls['name'].valid && lForm.controls['name'].touched">
+                        Enter a valid name.
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                    <mat-label>Contact</mat-label>
+                    <input matInput placeholder="Enter contact" formControlName="contact" autocomplete="off" required>
+                    <mat-error *ngIf="!lForm.controls['contact'].valid && lForm.controls['contact'].touched">
+                        Enter a valid contact number.
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div fxFlex fxLayout="row" fxLayoutGap="10px">
+                <mat-form-field fxFlex>
+                    <mat-label>Email</mat-label>
+                    <input matInput placeholder="Enter email" formControlName="email" autocomplete="off">
+                    <!-- <mat-error *ngIf="!lForm.controls['email'].valid && lForm.controls['email'].touched">
+                        Enter a valid email.
+                    </mat-error> -->
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                    <mat-label>GST Detail</mat-label>
+                    <input matInput placeholder="Enter gst" formControlName="gst" autocomplete="off" required>
+                    <!-- <mat-error *ngIf="!lForm.controls['gst'].valid && lForm.controls['gst'].touched">
+                        Enter a valid GST.
+                    </mat-error> -->
+                    <mat-error *ngIf="lForm.controls['gst'].invalid && (lForm.controls['gst'].dirty || lForm.controls['gst'].touched)">
+                        <span *ngIf="lForm.controls['gst'].errors">
+                          GST is required.
+                        </span>
+                        <span *ngIf="lForm.controls['gst']?.errors?.invalidGST">
+                          Enter a valid GST.
+                        </span>
+                      </mat-error>
+                </mat-form-field>
+
+            </div>
+            <div fxFlex fxLayout="row" fxLayoutGap="10px">
+                <mat-form-field fxFlex>
+                    <mat-label>Bank Name</mat-label>
+                    <!-- <textarea matInput placeholder="Enter Bank Name" formControlName="bank_name" autocomplete="off"
+                        required></textarea> -->
+                        <input matInput placeholder="Enter Bank Name" formControlName="bank_name" autocomplete="off">
+                    <!-- <mat-error *ngIf="!lForm.controls['bank_name'].valid && lForm.controls['bank_name'].touched">
+                        Enter Bank Name.
+                    </mat-error> -->
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                    <mat-label>Benificiary Name</mat-label>
+                    <!-- <textarea matInput placeholder="Enter Benificiary Name" formControlName="benificiary_name" autocomplete="off"
+                        required></textarea> -->
+                        <input matInput placeholder="Enter Benificiary Name" formControlName="benificiary_name" autocomplete="off">
+                    <!-- <mat-error *ngIf="!lForm.controls['benificiary_name'].valid && lForm.controls['benificiary_name'].touched">
+                        Enter Benificiary Name.
+                    </mat-error> -->
+                </mat-form-field>
+
+            </div>
+
+            <div fxFlex fxLayout="row" fxLayoutGap="10px">
+                <mat-form-field fxFlex>
+                    <mat-label>Account No</mat-label>
+                    <!-- <textarea matInput placeholder="Enter Account No" formControlName="acc_no" autocomplete="off"
+                        required></textarea> -->
+                        <input matInput placeholder="Enter Account No" formControlName="acc_no" autocomplete="off">
+                    <!-- <mat-error *ngIf="!lForm.controls['acc_no'].valid && lForm.controls['acc_no'].touched">
+                        Enter Account No.
+                    </mat-error> -->
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                    <mat-label>IFSC Code</mat-label>
+                    <!-- <textarea matInput placeholder="Enter IFSC Code" formControlName="ifsc" autocomplete="off"
+                        required></textarea> -->
+                        <input matInput placeholder="Enter IFSC Code" formControlName="ifsc" autocomplete="off">
+                    <!-- <mat-error *ngIf="!lForm.controls['ifsc'].valid && lForm.controls['ifsc'].touched">
+                        Enter a IFSC Code.
+                    </mat-error> -->
+                </mat-form-field>
+
+            </div>
+
+            <div fxFlex fxLayout="row" fxLayoutGap="10px">
+                <mat-form-field fxFlex>
+                    <mat-label>Address</mat-label>
+                    <textarea matInput placeholder="Enter address" formControlName="address" autocomplete="off"
+                        required></textarea>
+                    <mat-error *ngIf="!lForm.controls['address'].valid && lForm.controls['address'].touched">
+                        Enter a valid address.
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                    <mat-label> Remark</mat-label>
+                    <textarea matInput placeholder="Enter Remark" formControlName="payment_details" autocomplete="off"
+                        required></textarea>
+                    <!-- <mat-error *ngIf="!lForm.controls['payment_details'].valid && lForm.controls['payment_details'].touched">
+                        Enter a .
+                    </mat-error> -->
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                    <mat-label>Payment Type</mat-label>
+                    <mat-select placeholder="Select Payment Type" formControlName="payment_type" required
+                    (selectionChange)="onPaymentTypeSelected()">
+                        <!-- <mat-option value="Cash">Cash</mat-option>
+                        <mat-option value="Online">Online</mat-option>
+                        <mat-option value="Upi">UPI</mat-option> -->
+                        <mat-option value="Credit">Credit</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="!lForm.controls['payment_type'].valid && lForm.controls['payment_type'].touched">
+                        Enter valid Payment Type.
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div fxFlex fxLayout="row" fxLayoutGap="10px">
+                <mat-form-field fxFlex>
+                    <mat-label>State</mat-label>
+                    <mat-select placeholder="Select State" formControlName="state" required>
+                        <mat-option *ngFor="let state of statesList" [value]="state?.id">{{state?.name}}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="!lForm.controls['state'].valid && lForm.controls['state'].touched">
+                        Select State
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                    <mat-label>City</mat-label>
+                    <mat-select placeholder="Select City" formControlName="city" required>
+                        <mat-option *ngFor="let city of cities" [value]="city?.id">{{city?.city}}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="!lForm.controls['city'].valid && lForm.controls['city'].touched">
+                        Select City
+                    </mat-error>
+                </mat-form-field>
+
+            </div>
+    
+        </div>
+        <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
+            <button [disabled]="loading || lForm.invalid" mat-raised-button color="primary" type="submit">
+                {{(this.row.idstore_warehouse) ? "Update" : "Add New"}} {{(this.row.is_store) ? "Store" : "Vendor"}}
+            </button>
+            <button mat-raised-button type="button" (click)="cancel()">Cancel</button>
+        </div>
+    </form>
+</div>

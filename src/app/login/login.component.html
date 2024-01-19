@@ -1,0 +1,65 @@
+<app-header></app-header>
+<div class="container">
+    <div fxLayout="column">
+        <div class="padding-20"></div>
+        <div fxLayout="row" fxFlex>
+            <h1 fxFlexOffset="7" fxFlex>&nbsp;
+            </h1>
+        </div>
+        <div class="padding-20"></div>
+        <div fxFlex>
+            <div fxLayout="column" fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="40px">
+                <mat-card fxFlex="60" fxLayout="column">
+
+                    <h1 fxFlex >
+                        Hello 
+                    </h1>
+                    <div class="padding-20"></div>
+
+                    
+                    <form fxLayout="column" fxLayoutGap="10px" [formGroup]="loginForm" (ngSubmit)="onSubmit()"
+                        fxFlex="100">
+                        <div fxLayout="row" fxLayoutGap="40px">
+                            <mat-form-field fxFlex>
+                                <mat-label>Email</mat-label>
+                                <input matInput placeholder="Enter your email." formControlName="email"
+                                    autocomplete="off" required>
+                                <mat-error
+                                    *ngIf="!loginForm.controls['email'].valid && loginForm.controls['email'].touched">
+                                    Enter a valid email.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div fxLayout="row" fxLayoutGap="40px">
+                            <mat-form-field fxFlex>
+                                <mat-label>Password</mat-label>
+                                <input type="password" required matInput placeholder="Enter your password."
+                                    formControlName="password">
+                                <mat-error
+                                    *ngIf="!loginForm.controls['password'].valid && loginForm.controls['password'].touched">
+                                    Please enter valid password
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap.gt-sm="40px" fxLayoutAlign="end end">
+                            
+                            <span fxLayoutAlign="end end" [routerLink]="['/forgot-pass']" class="pointer">Forgot Password?</span>
+                        </div>
+
+                        <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
+                            <button [disabled]="loading" mat-raised-button color="primary" type="submit">Log
+                                in!</button>
+                            <button mat-raised-button [routerLink]="'[/]'">Cancel</button>
+                        </div>
+
+                    </form>
+                </mat-card>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="padding-40"></div>
+</div>

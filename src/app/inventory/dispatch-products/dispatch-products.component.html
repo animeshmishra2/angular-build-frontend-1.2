@@ -1,0 +1,364 @@
+<app-header></app-header>
+<div class="adm-container">
+    <div class="main-card">
+        <div fxLayout="row" fxLayoutGap="20px" class="outline-div" fxLayoutAlign="space-around start">
+            <div fxFlex="100" fxLayout="column">
+                <div fxFlex fxLayoutAlign="space-between center" class="orderNum">
+                    <div fxFlex="70" class="h1-txt">
+                        <a appBackButton><mat-icon>arrow_back</mat-icon></a>
+                        {{reqType}}
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutGap="10px" class="margin-top-25" fxLayoutAlign="center center"
+                    *ngIf="!isReviewDispReqReq">
+                    <div fxFlex="30">
+                        <mat-form-field fxFlex="95">
+                            <mat-label>Request To</mat-label>
+                            <mat-select [(ngModel)]="isStoreReq">
+                                <mat-option value="0">Warehouse</mat-option>
+                                <mat-option value="1">Store</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="30" *ngIf="isStoreReq == 1">
+                        <mat-form-field fxFlex="95">
+                            <mat-label>Store</mat-label>
+
+                            <input type="text" placeholder="Select Store" aria-label="store" matInput
+                                [(ngModel)]="selStore" required [matAutocomplete]="auto">
+                            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                                <mat-option *ngFor="let st of store" [value]="st">
+                                    {{st.name}}
+                                </mat-option>
+                            </mat-autocomplete>
+
+                            <!-- <mat-select [(ngModel)]="selStore">
+                                <mat-option *ngFor="let st of store"
+                                    [value]="st.idstore_warehouse">{{st.name}}</mat-option>
+                            </mat-select> -->
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="30" *ngIf="isStoreReq == 0">
+                        <mat-form-field fxFlex="95">
+                            <mat-label>Warehouse</mat-label>
+
+
+                            <input type="text" placeholder="Select Warehouse" aria-label="warehouse" matInput
+                                [(ngModel)]="selWare" required [matAutocomplete]="autow">
+                            <mat-autocomplete #autow="matAutocomplete" [displayWith]="displayFn">
+                                <mat-option *ngFor="let st of ware" [value]="st">
+                                    {{st.name}}
+                                </mat-option>
+                            </mat-autocomplete>
+
+
+<!--                             
+                            <mat-select [(ngModel)]="selWare">
+                                <mat-option *ngFor="let st of ware"
+                                    [value]="st.idstore_warehouse">{{st.name}}</mat-option>
+                            </mat-select> -->
+                        </mat-form-field>
+                    </div>
+
+                </div>
+                <div fxLayout="row" fxLayoutGap="10px" class="margin-top-25" fxLayoutAlign="center center"
+                    *ngIf="isReviewDispReqReq">
+                    <h2>Request From {{(reviewReq.from_is_store == 1)? 'Store' : 'Warehouse'}} - {{reviewReq.from_name}}
+                    </h2>
+                </div>
+                <div fxFlex fxLayout="row">
+                    <div fxFlex="98" fxLayout="column" class="leftCol" *ngIf="isCreateReqReq">
+                        <div fxLayout="row" fxLayoutGap="15px">
+                            <div fxFlex fxLayout="column">
+                                <div fxFlex="row">
+                                    <mat-form-field appearance="standard" fxFlex>
+                                        <mat-label>Search products by barcode</mat-label>
+                                        <input matInput placeholder="Scan or Enter Barcode" spellcheck="false"
+                                            autocomplete="off" onfocus="this.value=''" [(ngModel)]="prodSearchTxt" />
+                                    </mat-form-field>
+                                    <div fxFlex="20" fxLayoutAlign="center center">
+                                        <mat-slide-toggle [(ngModel)]="isExactSearch">Exact Match</mat-slide-toggle>
+                                    </div>
+                                    <div fxFlex="12" fxLayoutAlign="center center">
+                                        <button mat-button mat-raised-button color="primary" (click)="getProducts()">
+                                            Search
+                                            <!-- <mat-icon>navigate_next</mat-icon> -->
+                                        </button>
+                                    </div>
+                                </div>
+                                <table mat-table [dataSource]="dataSource" matSort>
+
+                                    <ng-container matColumnDef="brand">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            Brand Name
+                                        </th>
+                                        <td mat-cell *matCellDef="let row">{{ row.brand }}</td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="barcode">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            Barcode
+                                        </th>
+                                        <td mat-cell *matCellDef="let row">{{ row.barcode }}</td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="prod_name">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            Product Name
+                                        </th>
+                                        <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="tax">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            CGST/SGST
+                                        </th>
+                                        <td mat-cell *matCellDef="let row">{{ row.cgst }}/{{ row.sgst }}</td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="action">
+                                        <th mat-header-cell *matHeaderCellDef>Action</th>
+                                        <td mat-cell *matCellDef="let row">
+                                            <button mat-button mat-raised-button color="primary"
+                                                (click)="addProduct(row)" [disabled]="isDisable(row)">
+                                                <mat-icon>add</mat-icon>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                    <!-- Row shown when there is no matching data. -->
+                                    <tr class="mat-row" *matNoDataRow>
+                                        <td class="mat-cell" colspan="4">
+                                            No data matching the filter
+                                        </td>
+                                    </tr>
+                                </table>
+                                <mat-paginator [pageSizeOptions]="[5, 10]" aria-label="Select page of results">
+                                </mat-paginator>
+                            </div>
+                            <div fxFlex fxLayout="column">
+                                <div fxFlex="row" fxLayoutAlign="center end">
+                                    <h2 fxFlex>Selected Products</h2>
+                                </div>
+                                <table mat-table [dataSource]="dataSourceSel" matSort>
+
+                                    <ng-container matColumnDef="batch">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            Batch
+                                        </th>
+                                        <td mat-cell *matCellDef="let row">
+                                            <mat-form-field fxFlex="95">
+                                                <mat-label>Status</mat-label>
+                                                <mat-select [(ngModel)]="row.batch">
+                                                    <mat-option value="all">All</mat-option>
+                                                    <mat-option value="0">Closed</mat-option>
+                                                    <mat-option value="1">Open</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="barcode">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            Barcode
+                                        </th>
+                                        <td mat-cell *matCellDef="let row">{{ row.barcode }}</td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="prod_name">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            Product Name
+                                        </th>
+                                        <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="quantity">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            Quantity
+                                        </th>
+                                        <td mat-cell *matCellDef="let row">
+                                            <mat-form-field>
+                                                <mat-label>Prod Qty</mat-label>
+                                                <input type="number" placeholder="Quantity" aria-label="QTY" matInput
+                                                    autocomplete="off" [(ngModel)]="row.quantity" required>
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="action">
+                                        <th mat-header-cell *matHeaderCellDef>Action</th>
+                                        <td mat-cell *matCellDef="let row">
+                                            <button mat-button mat-raised-button color="warn"
+                                                (click)="removeProduct(row)">
+                                                <mat-icon>remove</mat-icon>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumnsSel"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumnsSel"></tr>
+                                    <!-- Row shown when there is no matching data. -->
+                                    <tr class="mat-row" *matNoDataRow>
+                                        <td class="mat-cell" colspan="4">
+                                            No data matching the filter
+                                        </td>
+                                    </tr>
+                                </table>
+                                <mat-paginator #secondPaginator [pageSizeOptions]="[5, 10]"
+                                    aria-label="Select page of results">
+                                </mat-paginator>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div fxFlex="98" fxLayout="column" class="leftCol" *ngIf="isCreateDispReq || isReviewDispReqReq">
+                        <div fxLayout="row" fxLayoutGap="15px">
+                            <div fxFlex fxLayout="column" *ngIf="isCreateDispReq">
+                                <div fxFlex="row" *ngIf="isCreateDispReq">
+                                    <mat-form-field appearance="standard" fxFlex>
+                                        <mat-label>Search products by barcode</mat-label>
+                                        <input matInput placeholder="Scan or Enter Barcode" spellcheck="false"
+                                            autocomplete="off" onfocus="this.value=''" [(ngModel)]="prodSearchTxt" />
+                                    </mat-form-field>
+                                    <div fxFlex="20" fxLayoutAlign="center center">
+                                        <mat-slide-toggle [(ngModel)]="isExactSearch">Exact Match</mat-slide-toggle>
+                                    </div>
+                                    <div fxFlex="12" fxLayoutAlign="center center">
+                                        <button mat-button mat-raised-button color="primary" (click)="getProducts()">
+                                            Search
+                                            <!-- <mat-icon>navigate_next</mat-icon> -->
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <table mat-table [dataSource]="dataSourceDisp" matSort>
+                                    <ng-container matColumnDef="brand">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            Brand Name
+                                        </th>
+                                        <td mat-cell *matCellDef="let row">{{ row.brand }}</td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="barcode">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            Barcode
+                                        </th>
+                                        <td mat-cell *matCellDef="let row">{{ row.barcode }}</td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="prod_name">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            Product Name
+                                        </th>
+                                        <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="tax">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            CGST/SGST
+                                        </th>
+                                        <td mat-cell *matCellDef="let row">{{ row.cgst }}/{{ row.sgst }}</td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="action">
+                                        <th mat-header-cell *matHeaderCellDef>Action</th>
+                                        <td mat-cell *matCellDef="let row">
+                                            <button mat-button mat-raised-button color="primary"
+                                                (click)="addProduct(row)" [disabled]="isDisable(row)">
+                                                <mat-icon>add</mat-icon>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumnsDisp"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumnsDisp"></tr>
+                                    <!-- Row shown when there is no matching data. -->
+                                    <tr class="mat-row" *matNoDataRow>
+                                        <td class="mat-cell" colspan="4">
+                                            No data matching the filter
+                                        </td>
+                                    </tr>
+                                </table>
+                                <mat-paginator [pageSizeOptions]="[5, 10]" aria-label="Select page of results">
+                                </mat-paginator>
+                            </div>
+                            <div fxFlex fxLayout="column">
+                                <div fxFlex="row" fxLayoutAlign="center end">
+                                    <h2 fxFlex>Selected Products</h2>
+                                </div>
+                                <table mat-table [dataSource]="dataSourceDispSel" matSort>
+
+                                    <ng-container matColumnDef="batch">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            Batch
+                                        </th>
+                                        <td mat-cell *matCellDef="let row">
+                                            <mat-form-field fxFlex="95">
+                                                <mat-label>Batch</mat-label>
+                                                <mat-select (selectionChange)="changeBatch($event.value, row)">
+                                                    <mat-option *ngFor="let bat of row.available_batches"
+                                                        [value]="bat">{{bat.name}} -
+                                                        &#8377;{{bat.mrp}}</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="barcode">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            Barcode
+                                        </th>
+                                        <td mat-cell *matCellDef="let row">{{ row.barcode }}</td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="prod_name">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            Product Name
+                                        </th>
+                                        <td mat-cell *matCellDef="let row">{{ (isReviewDispReqReq) ? row.prod_name :
+                                            row.name }}</td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="quantity">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            Quantity
+                                        </th>
+                                        <td mat-cell *matCellDef="let row">
+                                            <mat-form-field>
+                                                <mat-label>Prod Qty</mat-label>
+                                                <input type="number" placeholder="Quantity" aria-label="QTY" matInput
+                                                    autocomplete="off" [(ngModel)]="row.quantity_sent" min="0" [max]="row.available_batches.quantity" required>
+                                                <span matSuffix *ngIf="isReviewDispReqReq">REQ:{{row.quantity}}</span>
+                                                <mat-hint>Max Quantity for Batch is {{row.available_batches.quantity}}</mat-hint>
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="action">
+                                        <th mat-header-cell *matHeaderCellDef>Action</th>
+                                        <td mat-cell *matCellDef="let row">
+                                            <button mat-button mat-raised-button color="warn" *ngIf="isCreateDispReq"
+                                                (click)="removeProduct(row)">
+                                                <mat-icon>remove</mat-icon>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumnsDispSel"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumnsDispSel"></tr>
+                                    <!-- Row shown when there is no matching data. -->
+                                    <tr class="mat-row" *matNoDataRow>
+                                        <td class="mat-cell" colspan="4">
+                                            No data matching the filter
+                                        </td>
+                                    </tr>
+                                </table>
+                                <mat-paginator [pageSizeOptions]="[5, 20,50,100,200]" aria-label="Select page of results">
+                                </mat-paginator>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div fxFlex fxLayoutAlign="center center" class="orderNum" class="margin-top-25">
+                    <button mat-button (click)="onSubmit()" mat-raised-button color="primary">{{reqType}}
+                    </button>
+                </div>
+                <div class="margin-top-25"></div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,94 @@
+/* Add this CSS to your global styles.css or component's CSS file */
+
+.simple-table {
+    display: block;
+    overflow-x: auto;
+    overflow-y: hidden;
+    width: 1500px; /* Set the table's width */
+  }
+  
+  /* Adjust the width of the table's columns */
+  .simple-table th,
+  .simple-table td {
+    white-space: nowrap; /* Prevent line breaks */
+    min-width: 60px; /* Set minimum width for columns */
+    padding: 8px; /* Adjust padding as needed */
+  }
+  
+  /* Styling for the scrollbar on the left */
+  .simple-table tbody {
+    display: block;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 200px; /* Set the height for the scrollbar */
+  }
+  /* In your component's CSS or styles.css file */
+.limited-width {
+    max-width: 120px; /* Set your desired maximum width */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+
+  .recipt-header {
+    text-align: center;
+  }
+  .recipt-header h4,
+  .recipt-header h1,
+  .recipt-header h2,
+  .recipt-header h3 {
+    line-height: 3px;
+  }
+  .recipt-header p {
+    line-height: 3px;
+  }
+  .main-heading{
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  .sub-heading{
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  p{
+    font-size: 11px;
+  }
+  .recipt-body{
+    font-size: 11px;
+    width: 72mm;
+  }
+  .recipt-header{
+    width: 500px;
+  }
+  @media print {
+    #print-section {
+      margin: 10px 10px 0 0;
+    }
+    .no-print {
+      display: none;
+    }
+  }
+  .bdr {
+    outline: thin solid;
+  }
+  .right {
+    text-align: right;
+  }
+  .center {
+    text-align: center;
+  }
+  .btop {
+    border-top: 2px solid black;
+  }
+  .bbot {
+    border-bottom: 2px solid black;
+  }
+  table{
+    border-spacing: 0px;
+  }
+  .normal-lineheight{
+    line-height: normal;
+  }

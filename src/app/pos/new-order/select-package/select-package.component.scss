@@ -1,0 +1,28 @@
+.cart-img {
+    width: 40px;
+    height: 40px;
+    margin-top: 20px;
+}
+.end {
+    text-align: right;
+}
+.close-button {
+    float: right;
+    top: 20px;
+    right: -20px;
+}
+
+.close-icon {
+    transition: 1s ease-in-out;
+}
+
+.close-icon:hover {
+    transform: rotate(180deg);
+}
+.bt {
+    max-width: 35px;
+}
+mat-dialog-container{
+    background: transparent !important;
+    box-shadow: none !important;
+  }

@@ -1,0 +1,29 @@
+<button mat-icon-button class="close-button" [mat-dialog-close]="true">
+    <img src="../../../../assets/icons/close-button.png" class="close-icon" class="bt" />
+  </button>
+<div class="main-card" fxLayout="column">
+    <h2>Select Available Batch</h2>
+    <div fxFlex fxLayout="column" class="mat-elevation-z4 cart-item" style="margin: 2px 2px"
+        *ngFor="let item of prod; let j = index">
+        <div fxFlex fxLayout="row" fxLayoutGap="5px" style="padding: 5px">
+            <div fxFlex="53" fxLayout="row">
+                <div fxFlex="12" fxLayout="center center">
+                    <img src="assets/icons/invoice.png" class="cart-img" />
+                </div>
+                <div fxFlex="88" fxLayout="column">
+                    <div fxFlex="70" fxLayoutAlign="start center ">{{item.name}}</div>
+                </div>
+            </div>
+
+            <div fxFlex="35" fxLayout="column" fxLayoutAlign="center center" >
+                <div fxFlex fxLayoutAlign="center center" class="discount-per">
+                    &#8377; {{item.mrp}}
+                </div>
+            </div>
+            <div fxFlex="12" class="final-price" fxLayoutAlign="end center">
+                <button mat-stroked-button color="primary" (click)="select(item)"><mat-icon>check</mat-icon>
+                    Select</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,126 @@
+<app-header></app-header>
+<div class="adm-container">
+    <div fxLayout="column">
+        <div class="padding-20"></div>
+        <div fxLayout="row" fxFlex>
+            <h1 fxFlex>
+            </h1>
+        </div>
+        <!-- <div class="padding-20"></div> -->
+        <div fxFlex>
+            <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="40px">
+                <mat-card fxFlex="80" fxLayout="column">
+                    <h1 fxFlex class="center">
+                        Hello {{name}}
+                    </h1>
+                    <div class="padding-20">
+
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="50px">
+                        <mat-card fxFlex class="center" [ngClass]="bl1" (mouseover)="bl1='mat-elevation-z6'"
+                            (mouseout)="bl1='mat-elevation-z2'" [routerLink]="['store-warehouse', 'store']">
+                            <img mat-card-image src="assets/icons/store-2.png" alt="Manage Store">
+                            <mat-card-content>
+                                <h2>
+                                    Stores
+                                </h2>
+                            </mat-card-content>
+                        </mat-card>
+                        <mat-card fxFlex class="center" [ngClass]="bl3" (mouseover)="bl3='mat-elevation-z6'"
+                            (mouseout)="bl3='mat-elevation-z2'" [routerLink]="['store-warehouse', 'warehouse']">
+                            <img mat-card-image src="assets/icons/warehouse.png" alt="Manage Warehouse">
+                            <mat-card-content>
+                                <h2>
+                                    Warehouse
+                                </h2>
+                            </mat-card-content>
+                        </mat-card>
+                        <mat-card fxFlex class="center" [ngClass]="bl2" (mouseover)="bl2='mat-elevation-z6'"
+                            (mouseout)="bl2='mat-elevation-z2'" [routerLink]="['staff']">
+                            <img mat-card-image src="assets/icons/worker.png" alt="Manage Staff">
+                            <mat-card-content>
+                                <h2>
+                                    Manage Staff
+                                </h2>
+                            </mat-card-content>
+                        </mat-card>
+                        <mat-card fxFlex class="center" [ngClass]="bl10" (mouseover)="bl10='mat-elevation-z6'"
+                            (mouseout)="bl10='mat-elevation-z2'" [routerLink]="['product-master']">
+                            <img mat-card-image src="assets/icons/prod-master.png" alt="Product Master">
+                            <mat-card-content>
+                                <h2>
+                                    Product Master
+                                </h2>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    <div class="padding-20">
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="50px">
+                        <mat-card fxFlex class="center" [ngClass]="bl6" (mouseover)="bl6='mat-elevation-z6'"
+                            (mouseout)="bl6='mat-elevation-z2'" [routerLink]="['brand']">
+                            <img mat-card-image src="assets/icons/brand.png" alt="Manage Brands">
+                            <mat-card-content>
+                                <h2>
+                                    Brands
+                                </h2>
+                            </mat-card-content>
+                        </mat-card>
+                        <mat-card fxFlex class="center" [ngClass]="bl7" (mouseover)="bl7='mat-elevation-z6'"
+                            (mouseout)="bl7='mat-elevation-z2'" [routerLink]="['category']">
+                            <img mat-card-image src="assets/icons/cat-1.png" alt="Manage Category">
+                            <mat-card-content>
+                                <h2>
+                                    Category
+                                </h2>
+                            </mat-card-content>
+                        </mat-card>
+                        <mat-card fxFlex class="center" [ngClass]="bl8" (mouseover)="bl8='mat-elevation-z6'"
+                            (mouseout)="bl8='mat-elevation-z2'" [routerLink]="['sub-category']">
+                            <img mat-card-image src="assets/icons/cat-2.png" alt="Manage Sub Category">
+                            <mat-card-content>
+                                <h2>
+                                    Sub Category
+                                </h2>
+                            </mat-card-content>
+                        </mat-card>
+                        <mat-card fxFlex class="center" [ngClass]="bl9" (mouseover)="bl9='mat-elevation-z6'"
+                            (mouseout)="bl9='mat-elevation-z2'" [routerLink]="['sub-sub-category']">
+                            <img mat-card-image src="assets/icons/cat-3.png" alt="Sub Sub Category">
+                            <mat-card-content>
+                                <h2>
+                                    SS Category
+                                </h2>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    <div class="padding-20"></div>
+                    <div fxLayout="row" fxLayoutGap="50px">
+                        <mat-card fxFlex class="center" [ngClass]="bl13" (mouseover)="bl13='mat-elevation-z6'"
+                                (mouseout)="bl13='mat-elevation-z2'" [routerLink]="['wh-reports']">
+                                <img mat-card-image src="assets/icons/invoice.png" alt="Warehouse Reports">
+                                <mat-card-content>
+                                    <h2>
+                                        Warehouse Reports
+                                    </h2>
+                                </mat-card-content>
+                        </mat-card>
+                        <mat-card fxFlex class="center" [ngClass]="bl14" (mouseover)="bl14='mat-elevation-z6'"
+                                (mouseout)="bl14='mat-elevation-z2'" [routerLink]="['gst-reports']">
+                                <img mat-card-image src="assets/icons/invoice.png" alt="GST Reports">
+                                <mat-card-content>
+                                    <h2>
+                                        GST Reports
+                                    </h2>
+                                </mat-card-content>
+                        </mat-card>
+                    </div>
+                </mat-card>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="padding-40"></div>
+</div>

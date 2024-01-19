@@ -1,0 +1,218 @@
+<app-header></app-header>
+<div class="adm-container">
+  <div class="main-card">
+    <div fxLayout="row" fxLayoutGap="20px" class="outline-div" fxLayoutAlign="start start">
+      <div fxFlex="100" fxLayout="column">
+        <div fxFlex fxLayoutAlign="space-between center" class="orderNum">
+          <div fxFlex="40" class="h1-txt">
+            <a appBackButton><mat-icon>arrow_back</mat-icon></a>
+            Orders
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutGap="10px" class="margin-top-25">
+          <div fxFlex="2">
+            <mat-icon aria-hidden="false" aria-label="Search" class="search-icon info-text">search
+            </mat-icon>
+          </div>
+          <div fxFlex="25">
+            <mat-form-field appearance="fill" fxFlex>
+              <mat-label>Enter Order Number</mat-label>
+              <input matInput [(ngModel)]="orderNum" autocomplete="off" />
+              <button *ngIf="orderNum" matSuffix mat-icon-button aria-label="Clear" (click)="orderNum=''">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div fxFlex="10">
+            <mat-form-field appearance="fill" fxFlex="95">
+              <mat-label>Counters</mat-label>
+              <mat-select [(ngModel)]="counter">
+                <mat-option value="current">Current</mat-option>
+                <mat-option value="all">All</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div fxFlex="10">
+            <mat-form-field appearance="fill" fxFlex="95">
+              <mat-label>Order Type</mat-label>
+              <mat-select [(ngModel)]="order_type">
+                <mat-option value="0">Counter</mat-option>
+                <mat-option value="1">Online</mat-option>
+                <mat-option value="-1">All</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div fxFlex="10">
+            <mat-form-field appearance="fill" fxFlex="95">
+              <mat-label>Payment Type</mat-label>
+              <mat-select [(ngModel)]="pay_mode">
+                <mat-option value="all">All</mat-option>
+                <mat-option value="cash">Cash</mat-option>
+                <mat-option value="upi">UPI</mat-option>
+                <mat-option value="card">CARD</mat-option>
+                <mat-option value="qr">QR</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div fxFlex="45" fxLayoutGap="10px">
+            <div fxFlex>
+              <mat-form-field appearance="fill" fxFlex>
+                <mat-label>Choose a From date</mat-label>
+                <input matInput [matDatepicker]="fpicker" readonly [max]="todayDate" [(ngModel)]="from_date" />
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matSuffix [for]="fpicker"></mat-datepicker-toggle>
+                <mat-datepicker #fpicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div fxFlex>
+              <mat-form-field appearance="fill" fxFlex>
+                <mat-label>Choose a To date</mat-label>
+                <input matInput [matDatepicker]="tpicker" readonly [max]="todayDate" [(ngModel)]="to_date" />
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matSuffix [for]="tpicker"></mat-datepicker-toggle>
+                <mat-datepicker #tpicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div fxFlex="8" fxLayoutAlign="center center">
+            <button fxFlex="90" mat-flat-button color="primary" (click)="getOrder()">Search</button>
+            <div fxFlex="10"></div>
+          </div>
+        </div>
+
+        <div class="mat-elevation-z4" fxFlex class="tbl">
+          <table mat-table [dataSource]="dataSource" matSort>
+
+
+            <ng-container matColumnDef="idcustomer_order">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Order #</th>
+              <td mat-cell *matCellDef="let row">{{
+                row.idstore_warehouse +"/"+ row.idcustomer_order }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="counterName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Counter</th>
+              <td mat-cell *matCellDef="let row">
+                {{ (row.is_pos == 1 && row.is_online == 0) ? row.counterName : 'Online Order' }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="idcustomer">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Customer
+              </th>
+              <td mat-cell *matCellDef="let row">
+                {{ (row.idcustomer == 0) ? 'NA' : row.idcustomer }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="pay_mode">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Payment Type</th>
+              <td mat-cell *matCellDef="let row">
+                {{ row.pay_mode  }}
+              </td>
+            </ng-container>
+            <!-- <ng-container matColumnDef="is_delivery">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                IsDelivered
+              </th>
+              <td mat-cell *matCellDef="let row">
+                {{ row.is_delivery == 1 ? "Y" : "N" }}
+              </td>
+            </ng-container> -->
+            <ng-container matColumnDef="total_quantity">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Qty</th>
+              <td mat-cell *matCellDef="let row">
+                {{ row.total_quantity }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="total_price">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                TotalPrice
+              </th>
+              <td mat-cell *matCellDef="let row">
+                {{ row.total_price }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="bill_date">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Billed On</th>
+              <td mat-cell *matCellDef="let row">
+                {{ moment(row.created_at).format('DD-MM-YYYY h:mm:ss a') }}
+              </td>
+            </ng-container>
+            
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+              <td mat-cell *matCellDef="let row">
+                {{ (row.status == 0) ? 'Cancelled' : 'Success' }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef>Action</th>
+              <td mat-cell *matCellDef="let row">
+                <button mat-mini-fab color="primary" aria-label="Order Detail" (click)="openOrder(row)">
+                  <mat-icon>wysiwyg</mat-icon>
+                </button>
+                &nbsp;
+                <button mat-mini-fab color="warn" aria-label="Cancel Order" (click)="openOrder(row, true)" *ngIf="row.status == 1">
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns" [ngClass]="{ 'cancel-highlight': row.status == 0 }"></tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data found</td>
+            </tr>
+          </table>
+          <mat-paginator [pageSizeOptions]="[5, 10,50,100,200]" aria-label="Select page of results">
+          </mat-paginator>
+        </div>
+        <div class="mat-elevation-z4" fxFlex class="tbl" class="snap-div">
+          <div fxLayout="column">
+            <div fxLayout="row">
+              <div fxFlex fxLayoutAlign="center center">
+                <div class="number-snap">Collection Snapshot </div>
+              </div>
+            </div>
+            <div fxLayout="row" class="margin-top-25">
+              <div fxFlex fxLayoutAlign="center center">
+                <div class="number-snap">&#8377;{{totalAmount | number : "0.2-2"}}</div>
+              </div>
+              <div fxFlex fxLayoutAlign="center center">
+                <div class="number-snap">&#8377;{{totalCash | number : "0.2-2"}}</div>
+              </div>
+              <div fxFlex fxLayoutAlign="center center">
+                <div class="number-snap">&#8377;{{totalOnline | number : "0.2-2"}}</div>
+              </div>
+            </div>
+            <div fxLayout="row">
+              <div fxFlex fxLayoutAlign="center center">
+                Total Collection
+              </div>
+              <div fxFlex fxLayoutAlign="center center">
+                Total Cash Cash Collection
+              </div>
+              <div fxFlex fxLayoutAlign="center center">
+                Total Online
+              </div>
+            </div>
+            <div fxFlex style="height:20px;">&nbsp;</div>
+            <div fxLayout="row">
+              <div fxFlex fxLayoutAlign="center center">
+                <div >{{ moment(from_date).format('DD MMM YYYY') }} - {{ moment(to_date).format('DD MMM YYYY') }}</div>
+              </div>
+            </div>
+            <div fxLayout="row">
+              <div fxFlex fxLayoutAlign="center center">
+                From Date - Till Date
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

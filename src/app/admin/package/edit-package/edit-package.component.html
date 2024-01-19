@@ -1,0 +1,294 @@
+<div class="main-card">
+    <div fxLayout="row" fxLayoutGap="20px" class="outline-div" fxLayoutAlign="space-around start">
+        <div fxFlex="100" fxLayout="column">
+            <div fxFlex fxLayoutAlign="space-between center" class="orderNum">
+                <div fxFlex="40" class="h1-txt">
+                    <a appBackButton><mat-icon>arrow_back</mat-icon></a> 
+                    Create New Package
+                </div>
+                <div fxFlex="15" class="info-text" fxLayoutAlign="center center">
+
+                </div>
+            </div>
+            <div fxFlex fxLayout="row">
+                <div fxFlex="98" fxLayout="column" class="leftCol">
+                    <div class="margin-top-25"></div>
+                    <div flexLayout="row" fxLayoutGap="20px">
+                        <div fxFlex>
+                            <mat-form-field appearance="fill" fxFlex>
+                                <mat-label>Package Master</mat-label>
+                                <mat-select [(ngModel)]="packageMasterId" [disabled]="true">
+                                    <mat-option *ngFor="let pkg of pkgMasterList | keyvalue" [value]="pkg.value">
+                                        {{pkg.key}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex>
+                            <mat-form-field appearance="fill" fxFlex>
+                                <mat-label>Status</mat-label>
+                                <mat-select [(ngModel)]="status">
+                                    <mat-option value="1" style="color: green">Active</mat-option>
+                                    <mat-option value="0" style="color: red">In-Active</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+
+
+                    <mat-form-field fxFlex>
+                        <mat-label>Package Name</mat-label>
+                        <input matInput placeholder="Enter package name" [(ngModel)]="packageName" required
+                            autocomplete="off">
+                    </mat-form-field>
+
+                    <div flexLayout="row" fxLayoutGap="20px">
+                        <div fxFlex>
+                            <mat-form-field fxFlex>
+                                <mat-label>Applicable On</mat-label>
+                                <mat-select [(ngModel)]="applicableOn" [disabled]="true">
+                                    <mat-option value="M">Members</mat-option>
+                                    <mat-option value="NM">Non-Members</mat-option>
+                                    <mat-option value="BOTH">Both</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex>
+                            <mat-form-field fxFlex>
+                                <mat-label>Frequency</mat-label>
+                                <mat-select [(ngModel)]="frequency" [disabled]="true">
+                                    <mat-option value="1">Once</mat-option>
+                                    <mat-option value="999">Multiple</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                    </div>
+
+                    <div flexLayout="row" fxLayoutGap="20px">
+                        <div fxFlex>
+                            <!-- <mat-form-field fxFlex>
+                                <mat-label>Applicable From</mat-label>
+                                <mat-select [(ngModel)]="valid_from">
+                                    <mat-option value="M">Members</mat-option>
+                                    <mat-option value="NM">Non-Members</mat-option>
+                                    <mat-option value="BOTH">Both</mat-option>
+                                </mat-select>
+                            </mat-form-field> -->
+                            <mat-form-field fxFlex>
+                                <mat-label>Applicable From</mat-label>
+                                <input matInput  [disabled]="true" [(ngModel)]="valid_from">
+                                <mat-hint>Package will be available from this date</mat-hint>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex>
+                           
+                            <mat-form-field fxFlex>
+                                <mat-label>Applicable Till</mat-label>
+                                <input matInput [disabled]="true" [(ngModel)]="valid_till">
+                                <mat-hint>Package will be available till this date</mat-hint>
+                            </mat-form-field>
+
+                        </div>
+                        <div fxFlex>
+                            <mat-form-field fxFlex>
+                                <mat-label>Make Package General</mat-label>
+                                <mat-select [(ngModel)]="isGeneral" [disabled]="true">
+                                    <mat-option value="0">No</mat-option>
+                                    <mat-option value="1">Yes</mat-option>
+                                </mat-select>
+                                <mat-hint>This will make this ffer available to all user along with other discount
+                                    and offers.</mat-hint>
+                            </mat-form-field>
+
+                        </div>
+
+                    </div>
+                    <br />
+
+                    <div fxLayout="row" fxLayoutAlign="space-around start" fxLayoutGap="20px">
+                        <mat-card fxFlex="50" *ngIf="packageMasterId == 1">
+                            <mat-card-header>
+                                <mat-card-title>Package Trigger Product(s)</mat-card-title>
+                                <mat-card-subtitle>These product will activate package</mat-card-subtitle>
+                            </mat-card-header>
+
+                            <mat-card-content>
+                                <div>
+                                    <!-- <mat-form-field fxFlex>
+                                            <mat-label>Search Package Trigger Product(s)</mat-label>
+                                            <input matInput placeholder="Enter product name or Barcode"
+                                                onfocus="this.value=''" [ngModel]="trigSearch"
+                                                (ngModelChange)="doSearch($event, true)" autocomplete="off">
+                                        </mat-form-field> -->
+                                </div>
+                                <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="space-between start">
+
+                                    <div fxFlex="100" *ngIf="allTriggerProds.length > 0">
+                                        <div fxFlex>
+                                            <h2>Selected Trigger Prods</h2>
+                                            <div *ngFor="let pro of allTriggerProds; index as i">
+                                                <mat-card>
+                                                    <div>
+                                                        {{pro.name}}
+                                                    </div>
+                                                    <div fxLayout="row" fxLayoutGap="10px">
+                                                        <mat-form-field appearance="fill" class="qty" fxFlex="50">
+                                                            <mat-label>Qty</mat-label>
+                                                            <input matInput placeholder="Qty" required
+                                                                [(ngModel)]="pro.quantity" [disabled]="true">
+                                                        </mat-form-field>
+                                                        <!-- <div fxFlex="50">
+                                                                <button mat-raised-button color="warn"
+                                                                    aria-label="Remove Product"
+                                                                    (click)="removeProduct(pro, true)">
+                                                                    Remove Product
+                                                                </button>
+                                                            </div> -->
+
+                                                    </div>
+                                                </mat-card>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+
+
+                        <mat-card fxFlex="50" *ngIf="packageMasterId == 2">
+                            <mat-card-header>
+                                <mat-card-title>Package Trigger Amount</mat-card-title>
+                                <mat-card-subtitle>Over this amount package will trigger</mat-card-subtitle>
+                            </mat-card-header>
+
+                            <mat-card-content>
+                                <div>
+                                    <mat-form-field fxFlex>
+                                        <mat-label>Enter Package Trigger Product(s)</mat-label>
+                                        <input matInput placeholder="Enter amount" type="number"
+                                            [(ngModel)]="amountPkgAmt" autocomplete="off" [disabled]="true">
+                                    </mat-form-field>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+
+                        <mat-card fxFlex="50" *ngIf="packageMasterId == 2 || packageMasterId == 1">
+                            <mat-card-header>
+
+                                <mat-card-title>Tagged Product(s)</mat-card-title>
+                                <mat-card-subtitle>These product will become available</mat-card-subtitle>
+                            </mat-card-header>
+
+                            <mat-card-content>
+
+                                <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="space-between start">
+                                    <div fxFlex="100" *ngIf="allTaggedProds.length > 0">
+                                        <div fxFlex>
+                                            <h2>Selected Tagged Prods</h2>
+                                            <div *ngFor="let pro of allTaggedProds; index as i">
+                                                <mat-card>
+                                                    <div>
+                                                        {{pro.name}}
+                                                    </div>
+                                                    <div fxLayout="row" fxLayoutGap="10px">
+                                                        <mat-form-field appearance="fill" class="qty" fxFlex="50">
+                                                            <mat-label>Qty</mat-label>
+                                                            <input matInput placeholder="Qty" required
+                                                                [(ngModel)]="pro.quantity" [disabled]="true">
+                                                        </mat-form-field>
+                                                        <div fxFlex="50">
+                                                            <!-- <button mat-raised-button color="warn"
+                                                                    aria-label="Remove Product"
+                                                                    (click)="removeProduct(pro, false)">
+                                                                    Remove Product
+                                                                </button> -->
+                                                        </div>
+
+                                                    </div>
+                                                </mat-card>
+                                            </div>
+
+                                            <mat-card>
+                                                <mat-card-header>
+
+                                                    <mat-card-title>Additional Cost</mat-card-title>
+                                                    <mat-card-subtitle>0 if Tagged product are FREE on Triggered
+                                                        Items</mat-card-subtitle>
+                                                </mat-card-header>
+                                                <mat-card-content>
+                                                    <mat-form-field appearance="fill" class="qty" fxFlex="100">
+                                                        <mat-label>Additional Cost</mat-label>
+                                                        <input matInput placeholder="Qty" required
+                                                            [(ngModel)]="addTagAmt" [disabled]="true">
+                                                    </mat-form-field>
+                                                </mat-card-content>
+
+                                            </mat-card>
+                                        </div>
+                                    </div>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+
+                        <mat-card fxFlex="80" *ngIf="packageMasterId == 3">
+                            <mat-card-header>
+                                <mat-card-title>Package Trigger Product</mat-card-title>
+                                <mat-card-subtitle>On below scenario package will trigger</mat-card-subtitle>
+                            </mat-card-header>
+
+                            <mat-card-content>
+                                <div>
+                                    <mat-form-field fxFlex>
+                                        <mat-label>Select Product On Which Rule Will Be Applicable</mat-label>
+                                        <input matInput placeholder="Search By Product Name or Barcode"
+                                            [(ngModel)]="selectedProd" [disabled]="true">
+                                    </mat-form-field>
+
+
+                                </div>
+                                <div>
+
+                                    <mat-form-field fxFlex>
+                                        <mat-label>X </mat-label>
+                                        <span matPrefix>First &nbsp;</span>
+                                        <input matInput placeholder="Quantity" type="number" [(ngModel)]="firstQuantity"
+                                            autocomplete="off" [disabled]="true">
+                                        <span matSuffix>Quantity &nbsp;</span>
+                                    </mat-form-field>
+
+                                    <mat-form-field fxFlex>
+                                        <mat-label> -- </mat-label>
+                                        <span matPrefix>at Amount &nbsp;</span>
+                                        <input matInput placeholder="Enter amount" type="number"
+                                            [(ngModel)]="firstAmount" autocomplete="off" [disabled]="true">
+                                    </mat-form-field>
+                                    <mat-form-field fxFlex>
+                                        <mat-label>-- </mat-label>
+                                        <span matPrefix> &nbsp;then after that at Amount &nbsp;</span>
+                                        <input matInput placeholder="Enter amount" type="number"
+                                            [(ngModel)]="secondAmount" autocomplete="off" [disabled]="true">
+                                    </mat-form-field>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+
+                        <mat-card fxFlex="80" *ngIf="packageMasterId == 4">
+                            <h3>Rate Slab Package is Coming Soon!</h3>
+                        </mat-card>
+
+                    </div>
+                    <div class="margin-top-25"></div>
+                    <div fxFlex class="center">
+                        <button mat-raised-button (click)="updatePackage()">Update Package!</button>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+
+                </div>
+
+            </div>
+        </div>
+    </div>

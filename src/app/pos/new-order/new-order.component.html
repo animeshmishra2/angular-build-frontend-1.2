@@ -1,0 +1,558 @@
+<app-header></app-header>
+<div class="container">
+  <div class="main-card">
+    <div fxLayout="row" class="outline-div" fxLayoutAlign="start start">
+      <div fxFlex="50" fxLayout="column">
+        <div fxFlex fxLayoutAlign="space-between center" class="orderNum">
+          <div fxFlex="40" class="h1-txt">
+            <a appBackButton><mat-icon>arrow_back</mat-icon></a>
+            New Order
+          </div>
+          <!-- <div fxFlex="30" class="info-text">
+            {{ currentDate | date: "medium" }}
+          </div> -->
+        </div>
+        <div fxFlex class="search-div mat-elevation-z2" fxLayout="row">
+          <div fxFlex="6">
+            <mat-icon aria-hidden="false" aria-label="Search" class="search-icon info-text">search
+            </mat-icon>
+          </div>
+          <div fxFlex="70">
+            <input class="search-input" type="text" placeholder="Scan Barcode/Type Name , Barcode" spellcheck="false"
+              autocomplete="off" onfocus="this.value=''" [ngModel]="search" (ngModelChange)="doSearch($event)" />
+          </div>
+          <div fxFlex="24" fxLayoutAlign="center center">
+            <mat-slide-toggle [(ngModel)]="isExactSearch">Exact</mat-slide-toggle>
+          </div>
+        </div>
+        <div fxFlex fxLayout="column" style="margin-left: 20px; width: 100%;">
+          <div fxLayout="row wrap" fxLayoutGap="10px" class="left-sc">
+            <div class="items" *ngFor="let product of productToShow; let i = index">
+              <div class="prod-cart-item center mat-elevation-z2" fxLayout="column">
+                <div scope="row" fxFlex class="prod-img-div center">
+                  <div class="avl-qty" *ngIf="product.quantity > 0">
+                    Available
+                    {{ product.quantity > 100 ? "99+" : product.quantity | number : '1.2-2'}}
+                  </div>
+                  <div class="avl-qty-0" *ngIf="product.quantity == 0">
+                    Available 0
+                  </div>
+                  <div class="main-card center">
+                    <img [src]="'assets/icons/' + images[i]" class="prod-img" [title]="product.barcode" />
+                  </div>
+                </div>
+                <div fxFlex class="prod-name" [title]="product.prod_name">
+                  {{ product.prod_name }}
+                </div>
+                <div fxFlex class="prod-price" [title]="product.brand">
+                  {{ product.brand }}
+                </div>
+                <div fxFlex class="prod-price" fxLayout="row">
+                  <div fxFlex class="old-price" *ngIf="product.selling_price != product.mrp">
+                    &#8377; {{ product.mrp | number : "0.2-2" }}
+                  </div>
+                  <div fxFlex class="new-price">
+                    &#8377; {{ product.selling_price | number : "0.2-2" }}
+                  </div>
+                </div>
+                <div fxFlex class="cart-stat center">
+                  <button fxFlex mat-raised-button color="primary" *ngIf="
+                      cartItems['p-' + product.idproduct_master] == undefined
+                    " (click)="updateQuantity(product, false)">
+                    Add to Cart
+                  </button>
+
+                  <div fxFlex class="item-price-left" fxLayout="row" fxLayoutAlign="center center"
+                    *ngIf="cartItems['p-' + product.idproduct_master]">
+                    <div fxFlex="10">
+                      <!-- <mat-icon aria-hidden="false" aria-label="product"
+                        (click)="updateQuantity(product, false)">remove_circle_outline
+                      </mat-icon> -->
+                      <mat-icon aria-hidden="false" aria-label="product"
+                      (click)="updateQuantity(product, false)" *ngIf="cartItems['p-' + product.idproduct_master].qty > 1">
+                      remove_circle_outline
+                    </mat-icon>
+                    <mat-icon aria-hidden="false" aria-label="product"
+                      (click)="updateQuantity(product, false)" *ngIf="cartItems['p-' + product.idproduct_master].qty <= 1">
+                      delete_forever
+                    </mat-icon>
+                    </div>
+                    <div fxFlex="35">
+                      <span class="qty" style="margin-top: -5px;" fxLayoutAlign="center center" fxFlex>
+                        {{cartItems['p-' + product.idproduct_master].qty | number}}
+                      </span>
+                    </div>
+                    <div fxFlex="10">
+                      <mat-icon aria-hidden="false" aria-label="product"
+                        (click)="updateQuantity(product, true)">add_circle_outline
+                      </mat-icon>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="items" *ngIf="products.length == 0"></div>
+          </div>
+        </div>
+        <div class="paginator">
+          <mat-paginator [length]="products.length" pageSize="20" (page)="getPaginatorData($event)"
+            [pageSizeOptions]="[20, 30, 40, 50, 100]" showFirstLastButtons="true">
+          </mat-paginator>
+        </div>
+      </div>
+      <div fxFlex="50" fxLayout="column">
+        <div class="inner-card mat-elevation-z1 sti" fxLayout="column" *ngIf="cartProducts.length > 0">
+          <div fxFlex="10" class="h1-txt">Cart</div>
+          <div fxFlex="10" fxLayout="row" fxLayoutGap="5px" style="padding: 5px">
+            <div fxFlex="50" fxLayout="row">
+              <div fxFlex="2"></div>
+              <div fxFlex="98" class="info-text" fxLayoutAlign="center center" style="font-weight: 400;">
+                Item
+              </div>
+            </div>
+
+            <div fxFlex="25" class="info-text" fxLayoutAlign="center center" style="font-weight: 400;">
+              Item Price
+            </div>
+            <div fxFlex="25" class="info-text" fxLayoutAlign="center center" style="font-weight: 400;">
+              Final
+            </div>
+          </div>
+
+          <div fxLayout="column" fxLayoutGap="10px">
+            <div class="cart-iems-wrapper" #scrollTp>
+              <div *ngFor="let item of tagProdsCart;" fxLayout="column" style="margin: 2px 2px">
+                <div class="mat-elevation-z4 pkg-item" fxLayout="row">
+
+                  <div fxFlex="9" fxLayout="column" fxLayoutAlign="center center">
+                    <div fxLayout="center center">
+                      <img src='assets/icons/package.png' class="cart-img" />
+                    </div>
+
+                  </div>
+                  <div fxFlex="70" fxLayout="column">
+                    <div fxFlex fxLayout="column" class="cart-item-pkg"
+                      *ngFor="let prod of item.products; let j = index">
+                      <div fxFlex fxLayout="row" fxLayoutGap="5px" style="padding: 5px">
+                        <div fxFlex="65" fxLayout="row" fxLayoutAlign="start center">
+                          <div fxFlex="100">
+                            <div
+                            [title]="prod.prod_name"
+                            >&#10029; {{ (prod.prod_name.length > 34) ? prod.prod_name.substring(0,34) + '..' : prod.prod_name }}</div>
+                          </div>
+                        </div>
+                        <div fxLayout="column" fxLayoutAlign="center center">
+                          <div fxFlex fxLayoutAlign="center center" class="discount-per">
+                            Qty: {{ prod.quantityToDeliver }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div fxFlex="21" fxLayoutAlign="end center">
+                    <div class="final-price" fxLayoutAlign="end center">
+                      &#8377; {{ item.amount | number : "0.2-2" }} &nbsp;
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div fxFlex fxLayout="column" class="mat-elevation-z4 cart-item" style="margin: 2px 2px"
+                *ngFor="let item of cartProducts; let j = index">
+                <div fxFlex fxLayout="row" fxLayoutGap="5px" style="padding: 5px; align-items: center;">
+                  <div fxFlex="50" fxLayout="row">
+                    <div fxFlex="20" fxLayout="center center">
+                      <img [src]="'assets/icons/' + images[j]" class="cart-img" />
+                    </div>
+                    <div fxFlex="80">
+                      <div
+                      [title]="item.prod_name"
+                      > {{ (item.prod_name.length > 34) ? item.prod_name.substring(0,34) + '..' : item.prod_name }}
+                    </div>
+                      <!-- <div>weight</div> -->
+                      <div class="item-price" fxLayout="row">
+                        <div fxFlex="15">
+                          <mat-icon aria-hidden="false" aria-label="product"
+                            (click)="updateQuantity(item.detail, false)" *ngIf="item.qty > 1">
+                            remove_circle_outline
+                          </mat-icon>
+                          <mat-icon aria-hidden="false" aria-label="product"
+                            (click)="updateQuantity(item.detail, false)" *ngIf="item.qty <= 1">
+                            delete_forever
+                          </mat-icon>
+
+                        </div>
+                        <div fxFlex="55">
+                          <span class="qty" fxLayoutAlign="center center">
+                            <input type="number" class="qtyTb" [value]="item.qty" step="any"
+                              (change)="preUpdateQty(item, $event)" />
+                          </span>
+                        </div>
+
+                        <div fxFlex="15">
+                          <mat-icon aria-hidden="false" aria-label="product"
+                            (click)="updateQuantity(item.detail)">add_circle_outline
+                          </mat-icon>
+                        </div>
+                        <div fxFlex="55"></div>
+                      </div>
+                      <div class="discounts-row" fxLayout="row">
+                        <div fxFlex="29.3" class="discount-item">
+                          <span class="discount-label">P Dis:</span> &#8377;{{item?.withDiscountProduct}} &nbsp;
+                        </div>
+                        <div fxFlex="28.3" class="discount-item">
+                          <span class="discount-label"> L Dis :</span> &#8377;{{item?.withDiscountLand}} &nbsp;
+                        </div>
+                        <div fxFlex="29.3" class="discount-item">
+                          <span class="discount-label">C Dis :</span> &#8377;{{item?.withDiscountCopartnertPrice}}&nbsp;
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div fxFlex="25" fxLayout="column" fxLayoutAlign="end center">
+                    
+                    <div [ngSwitch]="customer?.idmembership_plan">
+                      <ng-container *ngSwitchCase="2">
+                        <div fxFlex fxLayoutAlign="center end" class="discount-per">
+                          &#8377; {{ item.withDiscountProduct | number : "0.2-2" }}
+                        </div>
+                      </ng-container>
+                    
+                      <ng-container *ngSwitchCase="3">
+                        <div fxFlex fxLayoutAlign="center end" class="discount-per">
+                          &#8377; {{ item.withDiscountLand | number : "0.2-2" }}
+                        </div>
+                      </ng-container>
+                    
+                      <ng-container *ngSwitchCase="4">
+                        <div fxFlex fxLayoutAlign="center end" class="discount-per">
+                          &#8377; {{ item.withDiscountCopartnertPrice | number : "0.2-2" }}
+                        </div>
+                      </ng-container>
+                    
+                      <!-- Handle default case when customer?.idmembership_plan doesn't match 1, 2, or 3 -->
+                      <ng-container *ngSwitchDefault>
+                        <div fxFlex fxLayoutAlign="center end" class="discount-per">
+                          &#8377; {{ item.selling_price | number : "0.2-2" }}
+                        </div>
+                      </ng-container>
+                    </div>
+                    
+                    <div fxFlex class="discount-amt ">
+                      &#8377; {{ item.mrp | number : "0.2-2" }} 
+                      (%{{
+                        ((item.selling_price - item.mrp) / item.mrp * 100) | number : "0.2-2"
+                      }})
+                    </div>
+                    <!-- <div fxFlex class="discount-amt">
+                     Discount : {{(customer?.idmembership_plan == 2) ? item?.discountproduct :
+                      (customer?.idmembership_plan == 3) ? item?.discountland :
+                      (customer?.idmembership_plan == 4) ? item?.discountCopartner : item?.Discount}}
+                    </div> -->
+                    
+                  </div>
+                  <div fxFlex="25" class="final-price" fxLayoutAlign="end center">
+                    &#8377;
+                    <!-- {{ item.selling_price * item.qty | number : "0.2-2" }} -->
+                    {{((customer?.idmembership_plan == 2) ? item.mrp * item.qty :
+                      (customer?.idmembership_plan == 3) ? item.mrp * item.qty:
+                      (customer?.idmembership_plan == 4) ? item.mrp * item.qty: item.selling_price * item.qty) | number : "0.2-2"}}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div fxLayoutGap="20px">
+              <div class="plan_box" *ngIf="customer?.idmembership_plan">
+                <div class="display-flex" [ngClass]="{'active' : customer?.idmembership_plan == 2}">
+                  <!-- <div class="price-title">Get this for as low as 
+                    <span class="green">{{(total?.withDiscountProductTotal) | number : "0.2-2" | currency:"INR":"symbol" }}</span> 
+                    <span class="dark-text">{{(total?.withoutDiscountPriceTotal) | number : "0.2-2" | currency:"INR":"symbol" }}</span>
+                  </div> -->
+                  <div class="offer-title">
+                    User
+                    <span style="font-style: italic; font-weight: bold;">
+                      {{customer?.name }}/ {{customer?.contact}}
+                    </span> current active plan is 
+                    <span style="font-style: italic; font-weight: bold;">
+                      {{customer.membership_type}}</span>
+                  </div>
+                  <div *ngIf="customer?.idmembership_plan">
+                    <button fxFlex mat-stroked-button color="warn" (click)="openMembershipDialog(customer)">
+                      Upgrade Membership
+                    </button>
+                  </div>
+                  <div *ngIf="!customer?.idmembership_plan">
+                    <button fxFlex mat-stroked-button color="warn" (click)="login()">
+                      Change Membership
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <mat-accordion>
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title> Apply Coupon / Discount / Packages</mat-panel-title>
+                </mat-expansion-panel-header>
+                <div></div>
+                <div fxLayout="row" fxLayoutGap="10px">
+                  <div fxFlex>
+                    <mat-form-field>
+                      <mat-placeholder>Coupon</mat-placeholder>
+                      <input matInput autocomplete="off" [(ngModel)]="coupon" [disabled]="
+                        customDisActive || 
+                        !!selectedNonGenPkg ||
+                        isAppliedDynFxDis
+                        " />
+                      <span matSuffix>
+                        <button mat-stroked-button color="primary" (click)="alterCoupon(true)" [disabled]="
+                          customDisActive || 
+                          !!selectedNonGenPkg||
+                          isAppliedDynFxDis
+                          " *ngIf="appliedCoupon.length == 0">
+                          <mat-icon>add_circle</mat-icon>Apply</button>
+                        <button mat-stroked-button color="warn" (click)="alterCoupon(false)"
+                          *ngIf="appliedCoupon.length > 0">
+                          <mat-icon>block</mat-icon>Remove</button>
+                      </span>
+                    </mat-form-field>
+                  </div>
+
+                </div>
+                <div class="separator">OR</div>
+                <div fxLayoutGap="10px" fxLayout="row">
+                  <mat-form-field fxFlex="30">
+                    <mat-placeholder>Custom Discount Amount</mat-placeholder>
+                    <span matPrefix>&#8377; &nbsp;</span>
+                    <input matInput autocomplete="off" [(ngModel)]="discountAmount"
+                      (change)="customDiscountToggle(true)" [disabled]="
+                      customDisActive || 
+                      !!selectedNonGenPkg || 
+                      appliedCoupon.length > 0 ||
+                      isAppliedDynFxDis
+                      " />
+                  </mat-form-field>
+
+                  <mat-form-field fxFlex="70">
+                    <mat-placeholder>Custom Discount Percent</mat-placeholder>
+                    <input matInput autocomplete="off" [(ngModel)]="discountPercentage"
+                      (change)="customDiscountToggle(false)" [disabled]="
+                      customDisActive || 
+                      !!selectedNonGenPkg || 
+                      appliedCoupon.length > 0 ||
+                      isAppliedDynFxDis
+                      " />
+
+                    <span matSuffix>%&nbsp;
+                      <span matSuffix>
+                        <button mat-stroked-button color="primary" (click)="updateCustomDiscout(true)" [disabled]="
+                          customDisActive || 
+                          !!selectedNonGenPkg || 
+                          appliedCoupon.length > 0 ||
+                          isAppliedDynFxDis
+                          " *ngIf="!customDisActive">
+                          <mat-icon>add_circle</mat-icon>Apply</button>
+
+                        <button mat-stroked-button color="warn" (click)="updateCustomDiscout(false)"
+                          *ngIf="customDisActive">
+                          <mat-icon>block</mat-icon>Remove</button>
+                      </span>
+                    </span>
+                  </mat-form-field>
+                </div>
+                <div class="separator">Or</div>
+                <div fxLayout="row" fxLayoutGap="10px">
+                  <button mat-stroked-button color="primary" (click)="openPackageSelect()" [disabled]="
+                    customDisActive || 
+                    appliedCoupon.length > 0 ||
+                    isAppliedDynFxDis
+                    ">
+                    <mat-icon>{{selectedNonGenPkg != 0 ? 'check_circle' : 'add_circle'}}</mat-icon>{{selectedNonGenPkg
+                    != 0 ? 'Modify' : 'Select'}} Available Package/Offer</button>
+                  <div class="hint" *ngIf="selectedNonGenPkg != 0">
+                    Selected: {{selectedNonGenPkg.name}}
+                  </div>
+                  <div *ngIf="selectedNonGenPkg != 0">
+                    <button mat-mini-fab color="warn" aria-label="Remove" (click)="removeSelNonGenPkg()">
+                      <mat-icon>block</mat-icon>
+                    </button>
+                  </div>
+                </div>
+                <div class="separator" *ngIf="customer && customer.instant_discount == 1 && customer.commission > 0">Or
+                </div>
+                <div fxLayout="row" fxLayoutGap="10px"
+                  *ngIf="customer && customer.instant_discount == 1 && customer.commission > 0">
+                  <button mat-stroked-button color="primary" (click)="modDynamicFixedDiscount(true)" [disabled]="
+                    customDisActive || 
+                    !!selectedNonGenPkg || 
+                    isAppliedDynFxDis ||
+                    appliedCoupon.length > 0
+                    ">
+                    <mat-icon>{{isAppliedDynFxDis ? 'check_circle' : 'add_circle'}}</mat-icon>{{isAppliedDynFxDis
+                    ? 'Applied' : 'Apply'}} Dynamic Fixed Discount</button>
+                  <div class="hint" *ngIf="isAppliedDynFxDis">
+                    Dynamic Fixed Discount is Active: &#8377; {{ total.extraDisc | number : "0.2-2" }}
+                  </div>
+                  <div *ngIf="isAppliedDynFxDis">
+                    <button mat-mini-fab color="warn" aria-label="Remove" (click)="modDynamicFixedDiscount(false)">
+                      <mat-icon>block</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+
+            <div fxLayout="row" class="btmSnap">
+              <div fxFlex="50" fxLayout="column" fxLayoutGap="10px" fxLayoutAlign="space-between stretch">
+
+                <div fxFlex="row" fxLayoutGap="5px">
+                  <mat-form-field fxFlex="35">
+                    <mat-placeholder>Payment Mode</mat-placeholder>
+                    <mat-select matInput [(ngModel)]="paymentMode" (selectionChange)="changePayMode()">
+                      <mat-option value="Cash">Cash </mat-option>
+                      <mat-option value="Card">Card </mat-option>
+                      <mat-option value="QR">QR </mat-option>
+                      <mat-option value="UPI">UPI </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field fxFlex="50" *ngIf="payRefEnable">
+                    <mat-placeholder>Ref Number</mat-placeholder>
+                    <input matInput type="search" autocomplete="off" [(ngModel)]="payRef" />
+                  </mat-form-field>
+                </div>
+
+                <div class="highlight-membersip-pre" fxFlex="70" *ngIf="!customerLogged">
+                  <div class="hint">
+                    Login User for Priviledges
+                  </div>
+                  <mat-form-field>
+                    <mat-placeholder>Member Contact</mat-placeholder>
+                    <input matInput type="search" autocomplete="off" [(ngModel)]="contact" />
+                    <button mat-button matSuffix mat-stroked-button (click)="login()" color="primary">
+                      Go!
+                    </button>
+                  </mat-form-field>
+                </div>
+                <div class="highlight-membersip" fxFlex="70" *ngIf="customerLogged">
+                  <div fxLayout="row" class="lsnap">
+                    <div fxFlex="25">Detail:</div>
+                    <div fxFlex="75" class="end">{{ customer.name.slice(0,5) }}../{{ customer.contact }}</div>
+                  </div>
+                  <div fxLayout="row" class="lsnap">
+                    <div fxFlex="25">Member:</div>
+                    <div fxFlex="75" class="end">{{ customer.membership_type }}</div>
+                  </div>
+                  <div fxLayout="row" class="lsnap">
+                    <div fxFlex="25">Wallet:</div>
+                    <div fxFlex="75" class="end">Lock: &#8377;{{ customer.wallet_balance }} / Redeem: &#8377;{{ customer.redeemWallet }}</div>
+                  </div>
+                  <div fxLayout="row" class="lsnap"
+                    *ngIf="customer && customer.instant_discount == 1 && customer.commission > 0">
+                    <div class="hint" fxFlex="100">
+                      *Eligible for Instant Discount.
+                    </div>
+                  </div>
+                  <div fxLayout="row" class="lsnap" fxLayoutAlign="space-around center">
+                    <button mat-button matSuffix mat-stroked-button (click)="logout()" color="warn" aria-label="Remove">
+                      <mat-icon>block</mat-icon> Remove Customer
+                    </button>
+                    <button mat-button matSuffix mat-stroked-button (click)="useRedeemWallet()" color="primary" aria-label="wallet" *ngIf="!isUseRedeemWallet && customer.redeemWallet > 0">
+                      <mat-icon>add_circle</mat-icon> Use Redeem Wallet
+                    </button>
+                    <button mat-button matSuffix mat-stroked-button (click)="dontUseRedeemWallet()" color="warn" aria-label="wallet" *ngIf="isUseRedeemWallet">
+                      <mat-icon>block</mat-icon> Don't Redeem Wallet
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div fxLayout="column" fxFlex="50">
+                <div fxLayout="row" class="snap">
+                  <div fxFlex="50" class="end">Net Total:</div>
+                  <div fxFlex="49" class="end">&#8377; {{ total.total | number : "0.2-2" }}</div>
+                </div>
+                <div fxLayout="row" class="snap">
+                  <div fxFlex="50" class="end">CGST:</div>
+                  <div fxFlex="49" class="end">
+                    &#8377; {{ total.cgst | number : "0.2-2" }}
+                  </div>
+                </div>
+                <div fxLayout="row" class="snap">
+                  <div fxFlex="50" class="end">SGST:</div>
+                  <div fxFlex="49" class="end">
+                    &#8377; {{ total.sgst | number : "0.2-2" }}
+                  </div>
+                </div>
+
+                <div fxLayout="row" class="snap">
+                  <div fxFlex="50" class="end" *ngIf="customer?.idmembership_plan == 1">Instant Dis:</div>
+                  <div fxFlex="50" class="end" *ngIf="!customer?.idmembership_plan">Instant Dis:</div>
+                  <div fxFlex="50" class="end" *ngIf="customer?.idmembership_plan == 2">Product Dis:</div>
+                  <div fxFlex="50" class="end" *ngIf="customer?.idmembership_plan == 3">Land Dis:</div>
+                  <div fxFlex="50" class="end" *ngIf="customer?.idmembership_plan == 4">CoPartner Dis:</div>
+                  <div fxFlex="49" class="end">
+                    &#8377; 
+                    {{ total.discount | number : "0.2-2" }}
+                    <!-- {{ total.totalDiscount | number : "0.2-2" }} -->
+                  </div>
+                </div>
+
+                <div fxLayout="row" class="snap" *ngIf="actualDiscountAmount > 0">
+                  <div fxFlex="50" class="end">Extra Dis:</div>
+                  <div fxFlex="49" class="end">
+                    &#8377; {{ actualDiscountAmount | number : "0.2-2" }}
+                  </div>
+                </div>
+
+                <div fxLayout="row" class="snapLast">
+                  <div fxFlex="50" class="end">Grand Total:</div>
+                  <div fxFlex="49" class="end">
+                    &#8377; {{ total.grand | number : "1.2-2" }}
+                  </div>
+                </div>
+                <div fxLayout="row" class="snap" *ngIf="isUseRedeemWallet">
+                  <div fxFlex="50" class="end">Used Wallet Amt :</div>
+                  <div fxFlex="49" class="end">
+                    &#8377; {{ ((total.grand - customer.redeemWallet) < 0) ? (total.grand) : customer.redeemWallet | number : "1.2-2" }}
+                  </div>
+                </div>
+
+                <div fxLayout="row" class="snapLast" *ngIf="isUseRedeemWallet">
+                  <div fxFlex="50" class="end">Amount Payable :</div>
+                  <div fxFlex="49" class="end">
+                    &#8377; {{ total.grandAfterWallet| number : "1.2-2" }}
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div fxLayout="row" fxLayoutGap="20px">
+              <button fxFlex mat-stroked-button color="warn" (click)="holdOrder()">
+                HOLD
+              </button>
+
+              <button fxFlex mat-raised-button color="primary" (click)="placeOrder()">
+                Place Order
+              </button>
+
+              <button fxFlex mat-stroked-button color="warn" (click)="emptyCart()">
+                Empty Cart
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="inner-card mat-elevation-z1" fxLayout="column" *ngIf="cartProducts.length == 0">
+          <div fxFlex="10" class="h1-txt">Cart</div>
+          <div class="center">
+            <img mat-card-image src="assets/icons/hold-order.png" alt="Empty Cart" class="empty-cart" />
+            <h2>Add items to get started!</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

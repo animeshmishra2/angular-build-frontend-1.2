@@ -1,0 +1,81 @@
+<app-header></app-header>
+<div class="container">
+  <div fxLayout="column">
+    <div class="padding-20"></div>
+    <div fxLayout="row" fxFlex>
+      <h1 fxFlex></h1>
+    </div>
+    <div class="padding-20"></div>
+    <div fxFlex>
+      <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="40px">
+        <mat-card fxFlex="80" fxLayout="column">
+          <h1 fxFlex class="center">Hello {{ name }}</h1>
+          <div class="padding-20"></div>
+          <div fxLayout="row" fxLayoutGap="50px">
+            <mat-card *ngIf="isCounterOpen" fxFlex class="center" [ngClass]="newOrd"
+              (mouseover)="newOrd = 'mat-elevation-z6'" (mouseout)="newOrd = 'mat-elevation-z2'"
+              [routerLink]="['/pos/new-order']">
+              <img mat-card-image src="assets/icons/new-order.png" alt="New Order" />
+              <mat-card-content>
+                <h2>New Order</h2>
+              </mat-card-content>
+            </mat-card>
+            <mat-card *ngIf="isCounterOpen" fxFlex class="center" [ngClass]="holdOrd"
+              (mouseover)="holdOrd = 'mat-elevation-z6'" (mouseout)="holdOrd = 'mat-elevation-z2'"
+              [routerLink]="['/pos/hold-order']">
+              <img mat-card-image src="assets/icons/hold-order.png" alt="Hold Order" />
+              <mat-card-content>
+                <h2>Hold Orders</h2>
+              </mat-card-content>
+            </mat-card>
+
+            <mat-card *ngIf="isCounterOpen" fxFlex class="center" [ngClass]="couOrd"
+              (mouseover)="couOrd = 'mat-elevation-z6'" (mouseout)="couOrd = 'mat-elevation-z2'"
+              [routerLink]="['/pos/counter-order']">
+              <img mat-card-image src="assets/icons/past-orders.png" alt="New Order" />
+              <mat-card-content>
+                <h2>Counter Orders</h2>
+              </mat-card-content>
+            </mat-card>
+
+            <mat-card fxFlex class="center" [ngClass]="bl1" (mouseover)="bl1 = 'mat-elevation-z6'"
+              (mouseout)="bl1 = 'mat-elevation-z2'" [routerLink]="['/inventory/requirement-request']">
+              <img mat-card-image src="assets/icons/demand.png" alt="Product Request" />
+              <mat-card-content>
+                <h2>Product Request</h2>
+              </mat-card-content>
+            </mat-card>
+
+            <mat-card fxFlex class="center" [ngClass]="bl2" (mouseover)="bl2 = 'mat-elevation-z6'"
+              (mouseout)="bl2 = 'mat-elevation-z2'" [routerLink]="['/inventory/requirement-request/1']">
+              <img mat-card-image src="assets/icons/supply-chain.png" alt="Received Requests" />
+              <mat-card-content>
+                <h2>Received Requests</h2>
+              </mat-card-content>
+            </mat-card>
+
+            <mat-card *ngIf="isCounterOpen" fxFlex class="center" [ngClass]="closeCou"
+              (mouseover)="closeCou = 'mat-elevation-z6'" (mouseout)="closeCou = 'mat-elevation-z2'"
+              (click)="closeCounter()">
+              <img mat-card-image src="assets/icons/close-counter.png" alt="New Order" />
+              <mat-card-content>
+                <h2>Close Counter</h2>
+              </mat-card-content>
+            </mat-card>
+            <mat-card *ngIf="!isCounterOpen" fxFlex class="center" [ngClass]="closeCou"
+              (mouseover)="closeCou = 'mat-elevation-z6'" (mouseout)="closeCou = 'mat-elevation-z2'"
+              [routerLink]="['/pos/open-counter']">
+              <img mat-card-image src="assets/icons/open-counter.png" alt="Open Order" />
+              <mat-card-content>
+                <h2>Open Counter</h2>
+              </mat-card-content>
+            </mat-card>
+          </div>
+          <div class="padding-20"></div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+
+  <div class="padding-40"></div>
+</div>

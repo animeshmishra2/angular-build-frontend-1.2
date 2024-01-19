@@ -1,0 +1,80 @@
+<app-header></app-header>
+<div class="wh-container">
+    <div class="main-card">
+        <div fxLayout="row" fxLayoutGap="20px" class="outline-div" fxLayoutAlign="space-around start">
+            <div fxFlex="100" fxLayout="column">
+                <div fxFlex fxLayoutAlign="space-between center" class="orderNum">
+                    <div fxFlex="40" class="h1-txt">Generate Order to Warehouses</div>
+                    <div fxFlex="15" class="info-text" fxLayoutAlign="center center">
+
+                    </div>
+                </div>
+                <div fxFlex fxLayout="row">
+                    <div fxFlex="98" fxLayout="column" class="leftCol">
+                        <div class="margin-top-25"></div>
+                        <mat-form-field appearance="fill" fxFlex>
+                            <mat-label>Warehouse</mat-label>
+                            <mat-select [(ngModel)]="warehouse">
+                                <mat-option *ngFor="let ware of allWares" [value]="ware.idstore_warehouse" >
+                                    {{ware.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field fxFlex>
+                            <mat-label>Search Product</mat-label>
+                            <input matInput placeholder="Enter product name or Barcode" onfocus="this.value=''"
+                                [ngModel]="search" (ngModelChange)="doSearch($event)" autocomplete="off">
+                        </mat-form-field>
+
+                        <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="space-between start">
+                            <div fxFlex="47"  *ngIf="products.length > 0">
+                                <div class="inner-card mat-elevation-z8">
+                                    <div *ngFor="let pro of products; index as i">
+                                        <div fxFlex="80">
+                                            {{pro.name}}
+                                        </div>
+                                        <div fxFlex>
+                                            <button mat-mini-fab color="primary" aria-label="Add Product"
+                                                (click)="addProduct(pro)">
+                                                <mat-icon>add_circle_outline</mat-icon>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div fxFlex="47" *ngIf="finOrders.length > 0">
+                                <div class="mat-elevation-z8 inner-card " fxFlex>
+                                    <div *ngFor="let pro of finOrders; index as i">
+                                        <div fxFlex="75">
+                                            {{pro.name}}
+                                        </div>
+                                        <div fxFlex="20">
+                                            <mat-form-field appearance="fill" class="qty">
+                                                <mat-label>Qty</mat-label>
+                                                <input matInput placeholder="Qty" required [(ngModel)]="pro.quantity">
+                                            </mat-form-field>
+                                            <!-- <input type="text" [(ngModel)]="pro.quantity"/> -->
+                                        </div>
+                                        <div fxFlex>
+                                            <button mat-mini-fab color="warn" aria-label="Add Product"
+                                                (click)="removeProduct(pro)">
+                                                <mat-icon>remove_circle_outline</mat-icon>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="margin-top-25"></div>
+                        <div fxFlex class="center">
+                            <button mat-raised-button (click)="createOrder()" [disabled]="finOrders.length == 0">Create Order!</button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>

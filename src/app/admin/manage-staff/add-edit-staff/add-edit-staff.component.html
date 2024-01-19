@@ -1,0 +1,56 @@
+<div fxFlex="100" class="inner-card mat-elevation-z1" fxLayout="column">
+    <div fxFlex="10" class="h1-txt">
+        {{(this.row.id) ? "Update" : "Add New"}} Staff Member
+    </div>
+    <div class="margin-top-25"></div>
+    <form fxLayout="column" [formGroup]="lForm" (ngSubmit)="onSubmit()" fxFlex="100">
+        <div fxLayout="column" fxLayoutGap="40px">
+            <div fxFlex fxLayout="row" fxLayoutGap="10px">
+                <mat-form-field fxFlex>
+                    <mat-label>Name</mat-label>
+                    <input matInput placeholder="Enter staff name" formControlName="name" autocomplete="off" required>
+                    <mat-error *ngIf="!lForm.controls['name'].valid && lForm.controls['name'].touched">
+                        Enter a valid name.
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                    <mat-label>Contact</mat-label>
+                    <input matInput placeholder="Enter staff contact" formControlName="contact" autocomplete="off"
+                        required>
+                    <mat-error *ngIf="!lForm.controls['contact'].valid && lForm.controls['contact'].touched">
+                        Enter a valid contact number.
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div fxFlex fxLayout="row" fxLayoutGap="10px">
+                <mat-form-field fxFlex>
+                    <mat-label>Email</mat-label>
+                    <input matInput placeholder="Enter Email ID" formControlName="email" autocomplete="off" required>
+                    <mat-error *ngIf="!lForm.controls['email'].valid && lForm.controls['email'].touched">
+                        Enter a valid email.
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                    <mat-label>Password</mat-label>
+                    <input matInput placeholder="Enter staff password" formControlName="password" autocomplete="off"
+                        >
+                </mat-form-field>
+            </div>
+            <mat-form-field fxFlex>
+                <mat-label>Address</mat-label>
+                <textarea matInput placeholder="Enter staff address" formControlName="address" autocomplete="off"
+                    required></textarea>
+                <mat-error *ngIf="!lForm.controls['address'].valid && lForm.controls['address'].touched">
+                    Enter a valid address.
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
+            <button [disabled]="loading || lForm.invalid" mat-raised-button color="primary"
+                type="submit">
+                {{(this.row.id) ? "Update" : "Add New"}} Staff
+            </button>
+            <button mat-raised-button type="button" (click)="cancel()">Cancel</button>
+        </div>
+    </form>
+</div>

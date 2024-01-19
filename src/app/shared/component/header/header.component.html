@@ -1,0 +1,43 @@
+<mat-toolbar color="primary">
+
+    <mat-toolbar-row class="mat-elevation-z6">
+
+        <span class="heading-top" [routerLink]="['']">
+            <!-- <img [routerLink]="['']" class="logo" src="../../../../assets/images/logo.png"/> -->
+           Home
+        </span>
+        <button mat-menu-item (click)="goToDash()">Dashboard/Home</button>
+        <span class="search-outline">
+            <h3>{{logType}} {{(swName.length > 0 ? '-':'')}} {{swName.substring(0,15)}}</h3>
+
+        </span>
+
+        <span class="spacer"></span>
+        <span>
+            <button mat-button [matMenuTriggerFor]="menu">
+                <mat-icon>account_circle</mat-icon>
+                {{(loggedIn == true) ? ((name.length > 8) ? name.substring(0,8) + '..' : name) : 'Sign In'}}
+            </button>
+        </span>
+
+        <!-- </span> -->
+        <mat-menu #menu="matMenu">
+            <div *ngIf="loggedIn == false">
+                <button mat-menu-item [routerLink]="['/login']">Log in</button>
+                <!-- <button mat-menu-item [routerLink]="['/register']">Register</button> -->
+            </div>
+            <div *ngIf="loggedIn == true ">
+                <!-- <button mat-menu-item [routerLink]="['/payment-list']">Payments</button> -->
+                <button mat-menu-item [routerLink]="['/change-pass']">Change Pass</button>
+                <button mat-menu-item (click)="logout()">Logout</button>
+            </div>
+            <div *ngIf="loggedIn == true && type=='UT'">
+                <button mat-menu-item [routerLink]="['/dashboard']">Dashboard</button>
+                <button mat-menu-item [routerLink]="['/change-pass']">Change Pass</button>
+                <button mat-menu-item [routerLink]="['/update-details']">Update Details</button>
+                <button mat-menu-item (click)="logout()">Logout</button>
+            </div>
+        </mat-menu>
+    </mat-toolbar-row>
+</mat-toolbar>
+<app-loader></app-loader>

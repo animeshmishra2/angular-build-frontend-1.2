@@ -1,0 +1,21 @@
+.hold-card {
+    max-width: 300px;
+    margin-bottom: 50px;
+}
+
+.hold-header-image {
+    background-image: url("../../../../assets/icons/special-offer.png");
+    background-size: cover;
+    height: 208px;
+}
+mat-card-content{
+    max-height: 200px;
+    overflow: auto;
+}
+.main-card{
+    overflow: auto;
+}
+.internal-wrapper{
+    max-height: 600px;
+    overflow: auto;
+}

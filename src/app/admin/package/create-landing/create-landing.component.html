@@ -1,0 +1,144 @@
+<div class="main-card">
+    <div fxLayout="row" fxLayoutGap="20px" class="outline-div" fxLayoutAlign="start start">
+        <div fxFlex="100" fxLayout="column">
+            <div fxFlex fxLayoutAlign="space-between center" class="orderNum">
+                <div fxFlex="40" class="h1-txt">
+                    Create New Package
+                </div>
+            </div>
+            <div class="margin-top-25"></div>
+            <div fxFlex fxLayout="column">
+                <div fxLayout="row wrap" fxLayoutGap="30px" class="internal-wrapper">
+                    <div class="items" fxLayout="row wrap" fxLayoutGap="30px">
+
+                        <mat-card class="hold-card">
+                            <mat-card-header>
+                                <mat-card-title>Buy X Get Y</mat-card-title>
+                            </mat-card-header>
+                            <div class="hold-header-image"></div>
+                            <mat-card-content>
+                                <h3>
+                                    Example -
+                                    <ul>
+                                        <li>
+                                            A package where you can configure 1 on 1 product
+                                        </li>
+                                        <li>
+                                            Buy 2 items get 1 Free.
+                                        </li>
+                                    </ul>
+                                </h3>
+                                <p>
+                                    <mat-card-subtitle>
+                                        This can be applicable to Members and Non-Members both.
+                                    </mat-card-subtitle>
+                                </p>
+                            </mat-card-content>
+                            <mat-card-actions>
+                                <button mat-raised-button color="primary" (click)="select(pkgType.Product)">
+                                    Create
+                                </button>
+                            </mat-card-actions>
+                        </mat-card>
+                        <mat-card class="hold-card">
+                            <mat-card-header>
+                                <mat-card-title>Buy ANY ITEM and Get OTHER ITEM for some amount.</mat-card-title>
+                            </mat-card-header>
+                            <div class="hold-header-image"></div>
+                            <mat-card-content>
+                                <h3>
+                                    Example -
+                                    <ul>
+                                        <li>
+                                            One product on 50 and other on additional 25, So total = 75 for two products
+                                        </li>
+                                        <li>
+                                            On 5kg Sugar Get 1kg Free.
+                                        </li>
+                                    </ul>
+                                </h3>
+                                <p>
+                                    <mat-card-subtitle>
+                                        This can be applicable to Members and Non-Members both.
+                                    </mat-card-subtitle>
+                                </p>
+                            </mat-card-content>
+                            <mat-card-actions>
+                                <button mat-raised-button color="primary" (click)="select(pkgType.Product)">
+                                    Create
+                                </button>
+                            </mat-card-actions>
+                        </mat-card>
+                        <mat-card class="hold-card">
+                            <mat-card-header>
+                                <mat-card-title>On particular Amount get few products free or with some
+                                    amount</mat-card-title>
+                            </mat-card-header>
+                            <div class="hold-header-image"></div>
+                            <mat-card-content>
+                                <h3>
+                                    Example -
+                                    <ul>
+                                        <li>
+                                            On shopping of 5k get 4 products get 4 Products Free.
+                                        </li>
+                                        <li>
+                                            On shopping of 5k get 1kg Sugar Free.
+                                        </li>
+                                        <li>
+                                            On shopping of 5k get 1kg Sugar Free.
+                                        </li>
+                                        <li>
+                                            On shopping of 5k get 2 month ration Free.
+                                        </li>
+                                    </ul>
+                                </h3>
+                                <p>
+                                    <mat-card-subtitle>
+                                        This can be applicable to Members and Non-Members both.
+                                    </mat-card-subtitle>
+                                </p>
+                            </mat-card-content>
+                            <mat-card-actions>
+                                <button mat-raised-button color="primary" (click)="select(pkgType.Amount)">
+                                    Create
+                                </button>
+                            </mat-card-actions>
+                        </mat-card>
+                        <mat-card class="hold-card">
+                            <mat-card-header>
+                                <mat-card-title>Quantity Discount</mat-card-title>
+                            </mat-card-header>
+                            <div class="hold-header-image"></div>
+                            <mat-card-content>
+                                <h3>
+                                    Example -
+                                    <ul>
+                                        <li>
+                                            Get 5 maggi @10 and after that @12.
+                                        </li>
+                                        <li>
+                                            Get 5 maggi @12 and after that @10.
+                                        </li>
+                                    </ul>
+                                </h3>
+                                <p>
+                                    <mat-card-subtitle>
+                                        This can be applicable to Members and Non-Members both.
+                                    </mat-card-subtitle>
+                                </p>
+                            </mat-card-content>
+                            <mat-card-actions>
+                                <button mat-raised-button color="primary" (click)="select(pkgType.Quantity)">
+                                    Create
+                                </button>
+                            </mat-card-actions>
+                        </mat-card>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

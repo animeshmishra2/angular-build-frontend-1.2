@@ -1,0 +1,623 @@
+<!-- <app-header></app-header> -->
+<div class="wh-container">
+    <div class="main-card">
+        <div fxFlex="100" class="inner-card mat-elevation-z1" fxLayout="column">
+            <div fxFlex fxLayoutAlign="space-between center" class="orderNum">
+                <div fxFlex="40" class="h1-txt">
+                    <a appBackButton><mat-icon>arrow_back</mat-icon></a>
+                    Vendor Bill
+                </div>
+            </div>
+            <div class="margin-top-25"></div>
+            <form class="example-form">
+
+            </form>
+            <mat-stepper linear #stepper>
+                <mat-step [stepControl]="firstFormGroup">
+                    <form [formGroup]="firstFormGroup">
+                        <ng-template matStepLabel>Vendor Details</ng-template>
+                        <div fxLayout="column">
+                            <div fxFlex fxLayoutAlign="center start">
+                                <mat-form-field fxFlex="30">
+                                    <mat-label>Search Vendor</mat-label>
+                                    <input type="text" placeholder="Select one" aria-label="Vendor" matInput
+                                        formControlName="vendor" required [matAutocomplete]="auto">
+                                    <mat-autocomplete (optionSelected)="setDefaultData()" #auto="matAutocomplete" [displayWith]="displayFn">
+                                        <mat-option *ngFor="let vendor of filteredVendors | async" [value]="vendor">
+                                            {{vendor.name}} - {{vendor.gst}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div fxLayout="column" *ngIf="isDispBillDet()">
+                            <div fxLayout="row" fxLayoutGap="10px">
+                                <div fxFlex>
+                                    <mat-form-field fxFlex>
+                                        <mat-label>Bill number</mat-label>
+                                        <input type="text" placeholder="Bill No" aria-label="Bill" matInput
+                                            autocomplete="off" formControlName="billno" required>
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex>
+                                    <mat-form-field fxFlex>
+                                        <mat-label>Total Bill Amount  &#8377;</mat-label>
+                                        <input type="number" placeholder="Bill Amount  &#8377;" aria-label="Amount" matInput
+                                            autocomplete="off" formControlName="total" required>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div fxLayout="row" fxLayoutGap="10px">
+                                <div fxFlex>
+                                    <mat-form-field fxFlex>
+                                        <mat-label>Amount Paid  &#8377;</mat-label>
+                                        <input type="number" placeholder="Paid Amount" aria-label="Paid" matInput
+                                            autocomplete="off" formControlName="paid" required>
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex fxLayoutAlign="row">
+                                    <mat-form-field fxFlex>
+                                        <mat-label>Payment Mode</mat-label>
+                                        <mat-select matInput formControlName="paymode">
+                                            <mat-option value="Cash">Cash </mat-option>
+                                            <mat-option value="Card">NetBanking </mat-option>
+                                            <mat-option value="UPI">UPI </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                </div>
+                            </div>
+                            <div fxLayout="row" fxLayoutGap="10px">
+                                <ng-container *ngIf="visiblecsGst">
+                                    <div fxFlex>
+                                        <mat-form-field fxFlex>
+                                            <mat-label>Total CGST  &#8377;</mat-label>
+                                            <input type="number" placeholder="CGST  &#8377;" aria-label="CGST" matInput
+                                                autocomplete="off" formControlName="cgst">
+                                        </mat-form-field>
+                                    </div>
+                                    <div fxFlex>
+                                        <mat-form-field fxFlex>
+                                            <mat-label>Total SGST &#8377;</mat-label>
+                                            <input type="number" placeholder="SGST &#8377;" aria-label="SGST" matInput
+                                                autocomplete="off" formControlName="sgst">
+                                        </mat-form-field>
+                                    </div>
+                                </ng-container>
+                                <div fxFlex *ngIf="visibleIgst">
+                                    <mat-form-field fxFlex>
+                                        <mat-label>Total IGST &#8377;</mat-label>
+                                        <input type="number" placeholder="IGST &#8377;" aria-label="SGST" matInput
+                                            autocomplete="off" formControlName="igst">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div fxLayout="row" fxLayoutGap="10px">
+                                <div fxFlex>
+                                    <mat-form-field fxFlex>
+                                        <mat-label>Reference Number/Remark</mat-label>
+                                        <textarea placeholder="Paid Amount Reference" aria-label="Reference" matInput
+                                            autocomplete="off" formControlName="refNo"></textarea>
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex class="alignment">
+                                    <mat-form-field fxFlex>
+                                        <mat-label>Bill Date</mat-label>
+                                        <input matInput [matDatepicker]="dp3" [value]="selectedDate"
+                                        formControlName="billDate" [max]="todayDate" (dateChange)="onDateChange($event)" readonly>
+                                        <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
+                                        <mat-datepicker #dp3 disabled="false"></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="center center">
+                            <button mat-button matStepperNext mat-raised-button color="primary">
+                                Next
+                                <mat-icon>navigate_next</mat-icon>
+                            </button>
+                        </div>
+                    </form>
+                </mat-step>
+                <mat-step [stepControl]="secondFormGroup">
+                    <ng-template matStepLabel>Select Products</ng-template>
+
+                    <div fxLayout="row" fxLayoutGap="15px">
+                        <div fxFlex fxLayout="column">
+                            <div fxFlex="row">
+                                <mat-form-field appearance="standard" fxFlex>
+                                    <mat-label>Search products by barcode</mat-label>
+                                    <input matInput placeholder="Scan or Enter Barcode" spellcheck="false"
+                                        autocomplete="off" onfocus="this.value=''" [(ngModel)]="prodSearchTxt" />
+                                </mat-form-field>
+                                <div fxFlex="20" fxLayoutAlign="center center">
+                                    <mat-slide-toggle [(ngModel)]="isExactSearch">Exact Match</mat-slide-toggle>
+                                </div>
+                                <div fxFlex="12" fxLayoutAlign="center center">
+                                    <button mat-button mat-raised-button color="primary" (click)="getProducts()">
+                                        Search
+                                        <!-- <mat-icon>navigate_next</mat-icon> -->
+                                    </button>
+                                </div>
+                            </div>
+                            <table mat-table [dataSource]="dataSource" matSort>
+                                <ng-container matColumnDef="idproduct_master">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+                                    <td mat-cell *matCellDef="let row">
+                                        {{ row.idproduct_master }}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="brand">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        Brand Name
+                                    </th>
+                                    <td mat-cell *matCellDef="let row">{{ row.brand }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="barcode">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        Barcode
+                                    </th>
+                                    <td mat-cell *matCellDef="let row">{{ row.barcode }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="prod_name">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        Product Name
+                                    </th>
+                                    <td mat-cell *matCellDef="let row">{{ row.prod_name }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="quantity">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        CGST/SGST
+                                    </th>
+                                    <td mat-cell *matCellDef="let row">{{ row.cgst }}/{{ row.sgst }}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="action">
+                                    <th mat-header-cell *matHeaderCellDef>Action</th>
+                                    <td mat-cell *matCellDef="let row">
+                                        <button mat-button mat-raised-button color="primary" (click)="addProduct(row)"
+                                            [disabled]="isDisable(row)">
+                                            <mat-icon>add</mat-icon>
+                                        </button>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                <!-- Row shown when there is no matching data. -->
+                                <tr class="mat-row" *matNoDataRow>
+                                    <td class="mat-cell" colspan="4">
+                                        No data matching the filter
+                                    </td>
+                                </tr>
+                            </table>
+                            <mat-paginator [pageSizeOptions]="[5, 10, 15, 20, 100]" aria-label="Select page of results">
+                            </mat-paginator>
+                        </div>
+                        <div fxFlex fxLayout="column">
+                            <div fxFlex="row" fxLayoutAlign="center end">
+                                <h2 fxFlex>Selected Products</h2>
+                            </div>
+                            <table mat-table [dataSource]="dataSourceSel" matSort>
+                                <ng-container matColumnDef="idproduct_master">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+                                    <td mat-cell *matCellDef="let row">
+                                        {{ row.idproduct_master }}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="brand">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        Brand Name
+                                    </th>
+                                    <td mat-cell *matCellDef="let row">{{ row.brand }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="barcode">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        Barcode
+                                    </th>
+                                    <td mat-cell *matCellDef="let row">{{ row.barcode }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="prod_name">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        Product Name
+                                    </th>
+                                    <td mat-cell *matCellDef="let row">{{ row.prod_name }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="quantity">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        CGST/SGST
+                                    </th>
+                                    <td mat-cell *matCellDef="let row">{{ row.cgst }}/{{ row.sgst }}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="action">
+                                    <th mat-header-cell *matHeaderCellDef>Action</th>
+                                    <td mat-cell *matCellDef="let row">
+                                        <button mat-button mat-raised-button color="warn" (click)="removeProduct(row)">
+                                            <mat-icon>remove</mat-icon>
+                                        </button>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayedColumnsSel"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumnsSel"></tr>
+                                <!-- Row shown when there is no matching data. -->
+                                <tr class="mat-row" *matNoDataRow>
+                                    <td class="mat-cell" colspan="4">
+                                        No data matching the filter
+                                    </td>
+                                </tr>
+                            </table>
+                            <mat-paginator #selectedPaginator [pageSizeOptions]="[5, 10, 15, 20, 100]" aria-label="Select page of results">
+                            </mat-paginator>
+                        </div>
+                    </div>
+                    <div>
+                        <button mat-button matStepperPrevious>Back</button>
+                        <button mat-button matStepperNext mat-raised-button color="primary">
+                            Next
+                            <mat-icon>navigate_next</mat-icon>
+                        </button>
+                    </div>
+                </mat-step>
+                <mat-step>
+                    <ng-template matStepLabel>Product Details</ng-template>
+                    <div class="card">
+                        <div class="align-title product-title">
+                            <h2 fxFlex>{{productDetails ? 'Edit' : 'Add'}} Product Detail</h2>
+                            <div class="right-part">
+                                <div class="value-title">Grand Total : <span>&#8377;{{grandTotal | number: '1.2-2' }}</span></div>
+                                <div class="value-title">Pending value: <span>&#8377;{{pendingAmonut() | number: '1.2-2' }}</span></div>
+                                <div class="value-title">Total Margin: <span> &#8377;{{totalMargin | number: '1.2-2' }}</span></div>
+                            </div>
+                        </div>
+                        <div class="table-container" id="content">
+                            <table mat-table [dataSource]="dataSourceSelDet" class="table" matSort #printTable>
+                                <ng-container matColumnDef="barcode">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        Barcode
+                                    </th>
+                                    <td mat-cell *matCellDef="let row">
+                                        <span class="cell-width">{{ row?.barcode }} /
+                                        {{ row?.prod_name?.substring(0,15) }} / 
+                                        {{ row?.brand?.substring(0,10) }}</span>
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="freeQuantity">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        Free Quantity
+                                    </th>
+                                    <td mat-cell *matCellDef="let row">
+                                        <span class="cell-width"><mat-form-field>
+                                            <mat-label>Free Quantity</mat-label>
+                                            <input type="number" min="0" placeholder="Free Quantity" aria-label="QTY" matInput
+                                                autocomplete="off" [(ngModel)]="row.free_quantity">
+                                        </mat-form-field></span>
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="quantity">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        Quantity
+                                    </th>
+                                    <td mat-cell *matCellDef="let row">
+                                        <span class="cell-width"><mat-form-field>
+                                            <mat-label>Prod Qty</mat-label>
+                                            <input type="number"  min="0" placeholder="Quantity" aria-label="QTY" matInput
+                                                autocomplete="off" (keyup)="autoCalculation()" [(ngModel)]="row.nquantity" required>
+                                        </mat-form-field></span>
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="unitpp">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        Unit Purchase Price   &#8377;
+                                    </th>
+                                    <td mat-cell *matCellDef="let row;let i = index">
+                                        <span class="cell-width"><mat-form-field>
+                                            <mat-label>Unit Price</mat-label>
+                                            <input type="number" min="0" placeholder="Purchase Price" aria-label="Price" matInput
+                                                autocomplete="off" (keyup)="autoCalculation(); calculatePrice(row, i)"[(ngModel)]="row.purchase_price" required>
+                                                
+                                        </mat-form-field>
+                                        <div *ngIf="row.purchase_price !== null && row.mrp !== null && row.purchase_price > row.mrp" class="error-message" >
+                                            Unit Purchase Price cannot be larger than MRP
+                                          </div>
+                                    </span>
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="hsn">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        HSN
+                                    </th>
+                                    <td mat-cell *matCellDef="let row">
+                                        <span class="cell-width"><mat-form-field>
+                                            <mat-label>HSN</mat-label>
+                                            <input type="number" placeholder="HSN" aria-label="Price" matInput
+                                                autocomplete="off" [(ngModel)]="row.hsn">
+                                        </mat-form-field></span>
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="mrp">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        MRP &#8377;
+                                    </th>
+                                    <td mat-cell *matCellDef="let row">
+                                        <span class="cell-width"><mat-form-field>
+                                            <mat-label>Prod MRP</mat-label>
+                                            <input type="number" placeholder="MRP" aria-label="MRP" matInput
+                                                autocomplete="off" [(ngModel)]="row.mrp" required>
+                                        </mat-form-field></span>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="marginPrice">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        MRP Margin  &#8377; (%);
+                                    </th>
+                                    <td mat-cell *matCellDef="let row">
+                                        <span class="cell-width">  &#8377; {{row.margin | number: '1.2-2'}}
+                                            <span>(%{{
+                                                row.marginPercent | number : "0.2-2"
+                                              }})</span>
+                                        </span>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="instant">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        Instant Price  &#8377;
+                                    </th>
+                                    <td mat-cell *matCellDef="let row">
+                                        <span class="cell-width"><mat-form-field>
+                                            <mat-label>Instant Price</mat-label>
+                                            <input type="number" min="0" placeholder="SP" aria-label="SP" matInput
+                                                autocomplete="off" [(ngModel)]="row.selling_price" required>
+                                                <span *ngIf="visiblecsGst">(%{{
+                                                    (((row.selling_price - (row.purchase_price + (row.purchase_price * (row.cgst + row.sgst)) / 100)))
+                                                     / row.selling_price * 100) | number : "0.2-2"
+                                                  }})</span>
+
+                                                <span *ngIf="visibleIgst">
+                                                    (%{{
+                                                        (((row.selling_price - (row.purchase_price + (row.purchase_price * row.igst)) / 100)) 
+                                                        / row.selling_price * 100) | number : "0.2-2"
+                                                      }})
+                                                </span>
+                                        </mat-form-field></span>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="product">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                      Product Price  &#8377;
+                                    </th>
+                                    <td mat-cell *matCellDef="let row">
+                                        <span class="cell-width"><mat-form-field>
+                                            <mat-label>Product Price</mat-label>
+                                            <input type="number" min="0" placeholder="IP" aria-label="SP" matInput
+                                                autocomplete="off" [(ngModel)]="row.product" required>
+                                                <span> 
+                                                    <span *ngIf="row.product > 0">
+                                                        <!-- (% {{
+                                                            (((( row.purchase_price - row.product )) 
+                                                            / row.purchase_price ) * 100) | number : "0.2-2"
+                                                        }}) -->
+                                                        (%{{
+                                                            (((row.product - (row.purchase_price + (row.purchase_price * (row.cgst + row.sgst)) / 100)))
+                                                             / row.product * 100) | number : "0.2-2"
+                                                          }})
+                                                    </span>
+                                                    <span *ngIf="row.product < 0">
+                                                        (% - {{
+                                                            (((row.product - (row.purchase_price + (row.purchase_price * (row.cgst + row.sgst)) / 100)))
+                                                             / row.product * 100) | number : "0.2-2"
+                                                          }})
+                                                    </span>
+                                                </span>
+                                        </mat-form-field></span>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="land">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        Land Price  &#8377; 
+                                    </th>
+                                    <td mat-cell *matCellDef="let row">
+                                        <span class="cell-width"><mat-form-field>
+                                            <mat-label>Land Price</mat-label>
+                                            <input type="number" min="0" placeholder="SP" aria-label="SP" matInput
+                                                autocomplete="off" [(ngModel)]="row.land" required>
+                                                <span>
+                                                    <span *ngIf="row.land > 0">
+                                                        <!-- (%{{
+                                                            (((( row.purchase_price - row.land )) 
+                                                            / row.purchase_price ) * 100) | number : "0.2-2"
+                                                        }}) -->
+                                                        (% {{
+                                                            (((row.land - (row.purchase_price + (row.purchase_price * (row.cgst + row.sgst)) / 100)))
+                                                             / row.land * 100) | number : "0.2-2"
+                                                          }})
+                                                    </span>
+                                                    <span *ngIf="row.land < 0">
+                                                        (% - {{
+                                                            (((row.land - (row.purchase_price + (row.purchase_price * (row.cgst + row.sgst)) / 100)))
+                                                             / row.land * 100) | number : "0.2-2"
+                                                          }})
+                                                    </span>
+                                                </span>
+                                        </mat-form-field></span>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="copartner">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        Copartner Price &#8377;
+                                    </th>
+                                    <td mat-cell *matCellDef="let row">
+                                        <span class="cell-width"><mat-form-field>
+                                            <mat-label>Copartner Price</mat-label>
+                                            <input type="number" min="0" placeholder="SP" aria-label="SP" matInput
+                                                autocomplete="off" [(ngModel)]="row.copartner" required>
+                                                <span>
+                                                    <span *ngIf="row.copartner > 0">
+                                                        <!-- (% {{
+                                                            (((( row.purchase_price - row.copartner )) 
+                                                            / row.purchase_price ) * 100) | number : "0.2-2"
+                                                        }}) -->
+                                                        (% {{
+                                                            (((row.copartner - (row.purchase_price + (row.purchase_price * (row.cgst + row.sgst)) / 100)))
+                                                             / row.copartner * 100) | number : "0.2-2"
+                                                          }})
+                                                    </span>
+                                                    <span *ngIf="row.copartner < 0">
+                                                        (% - {{
+                                                            (((row.copartner - (row.purchase_price + (row.purchase_price * (row.cgst + row.sgst)) / 100)))
+                                                             / row.copartner * 100) | number : "0.2-2"
+                                                          }})
+                                                    </span>
+                                                </span>
+                                        </mat-form-field></span>
+                                    </td>
+                                </ng-container>
+                                <!-- <ng-container matColumnDef="sp">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        Selling Price
+                                    </th>
+                                    <td mat-cell *matCellDef="let row">
+                                        <span class="cell-width"><mat-form-field>
+                                            <mat-label>Selling Price</mat-label>
+                                            <input type="number" (keyup)="autoCalculation()" placeholder="SP" aria-label="SP" matInput
+                                                autocomplete="off" [(ngModel)]="row.selling_price" required>
+                                        </mat-form-field></span>
+                                    </td>
+                                </ng-container> -->
+                                
+
+                                <ng-container *ngIf="visibleIgst" matColumnDef="additionalColumn" class="last-column">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        IGST (%)
+                                    </th>
+                                    <td mat-cell *matCellDef="let row">
+                                        <span class="cell-width"><mat-form-field>
+                                            <mat-label>IGST</mat-label>
+                                            <input type="number" placeholder="IGST" (keyup)="autoCalculation()" [(ngModel)]="row.igst" aria-label="IGSt" matInput
+                                                autocomplete="off" required>
+                                        </mat-form-field></span>
+                                    </td>
+                                </ng-container>
+
+                                <ng-container *ngIf="visiblecsGst" matColumnDef="cgst" class="last-column">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        CGST/SGST (%)
+                                    </th>
+                                    <td mat-cell *matCellDef="let row">
+                                        <span class="cell-width"><mat-form-field>
+                                            <mat-label>CGST</mat-label>
+                                            <input type="number" placeholder="CGST" (keyup)="autoCalculation()" [(ngModel)]="row.cgst" aria-label="IGSt" matInput
+                                                autocomplete="off" required>
+                                        </mat-form-field></span>
+                                    </td>
+                                </ng-container>
+
+                                <!-- <ng-container *ngIf="visiblecsGst" matColumnDef="sgst" class="last-column">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        SGST
+                                    </th>
+                                    <td mat-cell *matCellDef="let row">
+                                        <span class="cell-width"><mat-form-field>
+                                            <mat-label>SGST</mat-label>
+                                            <input type="number" (keyup)="autoCalculation()" placeholder="SGST" [(ngModel)]="row.sgst" aria-label="IGSt" matInput
+                                                autocomplete="off" required>
+                                        </mat-form-field></span>
+                                    </td>
+                                </ng-container> -->
+
+                                <ng-container matColumnDef="expiry">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        Expiry
+                                    </th>
+                                    <td mat-cell *matCellDef="let row">
+                                        <span class="cell-width"><mat-form-field>
+                                            <mat-chip-list #chipList aria-label="Choose a date" (click)="picker.open()">
+                                                <mat-chip *ngFor="let value of row.expiry" [selectable]="false"
+                                                    [removable]="true" (removed)="remove(value, row)">
+                                                    {{  row?.expiry ? (row?.expiry | date) : '' }}
+                                                    <mat-icon matChipRemove *ngIf="true">cancel</mat-icon>
+                                                </mat-chip>
+                                                <input [min]="todayDate" [value]="resetModel" matInput
+                                                    [matDatepicker]="picker" placeholder="Choose a date"
+                                                    (dateChange)="dateChanged($event, row)" [matChipInputFor]="chipList"
+                                                    hidden />
+                                            </mat-chip-list>
+                                            <mat-datepicker-toggle matPrefix [for]="picker"></mat-datepicker-toggle>
+                                            <mat-datepicker #picker [startAt]="init"
+                                                [dateClass]="dateClass"></mat-datepicker>
+                                        </mat-form-field></span>
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="totalAmt">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        Total Amount (Inc GST*)
+                                    </th>
+                                    <td mat-cell *matCellDef="let row">
+                                        <span class="cell-width">&#8377;{{row?.totalAmount | number: '1.2-2'}}</span>
+                                    </td>
+                                </ng-container>
+
+                                <!-- <ng-container matColumnDef="calculateprice" class="last-column">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        Action
+                                    </th>
+                                    <td mat-cell *matCellDef="let row;let i = index">
+                                        <span class="cell-width">
+                                                <button mat-raised-button type="button" (click)="calculatePrice(row, i)">Calculate Price</button>
+                                            </span> 
+                                    </td>
+                                </ng-container> -->
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumnsSelDet"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumnsSelDet"></tr>
+                                <!-- Row shown when there is no matching data. -->
+                                <tr class="mat-row" *matNoDataRow>
+                                    <td class="mat-cell" colspan="4">
+                                        No data matching the filter
+                                    </td>
+                                </tr>
+                            </table>
+                            <div id="printableContent" style="display: none;"></div>
+                        </div>
+                        <mat-paginator #finalPaginator [pageSizeOptions]="[5, 10, 20, 50, 100]" aria-label="Select page of results">
+                        </mat-paginator>
+                    </div>
+                    <div class="text-center">
+                        <h3>Grand Total  :  &#8377;{{grandTotal | number: '1.2-2'}}</h3>
+                        <mat-form-field>
+                            <mat-label>Remarks</mat-label>
+                            <input type="text" [(ngModel)]="remarksData" aria-label="Enter Remark" matInput autocomplete="off">
+                        </mat-form-field>
+                    </div>
+                    <div>
+                        <button mat-button matStepperPrevious>Back</button>
+                        <button mat-button (click)="onSubmit()" mat-raised-button color="primary"> {{productDetails ? 'Submit & Update' : 'Submit & Add'}}
+                            Inventory</button>
+
+                            &nbsp;
+                        <!-- <button mat-button (click)="savData()" mat-raised-button color="accent">
+                            Save Data
+                            <mat-icon>navigate_next</mat-icon>
+                        </button> -->
+                            &nbsp;
+                        <button mat-button (click)="print()" mat-raised-button color="primary">Review</button>
+                    </div>
+                </mat-step>
+            </mat-stepper>
+
+        </div>
+    </div>
+</div>

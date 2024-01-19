@@ -1,0 +1,73 @@
+// .mat-column-expiry {
+//     width: 300px
+// }
+// .mat-column-mrp {
+//      width: 100px
+// }
+.alignment {
+    margin-top: 15px !important;
+}
+
+
+/* Enable horizontal scrolling on smaller screens */
+// .table-container {
+//   overflow-x: auto;
+// }
+
+/* Ensure the table header remains visible */
+.mat-header-row {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 1;
+}
+
+.card {
+    .product-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        h2 {margin-bottom: 0;}
+        .right-part {
+            display: flex;
+            gap: 10px;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 6px 12px;
+            .value-title {
+                font-weight: 500;
+                font-size: 15px;
+                span {
+                    font-weight: 600;
+                }
+            }
+        }
+
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+
+    .table {
+        width: 100%;
+
+        tr {
+
+            td,
+            th {
+                padding: 10px;
+            }
+        }
+        .cell-width {
+            display: block;
+            width: 100px;
+        }
+    }
+
+    .mat-form-field {
+        width: 100%;
+    }
+
+}

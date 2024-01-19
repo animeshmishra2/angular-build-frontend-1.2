@@ -1,0 +1,66 @@
+<div class="main-card">
+    <div fxLayout="row" fxLayoutGap="20px" class="outline-div" fxLayoutAlign="start start">
+        <div fxFlex="100" fxLayout="column">
+            <div fxFlex fxLayoutAlign="space-between center" class="orderNum">
+                <div fxFlex="40" class="h1-txt">Bill Wise Transfer  Details</div>
+
+            </div>
+            <div>
+                <table mat-table [dataSource]="dataSource" matSort>
+                    <ng-container matColumnDef="prod_name">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Product Name</th>
+                        <td mat-cell *matCellDef="let row">
+                           {{ row?.prod_name}}
+                        </td>
+                    </ng-container>
+    
+                    <ng-container matColumnDef="barcode">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Barcode</th>
+                        <td mat-cell *matCellDef="let row">{{ row?.barcode }}</td>
+                    </ng-container>
+    
+                    <ng-container matColumnDef="totalquantity">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Quantity</th>
+                        <td mat-cell *matCellDef="let row">
+                            {{ row?.quantity }}
+                        </td>
+                    </ng-container>
+    
+                    <ng-container matColumnDef="sendq">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Sent Quantity</th>
+                        <td mat-cell *matCellDef="let row">
+                            {{ row?.quantity_sent}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="receivedq">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Received Quantity</th>
+                        <td mat-cell *matCellDef="let row">
+                            {{ row?.quantity_received }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="batch">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Batch
+                        </th>
+                        <td mat-cell *matCellDef="let row">
+                           {{row?.batch_name}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="batchmrp">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Batch MRP  &#8377;</th>
+                        <td mat-cell *matCellDef="let row">
+                            &#8377;  {{ row?.batch_mrp | number }}
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="4">No data found</td>
+                    </tr>
+                </table>
+            </div>
+           
+        </div>
+        <br>
+    </div>
+</div>

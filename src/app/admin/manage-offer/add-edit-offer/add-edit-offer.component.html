@@ -1,0 +1,76 @@
+<div fxFlex="100" class="inner-card mat-elevation-z1" fxLayout="column">
+    <div fxFlex="10" class="h1-txt">
+        Create New Offer
+    </div>
+    <div class="margin-top-25"></div>
+    <form fxLayout="column" [formGroup]="lForm" (ngSubmit)="onSubmit()" fxFlex="100">
+        <div fxLayout="column" fxLayoutGap="40px">
+            <div fxFlex fxLayout="row" fxLayoutGap="10px">
+                <mat-form-field appearance="fill">
+                    <mat-label>Base</mat-label>
+                    <mat-select formControlName="base">
+                        <mat-option value="P">Product</mat-option>
+                        <mat-option value="A">Amount</mat-option>
+                        <mat-option value="C">Quantity</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div fxFlex fxLayout="row" fxLayoutGap="10px">
+                <mat-form-field fxFlex>
+                    <mat-label>Search Product</mat-label>
+                    <input matInput placeholder="Enter product name or Barcode" onfocus="this.value=''"
+                        formControlName="search" (ngModelChange)="doSearch($event)" autocomplete="off">
+                </mat-form-field>
+                
+            </div>
+            <div fxFlex fxLayout="row" fxLayoutGap="20px" >
+                <div fxFlex="45" >
+                    <div class="inner-card mat-elevation-z8"  *ngIf="products.length > 0">
+                        <div *ngFor="let pro of products; index as i">
+                            <div fxFlex="80">
+                                {{pro.name}}
+                            </div>
+                            <div fxFlex>
+                                <button mat-mini-fab color="primary" aria-label="Add Product"
+                                    (click)="addProduct(pro)">
+                                    <mat-icon>add_circle_outline</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div fxFlex="45" *ngIf="selProds.length > 0">
+                    <div class="mat-elevation-z8 inner-card " fxFlex>
+                        <div *ngFor="let pro of selProds; index as i">
+                            <div fxFlex="75">
+                                {{pro.name}}
+                            </div>
+                            <div fxFlex>
+                                <button mat-mini-fab color="warn" aria-label="Add Product"
+                                    (click)="removeProduct(pro)">
+                                    <mat-icon>remove_circle_outline</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <mat-form-field fxFlex>
+                <mat-label>Address</mat-label>
+                <textarea matInput placeholder="Enter store address" formControlName="address" autocomplete="off"
+                    required></textarea>
+                <mat-error *ngIf="!lForm.controls['address'].valid && lForm.controls['address'].touched">
+                    Enter a valid address.
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
+            <button [disabled]="loading || lForm.invalid" mat-raised-button color="primary"
+                type="submit">
+                {{(this.row.idstore_warehouse) ? "Update" : "Add New"}} {{(this.row.is_store) ? "Store" : "Warehouse"}} 
+            </button>
+            <button mat-raised-button type="button" (click)="cancel()">Cancel</button>
+        </div>
+    </form>
+</div>

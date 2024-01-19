@@ -1,0 +1,11 @@
+.main-card {
+    width: 100%;
+    background-color: #f6f7fa;
+    border-radius: 25px;
+    height: 400px;
+}
+::ng-deep th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
+    padding: 7px !important;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+}

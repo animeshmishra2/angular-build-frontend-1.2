@@ -21,16 +21,16 @@ export class OpenCloseCounterComponent implements OnInit {
   alreadyOpenCounter;
   mainForm = new FormGroup({
     counter: new FormControl('', [Validators.required]),
-    n1: new FormControl(),
-    n2: new FormControl(),
-    n5: new FormControl(),
-    n10: new FormControl(),
-    n20: new FormControl(),
-    n50: new FormControl(),
-    n100: new FormControl(),
-    n200: new FormControl(),
-    n500: new FormControl(),
-    n2000: new FormControl(),
+    n1: new FormControl(0, [Validators.required]),
+    n2: new FormControl(0, [Validators.required]),
+    n5: new FormControl(0, [Validators.required]),
+    n10: new FormControl(0, [Validators.required]),
+    n20: new FormControl(0, [Validators.required]),
+    n50: new FormControl(0, [Validators.required]),
+    n100: new FormControl(0, [Validators.required]),
+    n200: new FormControl(0, [Validators.required]),
+    n500: new FormControl(0, [Validators.required]),
+    n2000: new FormControl(0, [Validators.required]),
 
   });
   counters: any = [];
@@ -42,21 +42,20 @@ export class OpenCloseCounterComponent implements OnInit {
     private alertService: AlertService,
     private authenticationService: AuthenticationService,
     private router: Router) {
-      this.currentUser = this.authenticationService.currentUserValue;
-      console.log(this.currentUser);
-      
-      if(this.router.url == '/pos/close-counter'){
-        this.isFromOpenCounter = false;
-        if(this.currentUser.counter_detail[0])
-        {
-          this.alreadyOpenCounter = this.currentUser.counter_detail[0].idcounter;
-        }
-        console.log(this.alreadyOpenCounter);
-        this.mainForm.patchValue({
-          counter:this.alreadyOpenCounter
-        });
+    this.currentUser = this.authenticationService.currentUserValue;
+    console.log(this.currentUser);
+
+    if (this.router.url == '/pos/close-counter') {
+      this.isFromOpenCounter = false;
+      if (this.currentUser.counter_detail[0]) {
+        this.alreadyOpenCounter = this.currentUser.counter_detail[0].idcounter;
       }
-    
+      console.log(this.alreadyOpenCounter);
+      this.mainForm.patchValue({
+        counter: this.alreadyOpenCounter
+      });
+    }
+
     if (this.currentUser.counter_detail.length > 0 && this.isFromOpenCounter === true) {
       console.log(this.currentUser);
       this.router.navigate(['/pos/dashboard']);
@@ -70,6 +69,19 @@ export class OpenCloseCounterComponent implements OnInit {
       .subscribe(
         data => {
           this.counters = data;
+          console.log(this.alreadyOpenCounter);
+          console.log(this.counters);
+
+          if (!this.isFromOpenCounter) {
+            this.counters.forEach(cnt => {
+              if (cnt.idcounter == this.alreadyOpenCounter) {
+                this.counterChanged(cnt);
+                this.mainForm.patchValue({
+                  counter: cnt
+                });
+              }
+            });
+          }
         },
         error => {
           this.alertService.error(error);
@@ -78,7 +90,9 @@ export class OpenCloseCounterComponent implements OnInit {
   }
 
   onSubmit() {
-    
+    if (this.mainForm.invalid) {
+      return;
+    }
     this.alertService.confirmDialog("Are you sure to " + ((this.isFromOpenCounter) ? "Open" : "Close") + " this Counter?").subscribe((res) => {
       if (res === true) {
         this.submitted = true;
@@ -87,13 +101,11 @@ export class OpenCloseCounterComponent implements OnInit {
         this.alertService.clear();
 
         // stop here if form is invalid
-        if (this.mainForm.invalid) {
-          return;
-        }
+       
 
         this.loading = true;
         let req = {
-          "idcounter": this.mainForm.get('counter')!.value,
+          "idcounter": (this.mainForm.get('counter')!.value).idcounter,
           "idstore_warehouse": this.counters[0]['idstore_warehouse'],
           "cashDet": {
             n1: this.mainForm.get('n1')!.value,
@@ -120,50 +132,50 @@ export class OpenCloseCounterComponent implements OnInit {
           req.cashDet.n500 * 500 +
           req.cashDet.n2000 * 2000;
 
-        
-        if(this.isFromOpenCounter){
-          this.counterServ.openCounter(req)
-          .subscribe(
-            data => {
-              this.loading = false;
-              if (data.statusCode !== 0) {
-                this.alertService.openSnackBar(data.err);
-              }
-              else {
-                this.currentUser.counter_detail = [data.data];
-                localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
-                this.router.navigate(['/pos/dashboard']);
-                // this.currentUserSubject.next(user);
 
-              }
-            },
-            error => {
-              this.alertService.error(error);
-              this.loading = false;
-            });
+        if (this.isFromOpenCounter) {
+          this.counterServ.openCounter(req)
+            .subscribe(
+              data => {
+                this.loading = false;
+                if (data.statusCode !== 0) {
+                  this.alertService.openSnackBar(data.err);
+                }
+                else {
+                  this.currentUser.counter_detail = [data.data];
+                  localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+                  this.router.navigate(['/pos/dashboard']);
+                  // this.currentUserSubject.next(user);
+
+                }
+              },
+              error => {
+                this.alertService.error(error);
+                this.loading = false;
+              });
         }
-        else{
+        else {
           this.counterServ.closeCounter(req)
-          .subscribe(
-            data => {
-              this.loading = false;
-              if (data.statusCode !== 0) {
-                this.alertService.openSnackBar(data.err);
-              }
-              else {
-                this.currentUser.counter_detail = [];
-                console.log(this.currentUser);
-                localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
-                // this.currentUserSubject.next(user);
-                this.router.navigate(['/pos/dashboard']);
-              }
-            },
-            error => {
-              this.alertService.error(error);
-              this.loading = false;
-            });
+            .subscribe(
+              data => {
+                this.loading = false;
+                if (data.statusCode !== 0) {
+                  this.alertService.openSnackBar(data.err);
+                }
+                else {
+                  this.currentUser.counter_detail = [];
+                  console.log(this.currentUser);
+                  localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+                  // this.currentUserSubject.next(user);
+                  this.router.navigate(['/pos/dashboard']);
+                }
+              },
+              error => {
+                this.alertService.error(error);
+                this.loading = false;
+              });
         }
-        
+
       }
     });
   }
@@ -197,5 +209,20 @@ export class OpenCloseCounterComponent implements OnInit {
           this.loading = false;
         }
       );
+  }
+  counterChanged(counter) {
+    console.log(counter);
+    this.mainForm.patchValue({
+      n1: counter.last_login.od_1,
+      n2: counter.last_login.od_2,
+      n5: counter.last_login.od_5,
+      n10: counter.last_login.od_10,
+      n20: counter.last_login.od_20,
+      n50: counter.last_login.od_50,
+      n100: counter.last_login.od_100,
+      n200: counter.last_login.od_200,
+      n500: counter.last_login.od_500,
+      n2000: counter.last_login.od_2000,
+    })
   }
 }

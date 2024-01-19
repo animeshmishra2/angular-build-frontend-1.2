@@ -17,48 +17,39 @@
 								</mat-icon>
 							</div>
 
-							<div fxFlex="30">
-								<mat-form-field  fxFlex>
-									<mat-label>Enter Bill Number</mat-label>
-									<input matInput [(ngModel)]="orderNum" autocomplete="off" />
-									<button *ngIf="orderNum" matSuffix mat-icon-button aria-label="Clear" (click)="orderNum=''">
-										<mat-icon>close</mat-icon>
-									</button>
-								</mat-form-field>
-							</div>
-							<div fxFlex="10">
-								<mat-form-field  fxFlex="95">
-									<mat-label>Vendor</mat-label>
-									<mat-select [(ngModel)]="vendor">
-										<mat-option value="0">All</mat-option>
-										<mat-option *ngFor="let vendor of vendors" [value]="vendor.idvendor">{{vendor.name}} -
-											{{vendor.gst}}</mat-option>
+							<div fxFlex="25">
+								<mat-form-field fxFlex="95">
+									<mat-label>Status</mat-label>
+									<mat-select [(ngModel)]="status">
+										<mat-option value="all">All</mat-option>
+										<mat-option value="1">Pending</mat-option>
+										<mat-option value="2">Dispatched</mat-option>
+										<mat-option value="3">Accepted / Closed</mat-option>
+										<mat-option value="4">Rejected</mat-option>
 									</mat-select>
 								</mat-form-field>
 							</div>
-							<div fxFlex="50" fxLayoutGap="10px">
+							<div fxFlex="65" fxLayoutGap="10px">
 								<div fxFlex>
-									<mat-form-field  fxFlex>
+									<mat-form-field fxFlex>
 										<mat-label>Choose a From date</mat-label>
-										<input matInput [matDatepicker]="fpicker" readonly [max]="todayDate"
-											[(ngModel)]="from_date" />
+										<input matInput [matDatepicker]="fpicker" readonly [max]="todayDate" [(ngModel)]="from_date" />
 										<mat-hint>MM/DD/YYYY</mat-hint>
 										<mat-datepicker-toggle matSuffix [for]="fpicker"></mat-datepicker-toggle>
 										<mat-datepicker #fpicker></mat-datepicker>
 									</mat-form-field>
 								</div>
 								<div fxFlex>
-									<mat-form-field  fxFlex>
+									<mat-form-field fxFlex>
 										<mat-label>Choose a To date</mat-label>
-										<input matInput [matDatepicker]="tpicker" readonly [max]="todayDate"
-											[(ngModel)]="to_date" />
+										<input matInput [matDatepicker]="tpicker" readonly [max]="todayDate" [(ngModel)]="to_date" />
 										<mat-hint>MM/DD/YYYY</mat-hint>
 										<mat-datepicker-toggle matSuffix [for]="tpicker"></mat-datepicker-toggle>
 										<mat-datepicker #tpicker></mat-datepicker>
 									</mat-form-field>
 								</div>
 							</div>
-		
+
 							<div fxFlex="8" fxLayoutAlign="center center">
 								<button fxFlex="90" mat-flat-button color="primary" (click)="getAll()">Search</button>
 								<div fxFlex="10"></div>
@@ -67,78 +58,31 @@
 
 						<div class="mat-elevation-z8" fxFlex>
 							<table mat-table [dataSource]="dataSource" matSort>
-								<ng-container matColumnDef="bill_number">
-									<th mat-header-cell *matHeaderCellDef mat-sort-header>Bill #</th>
-									<td mat-cell *matCellDef="let row">{{
-										row.bill_number }}</td>
-								</ng-container>
-		
-								<ng-container matColumnDef="vendor" >
-									<th mat-header-cell *matHeaderCellDef mat-sort-header>Vendor</th>
+								<ng-container matColumnDef="name">
+									<th mat-header-cell *matHeaderCellDef mat-sort-header>Vendor Name</th>
 									<td mat-cell *matCellDef="let row">
 										{{ (!!row.vendor_name) ? row.vendor_name.substring(0,15) : '' }}
 									</td>
 								</ng-container>
-		
-								<ng-container matColumnDef="total">
-									<th mat-header-cell *matHeaderCellDef mat-sort-header>
-										Total Amount
-									</th>
+
+								<ng-container matColumnDef="amount">
+									<th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
 									<td mat-cell *matCellDef="let row">
-										&#8377; {{ row.total  }}
+										{{ row.total }}
 									</td>
 								</ng-container>
-		
-								<ng-container matColumnDef="pending_value">
-									<th mat-header-cell *matHeaderCellDef mat-sort-header>
-										Pending Article Amount 
-									</th>
-									<td mat-cell *matCellDef="let row">
-										&#8377;  {{ row?.pending_value ? row?.pending_value : 0  }}
-									</td>
-								</ng-container>
-		
-								<ng-container matColumnDef="bill_remark">
-									<th mat-header-cell *matHeaderCellDef mat-sort-header>
-										Bill Remark
-									</th>
-									<td mat-cell *matCellDef="let row">
-										{{ row?.bill_remark ? row?.bill_remark : 'No Remark'  }}
-									</td>
-								</ng-container>
-							
+								
 								<ng-container matColumnDef="items">
-									<th mat-header-cell *matHeaderCellDef mat-sort-header>items / Qty</th>
+									<th mat-header-cell *matHeaderCellDef mat-sort-header>Items</th>
 									<td mat-cell *matCellDef="let row">
-										{{ row.items +"/"+ row.quantity }}
+										{{ row.items }}
 									</td>
 								</ng-container>
-								<ng-container matColumnDef="paid">
-									<th mat-header-cell *matHeaderCellDef mat-sort-header>
-										Total Bill Payment
-									</th>
-									<td mat-cell *matCellDef="let row">
-										&#8377;  {{ row.paid }}
-									</td>
-								</ng-container>
-		
-								<ng-container matColumnDef="created_at">
-									<th mat-header-cell *matHeaderCellDef mat-sort-header>Added On</th>
-									<td mat-cell *matCellDef="let row">
-										{{ moment(row.created_at).format('DD-MM-YYYY h:mm:ss a') }}
-									</td>
-								</ng-container>
+
 								<ng-container matColumnDef="action">
 									<th mat-header-cell *matHeaderCellDef>Action</th>
 									<td mat-cell *matCellDef="let row">
-										<!-- <button mat-mini-fab color="primary" aria-label="Edit" (click)="openDetails(row)">
-											<mat-icon>wysiwyg</mat-icon>
-										</button>
-										<button mat-mini-fab color="primary" aria-label="Edit" (click)="transferList(row)">
-											<mat-icon>list</mat-icon>
-										</button> -->
 										<button mat-flat-button color="primary" (click)="transfer(row)">Transfer</button>
-										
 									</td>
 								</ng-container>
 								<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -150,56 +94,6 @@
 									</td>
 								</tr>
 							</table>
-							<mat-paginator [pageSizeOptions]="[5, 10,50,100,200]" aria-label="Select page of results">
-							</mat-paginator>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div fxLayout="row" fxLayoutGap="20px" class="outline-div" fxLayoutAlign="space-around start">
-			<div fxFlex="100" fxLayout="column">
-				<div fxFlex fxLayoutAlign="space-between center" class="orderNum">
-					<div fxFlex="70" class="h1-txt">
-						Bill Tansfer Request List
-					</div>
-				</div>
-				<div fxFlex fxLayout="row" style="margin-top: 40px;">
-					<div fxFlex="98" fxLayout="column" class="leftCol">
-						<div class="mat-elevation-z8" fxFlex>
-                            <table mat-table [dataSource]="dataSourceRequst" matSort>
-                                <ng-container matColumnDef="id">
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-                                    <td mat-cell *matCellDef="let row">{{ row?.id }}</td>
-                                </ng-container>
-                
-                                <ng-container matColumnDef="store_to">
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Auto Transfer Store From</th>
-                                    <td mat-cell *matCellDef="let row">
-                                        {{ row?.from_name }}
-                                    </td>
-                                </ng-container>
-                
-                                <ng-container matColumnDef="dipatch_date">
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Auto Transfer Store To</th>
-                                    <td mat-cell *matCellDef="let row">
-                                        {{ row?.to_name}}
-                                    </td>
-                                </ng-container>
-                                <ng-container matColumnDef="action">
-									<th mat-header-cell *matHeaderCellDef>Action</th>
-									<td mat-cell *matCellDef="let row">
-										<button mat-mini-fab color="primary" aria-label="Edit" (click)="openDetails(row)">
-											<mat-icon>wysiwyg</mat-icon>
-										</button>
-								</ng-container>
-                                <tr mat-header-row *matHeaderRowDef="displayedColumnsRequest"></tr>
-                                <tr mat-row *matRowDef="let row; columns: displayedColumnsRequest"></tr>
-                                <tr class="mat-row" *matNoDataRow>
-                                    <td class="mat-cell" colspan="4">No data found</td>
-                                </tr>
-                            </table>
 							<mat-paginator [pageSizeOptions]="[5, 10,50,100,200]" aria-label="Select page of results">
 							</mat-paginator>
 						</div>

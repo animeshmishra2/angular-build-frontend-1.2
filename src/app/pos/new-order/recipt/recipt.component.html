@@ -175,6 +175,11 @@
         <td colspan="2">Extra Disc</td>
         <td>{{(detail?.extraDisc) | number : '1.2-2'}}</td>
       </tr>
+      <tr class="right normal-lineheight" *ngIf="detail && detail.redeemed_amt > 0">
+        <td style="width: 30%;">&nbsp;</td>
+        <td colspan="2">Wallet Bal</td>
+        <td>{{(detail?.redeemed_amt) | number : '1.2-2'}}</td>
+      </tr>
       <tr class="right normal-lineheight" *ngIf="roundOff != 0">
         <td></td>
         <td colspan="2">Round Off</td>

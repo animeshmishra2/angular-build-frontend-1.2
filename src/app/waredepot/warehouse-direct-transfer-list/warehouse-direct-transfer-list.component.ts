@@ -9,9 +9,6 @@ import { ConfirmOrderComponent } from 'src/app/pos/new-order/confirm-order/confi
 import { AppSetting } from 'src/app/shared/_conf/app-setting';
 import { AlertService } from 'src/app/shared/_service/alert.service';
 import { ApiHttpService } from 'src/app/shared/_service/api-http.service';
-import { BillDetailComponent } from '../new-bill/bill-detail/bill-detail.component';
-import { BillDetailsTransferComponent } from '../bill-transfer/bill-details-transfer/bill-details-transfer.component';
-import { DirectTransferDetailsComponent } from '../direct-transfer-details/direct-transfer-details.component';
 // import { ReqReqDetailComponent } from './req-req-detail/req-req-detail.component';
 
 @Component({
@@ -21,7 +18,7 @@ import { DirectTransferDetailsComponent } from '../direct-transfer-details/direc
 })
 export class WarehouseDirectTransferListComponent implements OnInit {
 
-  displayedColumns: string[] = ['idstore_request', 'req', 'request_date', 'updated_at', 'action'];
+  displayedColumns: string[] = ['idstore_request', 'req', 'status', 'request_date', 'updated_at', 'action'];
   dataSource: MatTableDataSource<any>;
   loading: boolean = false;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -61,16 +58,16 @@ export class WarehouseDirectTransferListComponent implements OnInit {
 
   getAll() {
     this.loading = true;
-    // let req = {
-    //   'valid_from': (this.from_date) ? moment(this.from_date).format('YYYY-MM-DD') : moment().subtract(30, 'days').format('YYYY-MM-DD'),
-    //   'valid_till': (this.to_date) ? moment(this.to_date).format('YYYY-MM-DD') : moment().add(1, 'days').format('YYYY-MM-DD'),
-    //   'status': (this.status.toLowerCase() == 'all') ? null : this.status,
-    //   'isMyReqReq': this.isMyReqReq
-    // }
-    this.apiServ.get(AppSetting.ENDPOINTS.allStoreRequestGetDirect)
+    let req = {
+      'valid_from': (this.from_date) ? moment(this.from_date).format('YYYY-MM-DD') : moment().subtract(30, 'days').format('YYYY-MM-DD'),
+      'valid_till': (this.to_date) ? moment(this.to_date).format('YYYY-MM-DD') : moment().add(1, 'days').format('YYYY-MM-DD'),
+      'status': (this.status.toLowerCase() == 'all') ? null : this.status,
+      'isMyReqReq': this.isMyReqReq
+    }
+    this.apiServ.post(AppSetting.ENDPOINTS.allStoreRequest, req)
       .subscribe(
         data => {
-          this.reqs = data;
+          this.reqs = data.data;
           this.dataSource = new MatTableDataSource(this.reqs);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
@@ -128,16 +125,6 @@ export class WarehouseDirectTransferListComponent implements OnInit {
   }
   review(row) {
     this.router.navigate(['inventory/review-dispatch-request'], { state: { data: row } });
-  }
-  openDetails(row){
-    console.log("row",row);
-    
-    const dialogRef = this.dialog.open(DirectTransferDetailsComponent, {
-      width: '80%',
-      data: { data: row }
-    });
-    dialogRef.afterClosed().subscribe(result => {
-    });
   }
 
 }

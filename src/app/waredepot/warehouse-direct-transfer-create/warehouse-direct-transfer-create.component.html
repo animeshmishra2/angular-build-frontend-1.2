@@ -16,8 +16,9 @@
 							<div fxFlex="30">
 								<mat-form-field fxFlex="95">
 									<mat-label>Request To</mat-label>
-									<mat-select [(ngModel)]="isStoreReq"  [attr.readonly]="true">
+									<mat-select [(ngModel)]="isStoreReq">
 										<mat-option value="0">Warehouse</mat-option>
+										<mat-option value="1">Store</mat-option>
 									</mat-select>
 								</mat-form-field>
 							</div>
@@ -138,10 +139,14 @@
 
 											<ng-container matColumnDef="quantity">
 												<th mat-header-cell *matHeaderCellDef mat-sort-header>
-													Available Quantity
+													Quantity
 												</th>
 												<td mat-cell *matCellDef="let row">
-													{{row.quantity}}
+													<mat-form-field>
+														<mat-label>Prod Qty</mat-label>
+														<input type="number" placeholder="Quantity" aria-label="QTY" matInput autocomplete="off"
+															[(ngModel)]="row.quantity" required>
+													</mat-form-field>
 												</td>
 											</ng-container>
 											<ng-container matColumnDef="action">

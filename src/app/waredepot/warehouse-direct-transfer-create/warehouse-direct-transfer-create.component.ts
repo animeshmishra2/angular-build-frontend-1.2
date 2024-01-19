@@ -247,7 +247,7 @@ export class WarehouseDirectTransferCreateComponent implements OnInit {
       });
 
       const finalObj: any = {
-        idstore_warehouse_from: this.authenticationService.currentUserValue.idwarehouse,
+        current_warehouse_id: this.authenticationService.currentUserValue.idwarehouse,
         to_warehouse_id: store?.idstore_warehouse,
         request_type: 2,
         products: allProducts

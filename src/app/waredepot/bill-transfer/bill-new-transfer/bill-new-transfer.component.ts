@@ -10,8 +10,7 @@ import { AppSetting } from 'src/app/shared/_conf/app-setting';
 import { AlertService } from 'src/app/shared/_service/alert.service';
 import { ApiHttpService } from 'src/app/shared/_service/api-http.service';
 import { AuthenticationService } from 'src/app/shared/_service/authentication.service';
-import { forkJoin } from 'rxjs';
-import { map } from 'rxjs/operators';
+
 @Component({
   selector: 'app-bill-new-transfer',
   templateUrl: './bill-new-transfer.component.html',
@@ -34,8 +33,7 @@ export class BillNewTransferComponent implements OnInit {
     public dialog: MatDialog,
     private apiServ: ApiHttpService,
     private router: Router,
-    private route: ActivatedRoute,
-    private authenticationService: AuthenticationService,) {
+    private route: ActivatedRoute) {
 
   }
 
@@ -47,49 +45,17 @@ export class BillNewTransferComponent implements OnInit {
         this.receivedData = navigationState.data;
         console.log("receivedData", this.receivedData);
 
-        // if (this.receivedData?.idvendor_purchases) {
-        //   this.apiServ.get(AppSetting.ENDPOINTS.getVendorBillDetail + `/${ this.receivedData?.idvendor_purchases}`).subscribe((res) => {
-        //     this.dataSourceSelDet = new MatTableDataSource(res);
-        //     this.dataSourceSelDet.paginator = this.paginator;
-        //     this.dataSourceSelDet.sort = this.sort;
-        //   });
-          
-        // }
-
-        if (this.receivedData?.idvendor_purchases) {
-          this.apiServ.get(AppSetting.ENDPOINTS.getVendorBillDetail + `/${this.receivedData?.idvendor_purchases}`).subscribe((res) => {
-            // Assuming res is an array of items with an 'id' property
-        
-            const observables = res.map(item => 
-              this.apiServ.post(AppSetting.ENDPOINTS.getBatchBillwise,{ idproduct_master: item.idproduct_master }).pipe(
-                map(details => ({ ...item, batches: details.data[0].available_batches }))  // Merge details with the original item
-              )
-            );
-        
-            forkJoin(observables).subscribe(updatedData => {
-              this.dataSourceSelDet = new MatTableDataSource(updatedData);
-              this.dataSourceSelDet.paginator = this.paginator;
-              this.dataSourceSelDet.sort = this.sort;
-            });
-          });
+        if (this.receivedData?.purchase_details?.length > 0) {
+          this.dataSourceSelDet = new MatTableDataSource(this.receivedData?.purchase_details);
+          this.dataSourceSelDet.paginator = this.paginator;
+          this.dataSourceSelDet.sort = this.sort;
         }
-        console.log(" this.dataSourceSelDet?.data", this.dataSourceSelDet?.data);
-        
       } else {
-        this.router.navigate(['/warehouse/bill-transfer/list']);
+        this.router.navigate(['/warehouse/bill-transfer/list'])
       }
     });
   }
-  getBillDetail() {
-    // this.loading = true;
-    this.apiServ.get(AppSetting.ENDPOINTS.getVendorBillDetail + `/${ this.receivedData?.idvendor_purchases}`).subscribe((res) => {
-      // this.dataSource = new MatTableDataSource(res);
-      // this.dataSource.paginator = this.paginator;
-      // this.dataSource.sort = this.sort;
-      // this.loading = false;
 
-    });
-  }
   getSW() {
     this.apiServ.get(AppSetting.ENDPOINTS.allSWExceptMine).subscribe((data) => {
       data.forEach(sw => {
@@ -139,11 +105,6 @@ export class BillNewTransferComponent implements OnInit {
     });
   }
 
-  changeBatch(event, row){
-    row['idproduct_batch'] = event.idproduct_batch;
-    row['selected_batch'] = event;
-  }
-
   onSubmit() {
     if (this.selStore?.length == 0) {
       this.alertService.openSnackBar("Please select at least one store.");
@@ -156,38 +117,39 @@ export class BillNewTransferComponent implements OnInit {
 
     const paylodData: any[] = [];
     this.selStore?.forEach((store: any) => {
-      const allProducts: any[] = [];
       this.dataSourceSelDet?.data?.forEach((product: any) => {
-        let dupProduct: any = { ...product };
-        dupProduct.selected_batch = { ...dupProduct.selected_batch };
-        const _currStoreObj = (dupProduct[(store?.name + '-' + dupProduct?.name)] || 0);
-        delete dupProduct[(store?.name + '-' + dupProduct?.name)];
-        dupProduct['idproduct_batch'] = dupProduct?.selected_batch?.idproduct_batch;
+        const dupProduct: any = { ...product };
+        const _currStoreObj = (dupProduct[(store?.name + '-' + dupProduct?.prod_name)] || 0);
+        delete dupProduct[(store?.name + '-' + dupProduct?.prod_name)];
 
-        if (_currStoreObj >= 0) {
-          console.log('_currStoreObj: ', _currStoreObj);
-          dupProduct.selected_batch['quantity_rec'] = _currStoreObj;
-          allProducts?.push(dupProduct.selected_batch);
+        const productObj = {
+          idvendor_purchases_detail: dupProduct?.idvendor_purchases,
+          idstore_warehouse: store?.idstore_warehouse,
+          batch: "New",
+          mrp: dupProduct?.mrp,
+          quantity: _currStoreObj,
+          idproduct_master: dupProduct?.idproduct_master
         }
+        paylodData?.push(productObj);
       });
-      const productObj = {
-        idstore_warehouse_from: this.authenticationService.currentUserValue.idwarehouse,
-        to_warehouse_id: store?.idstore_warehouse,
-        request_type: 2,
-        products: allProducts
-      }
-      paylodData?.push(productObj)
     });
+
+    const finalObj: any = {
+      idvendor: this.receivedData?.idvendor,
+      products: paylodData
+    };
+    console.log('finalObj: ', finalObj);
+
     const dialogRef = this.dialog.open(ConfirmOrderComponent, {
       data: { message: `Are you sure to Trasfer?`, title: this.reqType }
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.apiServ.post(AppSetting.ENDPOINTS.billWiseTransfer, paylodData).subscribe(data => {
+        this.apiServ.post(AppSetting.ENDPOINTS.billWiseTransfer, finalObj).subscribe(data => {
           if (data) {
             this.alertService.openSnackBar("Details Updated.");
-            this.router.navigate(['/warehouse/bill-transfer/list']);
+            this.router.navigate(['/warehouse/warehouse-direct-transfer-list']);
           } else {
             this.alertService.openSnackBar("ERROR: Unable to update.");
           }

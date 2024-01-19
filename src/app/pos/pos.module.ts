@@ -40,7 +40,6 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { BatchSelectComponent } from './new-order/batch-select/batch-select.component';
 import { UpgradeMembershipComponent } from './new-order/upgrade-membership/upgrade-membership.component';
-import { CashDrawerTransactionComponent } from './new-order/cash-drawer-transaction/cash-drawer-transaction.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +56,6 @@ import { CashDrawerTransactionComponent } from './new-order/cash-drawer-transact
     SelectPackageComponent,
     BatchSelectComponent,
     UpgradeMembershipComponent,
-    CashDrawerTransactionComponent,
   ],
   imports: [
     DirectiveModule,

@@ -499,10 +499,10 @@
                   </div>
                 </div>
 
-                <div fxLayout="row" class="snap" *ngIf="total.extraDisc > 0">
+                <div fxLayout="row" class="snap" *ngIf="actualDiscountAmount > 0">
                   <div fxFlex="50" class="end">Extra Dis:</div>
                   <div fxFlex="49" class="end">
-                    &#8377; {{ total.extraDisc | number : "0.2-2" }}
+                    &#8377; {{ actualDiscountAmount | number : "0.2-2" }}
                   </div>
                 </div>
 
@@ -512,7 +512,6 @@
                     &#8377; {{ total.grand | number : "1.2-2" }}
                   </div>
                 </div>
-
                 <div fxLayout="row" class="snap" *ngIf="isUseRedeemWallet">
                   <div fxFlex="50" class="end">Used Wallet Amt :</div>
                   <div fxFlex="49" class="end">
@@ -526,7 +525,6 @@
                     &#8377; {{ total.grandAfterWallet| number : "1.2-2" }}
                   </div>
                 </div>
-
               </div>
 
             </div>
@@ -536,7 +534,7 @@
                 HOLD
               </button>
 
-              <button fxFlex mat-raised-button color="primary" (click)="prepareOrder()">
+              <button fxFlex mat-raised-button color="primary" (click)="placeOrder()">
                 Place Order
               </button>
 

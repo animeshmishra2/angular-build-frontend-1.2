@@ -47,6 +47,10 @@ import { BillTransferListComponent } from './bill-transfer/bill-transfer-list/bi
 import { BillNewTransferComponent } from './bill-transfer/bill-new-transfer/bill-new-transfer.component';
 import { AutomaticTransferListComponent } from './automatic-transfer-list/automatic-transfer-list.component';
 import { AutomaticTransferProductComponent } from './automatic-transfer-product/automatic-transfer-product.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import { AutomaticTransferDetailsComponent } from './automatic-transfer-details/automatic-transfer-details.component';
+import { AutomaticTransferRequestListComponent } from './automatic-transfer-request-list/automatic-transfer-request-list.component';
+import { DirectTransferDetailsComponent } from './direct-transfer-details/direct-transfer-details.component';
 
 
 @NgModule({
@@ -70,7 +74,10 @@ import { AutomaticTransferProductComponent } from './automatic-transfer-product/
     BillTransferListComponent,
     BillNewTransferComponent,
     AutomaticTransferListComponent,
-    AutomaticTransferProductComponent
+    AutomaticTransferProductComponent,
+    AutomaticTransferDetailsComponent,
+    AutomaticTransferRequestListComponent,
+    DirectTransferDetailsComponent
   ],
   imports: [
     DirectiveModule,
@@ -103,7 +110,8 @@ import { AutomaticTransferProductComponent } from './automatic-transfer-product/
     MatSlideToggleModule,
     MatStepperModule,
     MatAutocompleteModule,
-    MatDialogModule
+    MatDialogModule,
+    MatCheckboxModule
   ],
   providers: [
     { provide: MAT_DIALOG_DATA, useValue: {} },

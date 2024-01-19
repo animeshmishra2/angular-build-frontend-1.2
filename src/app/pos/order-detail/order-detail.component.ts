@@ -9,8 +9,6 @@ import { AlertService } from 'src/app/shared/_service/alert.service';
 import { ApiHttpService } from 'src/app/shared/_service/api-http.service';
 import { OrderService } from 'src/app/shared/_service/order.service';
 import * as moment from 'moment';
-import { MatDialog } from '@angular/material/dialog';
-import { ConfirmOrderComponent } from '../new-order/confirm-order/confirm-order.component';
 
 @Component({
   selector: 'app-order-detail',
@@ -53,7 +51,6 @@ export class OrderDetailComponent implements OnInit {
     public router: Router,
     public apiServ: ApiHttpService,
     public alertService: AlertService,
-    public dialog: MatDialog,
     // @Inject(MAT_DIALOG_DATA) public data: any,
     // public dialogRef: MatDialogRef<OrderDetailComponent>,
   ) {
@@ -120,46 +117,42 @@ export class OrderDetailComponent implements OnInit {
   }
 
   cancelOrder(cancelComplete = true) {
-    let dialogRef = this.dialog.open(ConfirmOrderComponent, {
-      data: { message: `Are you sure to Cancel/Excahnge selected items?`, title: 'Cancel Or Exchange' }
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        if (cancelComplete) {
-          this.selection.select(...this.dataSource.data);
+    if (cancelComplete) {
+      this.selection.select(...this.dataSource.data);
+    }
+    console.log(this.selection.selected);
+    let req = {
+      idcustomer_order: this.order.idcustomer_order,
+      order_to_cancel: this.selection.selected
+    };
+
+    this.loading = true;
+    this.location.params.subscribe((data) => {
+      this.apiServ.post(AppSetting.ENDPOINTS.cancelOrder, req).subscribe((res) => {
+        if (res.statusCode == 0) {
+          this.alertService.openSnackBar("Order Cancelled");
+          this.getOrder();
+          this.printReceipt();
         }
-        console.log(this.selection.selected);
-        let req = {
-          idcustomer_order: this.order.idcustomer_order,
-          order_to_cancel: this.selection.selected
-        };
-        this.loading = true;
-        this.location.params.subscribe((data) => {
-          this.apiServ.post(AppSetting.ENDPOINTS.cancelOrder, req).subscribe((res) => {
-            if (res.statusCode == 0) {
-              this.alertService.openSnackBar("Order Cancelled");
-              this.getOrder();
-              this.printReceipt();
-            }
-            else {
-              this.alertService.openSnackBar("Error: Unable to cancel." +  res.message)
-            }
-            this.loading = false;
-          });
-        });
-      }
+        else {
+          this.alertService.openSnackBar("Error: Unable to cancel.")
+        }
+        this.loading = false;
+      });
     });
+
   }
 
   returnActive(row) {
     let isReturnDisable = true;
-    if (row.status == 0) {
+    if(row.status == 0)
+    {
       return isReturnDisable;
     }
     if (row.has_return_rule === 'Y') {
       let ordDate = moment(this.order['created_at']).startOf('day');
       var currDate = moment().startOf('day');
-      let dayWindow = currDate.diff(ordDate, 'days');
+      let dayWindow = currDate.diff(ordDate, 'days');      
       if (dayWindow >= 0 && dayWindow < row.return_duration) {
         isReturnDisable = false;
       }

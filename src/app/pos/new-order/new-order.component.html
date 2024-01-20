@@ -499,10 +499,10 @@
                   </div>
                 </div>
 
-                <div fxLayout="row" class="snap" *ngIf="total.extraDisc > 0">
+                <div fxLayout="row" class="snap" *ngIf="actualDiscountAmount > 0">
                   <div fxFlex="50" class="end">Extra Dis:</div>
                   <div fxFlex="49" class="end">
-                    &#8377; {{ total.extraDisc | number : "0.2-2" }}
+                    &#8377; {{ actualDiscountAmount | number : "0.2-2" }}
                   </div>
                 </div>
 

@@ -10,19 +10,15 @@ import { map, catchError } from 'rxjs/operators';
 export class ReportApiService {
   constructor(private http: HttpClient) {}
 
-  getProductReport(params?,body?): Observable<any> {
-    let string =""
-    if(params){
-      string = this.paramGenrator(params)
-    }
+  getProductReport(): Observable<any> {
     const requestBody = {
-      // idcategory: 1,
-      // idsub_category: 1,
-      // idsub_sub_category: 1,
-      // idbrand: 1,
+      idcategory: 1,
+      idsub_category: 1,
+      idsub_sub_category: 1,
+      idbrand: 1,
     };
     return this.http
-      .post(`${AppSetting.API_ENDPOINT}/api/product-report?${string}`,body?body:{})
+      .post(`${AppSetting.API_ENDPOINT}/api/product-report`, requestBody)
       .pipe(
         map((response) => response),
         catchError((error) => {
@@ -32,13 +28,12 @@ export class ReportApiService {
       );
   }
 
-  getInventoryReport(params): Observable<any> {
-  let string =""
-  if(params){
-    string = this.paramGenrator(params)
-  }
+  getInventoryReport(id: number): Observable<any> {
+    const requestBody = {
+      idstore_warehouse: id,
+    };
     return this.http
-      .get(`${AppSetting.API_ENDPOINT}/api/inventory-report?${string}`)
+      .post(`${AppSetting.API_ENDPOINT}/api/inventory-report`, requestBody)
       .pipe(
         map((response) => response),
         catchError((error) => {
@@ -48,13 +43,12 @@ export class ReportApiService {
       );
   }
 
-  getInventoryReportByDate(params:any): Observable<any> {
-    let string =""
-    if(params){
-      string = this.paramGenrator(params)
-    }
+  getInventoryReportByDate(id: number,dateRange: Date[]): Observable<any> {
+    const requestBody = {
+      idstore_warehouse: id,
+    };
     return this.http
-      .get(`${AppSetting.API_ENDPOINT}/api/inventory-report?${string}`)
+      .post(`${AppSetting.API_ENDPOINT}/api/inventory-report?fromDate=${dateRange[0]}&toDate=${dateRange[1]}`, requestBody)
       .pipe(
         map((response) => response),
         catchError((error) => {
@@ -75,17 +69,6 @@ export class ReportApiService {
         })
       );
   }
-  getStoreList(): Observable<any> {
-    return this.http
-      .get(`${AppSetting.API_ENDPOINT}/api/get-store-list`)
-      .pipe(
-        map((response) => response),
-        catchError((error) => {
-          console.error('Error fetching Warehouse Report:', error);
-          throw error; // Rethrow the error
-        })
-      );
-  }
 
   getOrderReportData(): Observable<any> {
     return this.http
@@ -97,65 +80,5 @@ export class ReportApiService {
           throw error; // Rethrow the error
         })
       );
-  }
-
-  private paramGenrator(param){
-    
-    const params:any = [];
-
-    for (const key in param) {
-      if(key && param[key]){
-
-        params.push(`${encodeURIComponent(key)}=${encodeURIComponent(param[key])}`);
-      }
-    }
-  
-    return params.join('&');
-  }
-
-  getExpiryReport(params:any):Observable<any>{
-    let string =""
-    if(params){
-      string = this.paramGenrator(params)
-    }
-    return this.http
-    .get(`${AppSetting.API_ENDPOINT}/api/expried-and-expiring-report?${string}`)
-    .pipe(
-      map((response) => response),
-      catchError((error) => {
-        console.error('Error fetching expried and expiring Report:', error);
-        throw error; // Rethrow the error
-      })
-    );
-  }
-  getPurchaseOrderReport(params:any):Observable<any>{
-    let string =""
-    if(params){
-      string = this.paramGenrator(params)
-    }
-    return this.http
-    .get(`${AppSetting.API_ENDPOINT}/api/purchase-order-report?${string}`)
-    .pipe(
-      map((response) => response),
-      catchError((error) => {
-        console.error('Error fetching Purchase Report:', error);
-        throw error; // Rethrow the error
-      })
-    );
-  }
-  getSalesReport(params:any):Observable<any>{
-    let string =""
-    if(params){
-      string = this.paramGenrator(params)
-    }
-    return this.http
-    .get(`${AppSetting.API_ENDPOINT}/api/sales-report?${string}`)
-    .pipe(
-      map((response) => response),
-      catchError((error) => {
-        console.error('Error fetching Sales Report:', error);
-        throw error; // Rethrow the error
-      })
-    );
   }
 }

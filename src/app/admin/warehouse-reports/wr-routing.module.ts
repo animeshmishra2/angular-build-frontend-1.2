@@ -13,7 +13,6 @@ import { SubSubCategoryComponent } from './report-pages/sub-sub-category/sub-sub
 import { SubCategoryComponent } from './report-pages/sub-category/sub-category.component';
 import { ReciptComponent } from 'src/app/pos/new-order/recipt/recipt.component';
 import { ExpiryReportComponent } from './report-pages/expiry-report/expiry-report.component';
-import { SalesReportComponent } from './report-pages/sales-report/sales-report.component';
 
 const routes: Routes = [
   {
@@ -31,7 +30,6 @@ const routes: Routes = [
   { path: "discount-and-schemes-report", component: DiscountReportComponent },
   { path: "sub-category", component: SubCategoryComponent },
   { path: "sub-sub-category", component: SubSubCategoryComponent },
-  { path: "sales-report", component: SalesReportComponent },
   { path: '', component: WarehouseReportsComponent },
   
 ];

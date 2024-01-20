@@ -45,8 +45,6 @@ import { TransferReportComponent } from './report-pages/transfer-report/transfer
 import { TotalPendencyComponent } from './report-pages/total-pendency/total-pendency.component';
 import { DiscountReportComponent } from './report-pages/discount-report/discount-report.component';
 import { GstReportService } from '../gst-report/gst-report.service';
-import {PaginatorModule} from 'primeng/paginator';
-import { SalesReportComponent } from './report-pages/sales-report/sales-report.component';
 
 @NgModule({
   declarations: [
@@ -64,12 +62,10 @@ import { SalesReportComponent } from './report-pages/sales-report/sales-report.c
     TransferReportComponent,
     TotalPendencyComponent,
     DiscountReportComponent,
-    SalesReportComponent,
   ],
   imports: [
     CommonModule,
     SharedGlobalModule,
-    PaginatorModule,
     FlexLayoutModule,
     DirectiveModule,
     WRRoutingModule,

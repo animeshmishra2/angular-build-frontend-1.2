@@ -20,6 +20,7 @@ import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { BatchSelectComponent } from './batch-select/batch-select.component';
 import { UpgradeMembershipComponent } from './upgrade-membership/upgrade-membership.component';
+import { CashDrawerTransactionComponent } from './cash-drawer-transaction/cash-drawer-transaction.component';
 
 @Component({
   selector: 'app-new-order',
@@ -52,7 +53,7 @@ export class NewOrderComponent implements OnInit, OnDestroy {
   packageAmount: any[] = []
   selectedNonGenPkg: any = 0;
   private mywindow;
-isUseRedeemWallet = false;
+  isUseRedeemWallet = false;
 
   customer = {
     idcustomer: 0,
@@ -101,7 +102,7 @@ isUseRedeemWallet = false;
     extraDisc: 0,
     coupon: 0,
     grand: 0,
-grandAfterWallet: 0,
+    grandAfterWallet: 0,
     totalQty: 0,
     instant_discount: 0,
     land_discount: 0,
@@ -138,6 +139,7 @@ grandAfterWallet: 0,
   @ViewChild(MatPaginator) paginator: MatPaginator;
   customDisActive: boolean = false;
   isAppliedDynFxDis: boolean = false;
+  cashtTranDetail: never[];
 
   constructor(
     private prodServ: ProductService,
@@ -293,7 +295,6 @@ grandAfterWallet: 0,
   updateQuantity(product, isIncrement = true, isFinalQty = false, newQty = 0) {
     if (!this.cartProducts?.length){
       this.logOutCustomer();
-      this.discountAmount = 0;
     }
     
     if(isIncrement && product.quantity < 1){
@@ -399,8 +400,6 @@ grandAfterWallet: 0,
       toGvDiscAmt = 0
     }
     else if (this.isAppliedDynFxDis) {
-      console.log("truuu");
-      
       let discAmt = 0;
       this.cartProducts.forEach((pro) => {
         if(pro.detail.instant_discount_percent > 0){
@@ -478,7 +477,7 @@ grandAfterWallet: 0,
       extraDisc: 0,
       coupon: this.coupon,
       grand: 0,
-grandAfterWallet: 0,
+      grandAfterWallet: 0,
       totalQty: 0,
       instant_discount: 0,
       land_discount: 0,
@@ -607,7 +606,7 @@ grandAfterWallet: 0,
     this.total.discount =
       this.total.discount + (this.cdiscountamount + this.couponDiscountAmount);
     this.total.grand =
-      this.total.grand - (this.cdiscountamount + this.couponDiscountAmount + this.actualDiscountAmount);
+      this.total.grand - (this.cdiscountamount + this.couponDiscountAmount + this.total.extraDisc);
     if(this.isUseRedeemWallet && this.customer.redeemWallet > 0){
       if((this.total.grand - this.customer.redeemWallet) < 0){
         this.total.grandAfterWallet = 0;
@@ -812,7 +811,7 @@ grandAfterWallet: 0,
                 extraDisc: 0,
                 coupon: 0,
                 grand: 0,
-grandAfterWallet: 0,
+                grandAfterWallet: 0,
                 totalQty: 0,
                 instant_discount: 0,
                 land_discount: 0,
@@ -831,7 +830,7 @@ grandAfterWallet: 0,
               this.cartItems = [];
               this.cartProducts = [];
               this.cartEmpty = false;
-this.isUseRedeemWallet = false;
+              this.isUseRedeemWallet = false;
               this.search = '';
               this.alertService.openSnackBar(
                 'Order kept on HOLD. Products will not be reserved.'
@@ -847,6 +846,26 @@ this.isUseRedeemWallet = false;
       }
     });
 
+  }
+
+  prepareOrder(){
+    if(this.paymentMode == 'Cash'){
+      this.cashtTranDetail = [];
+      let dialogRef = this.dialog.open(CashDrawerTransactionComponent, {
+        width: '80%',
+        data: { total: this.total }
+      });
+      dialogRef.afterClosed().subscribe((result) => {
+        if(result.ret){
+          console.log(result.ret)
+          this.cashtTranDetail = result.ret;
+          this.placeOrder();
+        }
+      });
+    }
+    else{
+      this.placeOrder();
+    }
   }
 
   placeOrder() {
@@ -874,7 +893,8 @@ this.isUseRedeemWallet = false;
           isAppliedDynFxDis: this.isAppliedDynFxDis,
           paymentMode: this.paymentMode,
           payRef: this.payRef,
-redeemWallet: this.isUseRedeemWallet
+          redeemWallet: this.isUseRedeemWallet,
+          cashtTranDetail: this.cashtTranDetail
         };
         // this.loading = true;
         this.alertService.openSnackBar('Placing order please wait for some time');
@@ -892,7 +912,7 @@ redeemWallet: this.isUseRedeemWallet
                 extraDisc: 0,
                 coupon: 0,
                 grand: 0,
-grandAfterWallet: 0,
+                grandAfterWallet: 0,
                 totalQty: 0,
                 instant_discount: 0,
                 land_discount: 0,
@@ -912,7 +932,7 @@ grandAfterWallet: 0,
               this.cartItems = [];
               this.cartProducts = [];
               this.cartEmpty = false;
-this.isUseRedeemWallet = false;
+              this.isUseRedeemWallet = false;
               this.search = '';
               this.alertService.openSnackBar('Order Placed.');
               this.discountAmount = null;
@@ -1045,7 +1065,7 @@ this.isUseRedeemWallet = false;
       extraDisc: 0,
       coupon: 0,
       grand: 0,
-grandAfterWallet: 0,
+      grandAfterWallet: 0,
       totalQty: 0,
       instant_discount: 0,
       land_discount: 0,
@@ -1057,7 +1077,7 @@ grandAfterWallet: 0,
     this.cartProducts = [];
     this.cartEmpty = false;
     this.search = '';
-this.isUseRedeemWallet = false;
+    this.isUseRedeemWallet = false;
     this.getProducts('1');
   }
 

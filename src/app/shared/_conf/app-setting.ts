@@ -35,7 +35,6 @@ export class AppSetting {
         "updateVendorPurchasesDetail" : "/api/update-vendor-bill/",
         "getVendorBills" : "/api/get-bills",
         "getVendorBillDetail" : "/api/get-bills-details",
-        "allStoreRequestGetDirect" : "/api/get-direct-transfer-request",
         "allStoreRequest" : "/api/all-store-request",
         "allSWExceptMine" : "/api/get-allother-sw",
         "createReqReq" : "/api/create-req-req",
@@ -53,14 +52,7 @@ export class AppSetting {
         "getBatch": "/api/fetch-batch",
         "getVendorPurchaseBills" : "/api/get-purchase",
         "billWiseTransfer": "/api/bill-wise-transfer",
-        "inventoryTresholdProduct": "/api/get_inventory_threshold_products",
-        "autoTransferSave": '/api/auto-stock-transfer',
-        "getBillrequestList":'/api/get-billwise-transfer-request',
-        "getAutotransferDetails":'/api/get-auto-transfer-request-detail',
-        "getAutorequestList":'/api/get-auto-transfer-request',
-        "getDirecttransferDetails":'/api/get-direct-transfer-request-detail',
-        "getbilWisetransferDetails":'/api/get-billwise-transfer-request-detail',
-        "getBatchBillwise": "/api/fetch-bill-wise-batch",
+        "getCounterDetail": "/api/get-counter-det",
     }
     public static PKGMASTER = {
         'Product': 1,

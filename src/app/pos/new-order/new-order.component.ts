@@ -384,7 +384,6 @@ export class NewOrderComponent implements OnInit, OnDestroy {
     this.calculateExtraDiscount();
     this.calculateTotal();
   }
-
   calculateExtraDiscount() {
     let toGvDiscAmt = 0;
     if (this.discountAmount > 0) {
@@ -400,6 +399,8 @@ export class NewOrderComponent implements OnInit, OnDestroy {
       toGvDiscAmt = 0
     }
     else if (this.isAppliedDynFxDis) {
+      console.log("truuu");
+      
       let discAmt = 0;
       this.cartProducts.forEach((pro) => {
         if(pro.detail.instant_discount_percent > 0){
@@ -416,6 +417,7 @@ export class NewOrderComponent implements OnInit, OnDestroy {
     }
     this.actualDiscountPer = (this.total.grand == 0) ? 0 : this.actualDiscountAmount * (100 / this.total.grand);
   }
+
 
   customDiscountToggle(amountChanged) {
     if (amountChanged) {
@@ -477,7 +479,7 @@ export class NewOrderComponent implements OnInit, OnDestroy {
       extraDisc: 0,
       coupon: this.coupon,
       grand: 0,
-      grandAfterWallet: 0,
+grandAfterWallet: 0,
       totalQty: 0,
       instant_discount: 0,
       land_discount: 0,
@@ -606,7 +608,7 @@ export class NewOrderComponent implements OnInit, OnDestroy {
     this.total.discount =
       this.total.discount + (this.cdiscountamount + this.couponDiscountAmount);
     this.total.grand =
-      this.total.grand - (this.cdiscountamount + this.couponDiscountAmount + this.total.extraDisc);
+      this.total.grand - (this.cdiscountamount + this.couponDiscountAmount + this.actualDiscountAmount);
     if(this.isUseRedeemWallet && this.customer.redeemWallet > 0){
       if((this.total.grand - this.customer.redeemWallet) < 0){
         this.total.grandAfterWallet = 0;

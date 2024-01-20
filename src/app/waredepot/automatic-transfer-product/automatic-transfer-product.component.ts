@@ -16,7 +16,7 @@ import { ApiHttpService } from 'src/app/shared/_service/api-http.service';
 })
 export class AutomaticTransferProductComponent implements OnInit {
 
-  dataSourceSelColumnDet: string[] = ['isChecked', 'barcode','eDate', 'batch',  'warwhouseQuantity', 'transferQuantity'];
+  dataSourceSelColumnDet: string[] = ['isChecked', 'barcode','product_name','eDate', 'batch',  'warwhouseQuantity', 'transferQuantity'];
   dataSourceSelDet: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

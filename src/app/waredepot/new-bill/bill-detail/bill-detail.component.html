@@ -2,78 +2,54 @@
     <div fxLayout="row" fxLayoutGap="20px" class="outline-div" fxLayoutAlign="start start">
         <div fxFlex="100" fxLayout="column">
             <div fxFlex fxLayoutAlign="space-between center" class="orderNum">
-                <div fxFlex="40" class="h1-txt">Vendor Bill Detail</div>
+                <div fxFlex="40" class="h1-txt">Bill Wise Transfer  Details</div>
 
             </div>
             <div>
                 <table mat-table [dataSource]="dataSource" matSort>
-                    <ng-container matColumnDef="unit_purchase_price">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Unit Purchase Price  &#8377;</th>
-                        <td mat-cell *matCellDef="let row">
-                            &#8377;    {{ row.unit_purchase_price | number }}
-                        </td>
-                    </ng-container>
-    
                     <ng-container matColumnDef="prod_name">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Barcode/ Product</th>
-                        <td mat-cell *matCellDef="let row">{{ row.barcode }} / {{ row.prod_name }}</td>
-                    </ng-container>
-    
-                    <ng-container matColumnDef="hsn">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>HSN</th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Product Name</th>
                         <td mat-cell *matCellDef="let row">
-                            {{ row.hsn }}
+                           {{ row?.prod_name}}
                         </td>
                     </ng-container>
     
-                    <ng-container matColumnDef="expiry">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Expiry</th>
+                    <ng-container matColumnDef="barcode">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Barcode</th>
+                        <td mat-cell *matCellDef="let row">{{ row?.barcode }}</td>
+                    </ng-container>
+    
+                    <ng-container matColumnDef="totalquantity">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Quantity</th>
                         <td mat-cell *matCellDef="let row">
-                            {{ row.expiry ? row.expiry : 'No Date' }}
+                            {{ row?.quantity }}
                         </td>
                     </ng-container>
-                    <ng-container matColumnDef="quantity">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>QTY</th>
+    
+                    <ng-container matColumnDef="sendq">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Sent Quantity</th>
                         <td mat-cell *matCellDef="let row">
-                            {{ row.quantity }}
+                            {{ row?.quantity_sent}}
                         </td>
                     </ng-container>
-                    <ng-container matColumnDef="total">
+                    <ng-container matColumnDef="receivedq">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Received Quantity</th>
+                        <td mat-cell *matCellDef="let row">
+                            {{ row?.quantity_received }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="batch">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                            Total Price  &#8377;
+                            Batch
                         </th>
                         <td mat-cell *matCellDef="let row">
-                            &#8377;  {{ (row.unit_purchase_price * row.quantity) | number }}
+                           {{row?.batch_name}}
                         </td>
                     </ng-container>
-                    <ng-container matColumnDef="mrp">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>MRP  &#8377;</th>
+                    <ng-container matColumnDef="batchmrp">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Batch MRP  &#8377;</th>
                         <td mat-cell *matCellDef="let row">
-                            &#8377;  {{ row.mrp | number }}
-                        </td>
-                    </ng-container>
-                    <ng-container matColumnDef="selling_price">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Instant Price  &#8377;</th>
-                        <td mat-cell *matCellDef="let row">
-                            &#8377; {{ row.selling_price ? row.selling_price : 0  }}
-                        </td>
-                    </ng-container>
-                    <ng-container matColumnDef="product_price">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Product Price  &#8377;</th>
-                        <td mat-cell *matCellDef="let row">
-                            &#8377; {{ row.product ? row.product : 0 }}
-                        </td>
-                    </ng-container>
-                    <ng-container matColumnDef="copartner_price">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Copartner Price  &#8377;</th>
-                        <td mat-cell *matCellDef="let row">
-                            &#8377; {{ row.copartner ? row.copartner : 0  }}
-                        </td>
-                    </ng-container>
-                    <ng-container matColumnDef="land_price">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Land Price  &#8377;</th>
-                        <td mat-cell *matCellDef="let row">
-                            &#8377; {{ row.land ? row.land : 0 }}
+                            &#8377;  {{ row?.batch_mrp | number }}
                         </td>
                     </ng-container>
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

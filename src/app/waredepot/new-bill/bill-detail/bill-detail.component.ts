@@ -20,16 +20,12 @@ export class BillDetailComponent implements OnInit {
   to_date: string;
   displayedColumns: string[] = [
     'prod_name',
-    'hsn',
-    'quantity',
-    'mrp',
-    'selling_price',
-    'product_price',
-    'copartner_price',
-    'land_price',
-    'unit_purchase_price',
-    'total',
-    'expiry',
+    'barcode',
+    'totalquantity',
+    'sendq',
+    'receivedq',
+    'batch',
+    'batchmrp',
   ];
   dataSource: MatTableDataSource<any>;
   loading: boolean = false;
@@ -55,7 +51,7 @@ export class BillDetailComponent implements OnInit {
 
   getBillDetail() {
     this.loading = true;
-    this.apiService.get(AppSetting.ENDPOINTS.getVendorBillDetail + `/${this.bill.idvendor_purchases}`).subscribe((res) => {
+    this.apiService.get(AppSetting.ENDPOINTS.getbilWisetransferDetails + `/${this.bill.id}`).subscribe((res) => {
       this.dataSource = new MatTableDataSource(res);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;

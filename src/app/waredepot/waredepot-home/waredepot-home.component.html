@@ -50,10 +50,28 @@
                                 <h2>Manage Inventory</h2>
                             </mat-card-content>
                         </mat-card>
+                        <mat-card fxFlex class="center" style="margin: 0 10px;" [ngClass]="bl1" 
+                        (mouseover)="bl1 = 'mat-elevation-z6'"
+                        (mouseout)="bl1 = 'mat-elevation-z2'" 
+                        [routerLink]="['/inventory/requirement-request']">
+                        <img mat-card-image src="assets/icons/demand.png" alt="Product Request" />
+                        <mat-card-content>
+                            <h2>Product Request</h2>
+                        </mat-card-content>
+                    </mat-card>
+                    <mat-card fxFlex class="center" style="margin: 0 10px;" [ngClass]="bl2" 
+                        (mouseover)="bl2 = 'mat-elevation-z6'"
+                        (mouseout)="bl2 = 'mat-elevation-z2'" 
+                        [routerLink]="['/inventory/requirement-request/1']">
+                        <img mat-card-image src="assets/icons/supply-chain.png" alt="Received Requests" />
+                        <mat-card-content>
+                            <h2>Received Requests</h2>
+                        </mat-card-content>
+                    </mat-card>
                        
                     </div>
                     <div fxLayout="column" fxLayoutGap="10px" style="margin-top: 20px;border: 3px solid #acacac;padding: 10px;border-radius: 15px">
-                        <h2>Manual transfer</h2>
+                        <h2>Manage transfer</h2>
                         <div style="margin-top: 20px;border: 3px solid #acacac;padding: 10px;border-radius: 15px">
                             <mat-card fxFlex class="center" style="margin: 0 10px;" [ngClass]="bl1" 
                                 (mouseover)="bl1 = 'mat-elevation-z6'"

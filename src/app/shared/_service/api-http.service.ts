@@ -86,5 +86,20 @@ export class ApiHttpService {
         })
       );
   }
+  getParamsData(url: string, params1?: any): Observable<any> {
+    console.log("params",params1);
+    
+    let params = new HttpParams();
+    params = params.append('idstore_warehouse', params1);
+    return this.http.get<any>(AppSetting.API_ENDPOINT + url, { params: params })
+      .pipe(
+        map(data => {
+          return data.data;
+        }),
+        catchError(err => {
+          return throwError(err);
+        })
+      );
+  }
 
 }

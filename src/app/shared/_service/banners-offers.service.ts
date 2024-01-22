@@ -7,11 +7,31 @@ import { AppSetting } from '../_conf/app-setting';
 @Injectable({
   providedIn: 'root'
 })
-export class StoreWareService {
+export class BannerOfferService {
   constructor(private http: HttpClient) { }
 
-  getStoresWare(req) {
-    return this.http.post<any>(AppSetting.API_ENDPOINT + '/api/get-store-ware', req)
+  getBanners() {
+    return this.http.get<any>(AppSetting.API_ENDPOINT + '/api/get-banner')
+      .pipe(map(data => {
+        return data.data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
+
+  deleteBanner(id) {
+    return this.http.get<any>(AppSetting.API_ENDPOINT + '/api/delete-banner/' + id)
+      .pipe(map(data => {
+        return data.data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
+
+  getBannerType() {
+    return this.http.get<any>(AppSetting.API_ENDPOINT + '/api/banner-type')
       .pipe(map(data => {
         return data.data;
       }),
@@ -90,36 +110,31 @@ export class StoreWareService {
         }));
   }
 
-  createBanner(req) {
-    return this.http.post<any>(AppSetting.API_ENDPOINT + '/api/create-banner', req)
-      .pipe(map(data => {
-        return data.data;
-      }),
-        catchError(err => {
-          return throwError(err);
-        }));
-  }
-
-  updateBanner(req) {
-    return this.http.post<any>(AppSetting.API_ENDPOINT + '/api/update-banner', req)
-      .pipe(map(data => {
-        return data.data;
-      }),
-        catchError(err => {
-          return throwError(err);
-        }));
-  }
-
-  createSlots(req) {
-    return this.http.post<any>(AppSetting.API_ENDPOINT + '/api/create-slot', req).pipe(map(data => {
+  getDeleiverySlots() {
+    return this.http.get<any>(AppSetting.API_ENDPOINT + '/api/get-slot').pipe(map(data => {
       return data.data;
     }), catchError(err => {
       return throwError(err);
     }));
   }
 
-  updateSlots(req, id) {
-    return this.http.post<any>(AppSetting.API_ENDPOINT + '/api/edit-slot/' + id, req).pipe(map(data => {
+  deleteSlots(id) {
+    return this.http.get<any>(AppSetting.API_ENDPOINT + '/api/delete-slot/' + id).pipe(map(data => {
+      return data.data;
+    }), catchError(err => {
+      return throwError(err);
+    }));
+  }
+  getThresoldPurchaseOrder() {
+    return this.http.get<any>(AppSetting.API_ENDPOINT + '/api/inventory-threshold/list').pipe(map(data => {
+      return data.data;
+    }), catchError(err => {
+      return throwError(err);
+    }));
+  }
+
+  deletePurchaseOrder(id) {
+    return this.http.get<any>(AppSetting.API_ENDPOINT + '/api/delete-slot/' + id).pipe(map(data => {
       return data.data;
     }), catchError(err => {
       return throwError(err);

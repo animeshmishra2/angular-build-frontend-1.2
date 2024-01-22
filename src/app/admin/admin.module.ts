@@ -60,6 +60,10 @@ import { MatStepperModule } from "@angular/material/stepper";
 import { ManageAccessComponent } from './store-warehouse/manage-access/manage-access.component';
 import { WarehouseReportsComponent } from './warehouse-reports/warehouse-reports.component';
 import { ButtonModule } from 'primeng/button';
+import { AddEditSlotsComponent } from './deleivery-slots/add-edit-slots/add-edit-slots.component';
+import { ThreshouldPurchaseOrderComponent } from './threshould-purchase-order/threshould-purchase-order.component';
+import { DeleiverySlotsComponent } from './deleivery-slots/deleivery-slots.component';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 @NgModule({
   declarations: [
@@ -92,7 +96,9 @@ import { ButtonModule } from 'primeng/button';
     EditProductMasterComponent,
     ManageAccessComponent,
     WarehouseReportsComponent,
-    
+    DeleiverySlotsComponent,
+    ThreshouldPurchaseOrderComponent,
+    AddEditSlotsComponent,
   ],
   imports: [
     DirectiveModule,
@@ -126,7 +132,8 @@ import { ButtonModule } from 'primeng/button';
     MatSlideToggleModule,
     MatStepperModule,
     MatAutocompleteModule,
-    MatTooltipModule
+    MatTooltipModule,
+    NgxMaterialTimepickerModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },

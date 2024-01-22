@@ -25,6 +25,11 @@ export class AdminHomeComponent implements OnInit {
   bl12: string;
   bl13: string;
   bl14: string;
+  bl15: string;
+  bl16: string;
+  bl17: string;
+  bl18: string;
+  bl19: string;
 
    constructor(private authenticationService: AuthenticationService, public router: Router) {
     if (this.authenticationService.currentUserValue && this.authenticationService.currentUserValue.name) {

@@ -1,0 +1,70 @@
+<div fxFlex="100" class="inner-card mat-elevation-z1" fxLayout="column">
+	<div fxFlex="10" class="h1-txt">
+		{{(row?.id) ? "Update" : "Add New"}} Banner
+	</div>
+	<div class="margin-top-25"></div>
+	<form fxLayout="column" [formGroup]="lForm" (ngSubmit)="onSubmit()" fxFlex="100">
+		<div fxLayout="column" fxLayoutGap="40px">
+			<div fxFlex fxLayout="row" fxLayoutGap="10px">
+				<mat-form-field fxFlex>
+					<mat-label>Title</mat-label>
+					<input matInput placeholder="Enter Title" formControlName="title" autocomplete="off" required>
+					<mat-error *ngIf="!lForm.controls['title'].valid && lForm.controls['title'].touched">
+						Enter a valid Title.
+					</mat-error>
+				</mat-form-field>
+				<mat-form-field fxFlex>
+					<mat-label>Sub title</mat-label>
+					<input matInput placeholder="Enter Sub title" formControlName="subtitle" autocomplete="off" required>
+					<mat-error *ngIf="!lForm.controls['subtitle'].valid && lForm.controls['subtitle'].touched">
+						Enter a valid Sub title.
+					</mat-error>
+				</mat-form-field>
+				<mat-form-field fxFlex>
+					<mat-label>Link</mat-label>
+					<input matInput placeholder="Enter Link" formControlName="link" autocomplete="off" required>
+					<mat-error *ngIf="!lForm.controls['link'].valid && lForm.controls['link'].touched">
+                        Enter a valid Link.
+                    </mat-error>
+				</mat-form-field>
+			</div>
+			<div fxFlex fxLayout="row" fxLayoutGap="10px">
+				<mat-form-field fxFlex>
+					<mat-label>Banner Type</mat-label>
+					<mat-select formControlName="bannertype">
+						<mat-option *ngFor="let sType of bannerTypes" [value]="sType.id">{{sType.name}}</mat-option>
+					</mat-select>
+					<mat-error *ngIf="!lForm.controls['bannertype'].valid && lForm.controls['bannertype'].touched">
+						Select a Banner Type.
+					</mat-error>
+				</mat-form-field>
+				<mat-form-field fxFlex>
+					<mat-label>Type list</mat-label>
+					<mat-select formControlName="typelist">
+						<mat-option *ngFor="let sType of typelist" [value]="sType.idcategory">{{sType.name}}</mat-option>
+					</mat-select>
+					<mat-error *ngIf="!lForm.controls['typelist'].valid && lForm.controls['typelist'].touched">
+						Select Type
+					</mat-error>
+				</mat-form-field>
+				<div fxFlex fxLayoutAlign="start center" style="margin-top: 20px 0px;">
+					<ng-container *ngIf="!selectedFile">
+						<label for="frontImage">Banner Image </label>
+						<input (change)="onFileSelected($event, 'BACK')" type="file" id="backImage">
+						<div *ngIf="fileSizeError" class="error-message">File size exceeds the maximum limit (4 MB).</div>
+					</ng-container>
+					<ng-container *ngIf="selectedFile">
+						<span>{{selectedFile?.name || selectedFile}}</span>
+						<mat-icon (click)="selectedFile = null">delete</mat-icon>
+					</ng-container>
+				</div>
+			</div>
+		</div>
+		<div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
+			<button [disabled]="loading || lForm.invalid" mat-raised-button color="primary" type="submit">
+				{{(row?.id) ? "Update" : "Add New"}} Banner
+			</button>
+			<button mat-raised-button type="button" (click)="cancel()">Cancel</button>
+		</div>
+	</form>
+</div>

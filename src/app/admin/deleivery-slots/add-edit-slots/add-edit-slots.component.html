@@ -1,0 +1,81 @@
+<div fxFlex="100" class="inner-card mat-elevation-z1" fxLayout="column">
+	<div fxFlex="10" class="h1-txt">
+		{{(row?.iddelivery_slots) ? "Update" : "Add New"}} Delivery Slots
+	</div>
+	<div class="margin-top-25"></div>
+	<form fxLayout="column" [formGroup]="slotForm" (ngSubmit)="onSubmit()" fxFlex="100">
+		<div fxLayout="column" fxLayoutGap="40px">
+			<div fxFlex fxLayout="row" fxLayoutGap="10px">
+				<mat-form-field fxFlex>
+					<mat-label>Store</mat-label>
+					<mat-select formControlName="idstore_warehouse">
+						<mat-option *ngFor="let store of storeList" [value]="store.idstore_warehouse">{{store.name}}</mat-option>
+					</mat-select>
+					<mat-error
+						*ngIf="!slotForm.controls['idstore_warehouse'].valid && slotForm.controls['idstore_warehouse'].touched">
+						Select Store.
+					</mat-error>
+				</mat-form-field>
+				<mat-form-field fxFlex>
+					<mat-label>Choose a Date</mat-label>
+					<input matInput [matDatepicker]="fpicker" (dateChange)="onDateChange($event)" readonly [min]="todayDate" formControlName="date" />
+					<mat-hint>MM/DD/YYYY</mat-hint>
+					<mat-datepicker-toggle matSuffix [for]="fpicker"></mat-datepicker-toggle>
+					<mat-datepicker #fpicker></mat-datepicker>
+					<mat-error *ngIf="!slotForm.controls['date'].valid && slotForm.controls['date'].touched">
+						Choose a Valid Date.
+					</mat-error>
+				</mat-form-field>
+			</div>
+			<div fxFlex fxLayout="row" fxLayoutGap="10px">
+				<div class="toggle-example">
+					<label>Slot Start Time</label>
+					<div class="time-picker">
+						<input [ngxTimepicker]="toggleTimepicker" [min]="minTime" [value]="startDefault" [format]="24" formControlName="slot_time_start" [disableClick]="true" readonly>
+						<ngx-material-timepicker-toggle [for]="toggleTimepicker"></ngx-material-timepicker-toggle>
+						<ngx-material-timepicker [defaultTime]="startDefault"  #toggleTimepicker></ngx-material-timepicker>
+					</div>
+					<p class="error-msg"
+						*ngIf="!slotForm.controls['slot_time_start'].valid && slotForm.controls['slot_time_start'].touched">
+						Choose a Slot Start Time.
+					</p>
+				</div>
+				<div class="toggle-example">
+					<label>Slot End Time</label>
+					<div class="time-picker">
+						<input [ngxTimepicker]="toggleTimepickerEnd" [min]="slotForm.controls['slot_time_start'].value" [format]="24" formControlName="slot_time_end" [disableClick]="true" readonly>
+						<ngx-material-timepicker-toggle [for]="toggleTimepickerEnd"></ngx-material-timepicker-toggle>
+						<ngx-material-timepicker [defaultTime]="endDefault" #toggleTimepickerEnd></ngx-material-timepicker>
+					</div>
+					<p class="error-msg"
+						*ngIf="!slotForm.controls['slot_time_start'].valid && slotForm.controls['slot_time_start'].touched">
+						Choose a Slot End Time.
+					</p>
+				</div>
+			</div>
+			<div fxFlex fxLayout="row" fxLayoutGap="10px">
+				<mat-form-field fxFlex>
+					<mat-label>Max Orders</mat-label>
+					<input matInput placeholder="Enter Link" formControlName="max_orders" autocomplete="off" required>
+					<mat-error *ngIf="!slotForm.controls['max_orders'].valid && slotForm.controls['max_orders'].touched">
+						Enter a valid Max Orders.
+					</mat-error>
+				</mat-form-field>
+				<mat-form-field fxFlex>
+					<mat-label>Available Slots</mat-label>
+					<input matInput placeholder="Enter Link" formControlName="available_slots" autocomplete="off" required>
+					<mat-error
+						*ngIf="!slotForm.controls['available_slots'].valid && slotForm.controls['available_slots'].touched">
+						Enter a valid Available Slots.
+					</mat-error>
+				</mat-form-field>
+			</div>
+		</div>
+		<div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center" style="margin: 10px 0px;">
+			<button [disabled]="loading || slotForm.invalid" mat-raised-button color="primary" type="submit">
+				{{(row?.iddelivery_slots) ? "Update" : "Add New"}} Delivery Slots
+			</button>
+			<button mat-raised-button type="button" (click)="cancel()">Cancel</button>
+		</div>
+	</form>
+</div>

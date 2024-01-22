@@ -1,0 +1,21 @@
+.toggle-example {
+	width: 50%;
+	.time-picker {
+		display: flex;
+		align-items: center;
+
+		input {
+			width: 100%;
+			height: 36px;
+		}
+
+		ngx-material-timepicker-toggle {
+			position: relative;
+    	right: 30px;
+		}
+	}
+
+	.error-msg {
+		color: red;
+	}
+}

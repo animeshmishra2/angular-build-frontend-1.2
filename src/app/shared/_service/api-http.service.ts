@@ -101,5 +101,15 @@ export class ApiHttpService {
         })
       );
   }
+  newget(url: string) {
+    console.log(AppSetting.API_ENDPOINT + url);
 
+    return this.http.get<any>(AppSetting.API_ENDPOINT + url)
+      .pipe(map(data => {
+        return data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
 }

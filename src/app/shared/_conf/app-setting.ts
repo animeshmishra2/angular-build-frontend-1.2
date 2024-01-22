@@ -62,6 +62,8 @@ export class AppSetting {
       "getbilWisetransferDetails":'/api/get-billwise-transfer-request-detail',
       "getBatchBillwise": "/api/fetch-bill-wise-batch",
         "getCounterDetail": "/api/get-counter-det",
+        "getBannertype": "/api/banner-type",
+        "getType":"/api/banner-cat"
     }
     public static PKGMASTER = {
         'Product': 1,

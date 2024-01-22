@@ -28,7 +28,9 @@ body {
 .center{
     text-align: center;
 }
-
+ngx-material-timepicker-container .timepicker-overlay {
+    z-index: 9999 !important;
+}
 .container {
     min-height: 89%;
     width: 98%;

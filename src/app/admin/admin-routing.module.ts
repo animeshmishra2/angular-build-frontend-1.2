@@ -19,6 +19,8 @@ import { SubSubCategoryComponent } from './sub-sub-category/sub-sub-category.com
 import { EditStoreWareComponent } from './store-warehouse/edit-store-ware/edit-store-ware.component';
 import { WarehouseReportsComponent } from './warehouse-reports/warehouse-reports.component';
 import { GstReportComponent } from './gst-report/gst-report.component';
+import { DeleiverySlotsComponent } from './deleivery-slots/deleivery-slots.component';
+import { ThreshouldPurchaseOrderComponent } from './threshould-purchase-order/threshould-purchase-order.component';
 
 const routes: Routes = [
   { path: "store-warehouse/:type", component: StoreWarehouseComponent },
@@ -38,6 +40,11 @@ const routes: Routes = [
   { path: 'product-master', component: ProductMasterComponent },
   { path: 'create-package/:id/:counter', component: CreateComponent },
   { path: '', component: AdminHomeComponent },
+  { path: 'banners-offers', loadChildren: () => import('./banners-offers/banners-offers.module').then(m => m.BannersOffersModule) },
+  { path: 'coupons-shiping-charges', loadChildren: () => import('./coupns-shiping-charges/coupns-shiping-charges.module').then(m => m.CoupnsShipingChargesModule) },
+  { path: 'deleivery-slots', component: DeleiverySlotsComponent },
+  { path: 'threshould-purchase-order', component: ThreshouldPurchaseOrderComponent },
+  { path: 'package-by-branch-category', loadChildren: () => import('./package-branch-category/package-branch-category.module').then(m => m.PackageBranchCategoryModule) }
   
 ];
 

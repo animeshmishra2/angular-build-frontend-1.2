@@ -64,6 +64,7 @@ import { AddEditSlotsComponent } from './deleivery-slots/add-edit-slots/add-edit
 import { ThreshouldPurchaseOrderComponent } from './threshould-purchase-order/threshould-purchase-order.component';
 import { DeleiverySlotsComponent } from './deleivery-slots/deleivery-slots.component';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { AddEditThresoldPurchaseOrderComponent } from './threshould-purchase-order/add-edit-thresold-purchase-order/add-edit-thresold-purchase-order.component';
 
 @NgModule({
   declarations: [
@@ -99,6 +100,7 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
     DeleiverySlotsComponent,
     ThreshouldPurchaseOrderComponent,
     AddEditSlotsComponent,
+    AddEditThresoldPurchaseOrderComponent
   ],
   imports: [
     DirectiveModule,

@@ -61,9 +61,10 @@ export class AppSetting {
       "getDirecttransferDetails":'/api/get-direct-transfer-request-detail',
       "getbilWisetransferDetails":'/api/get-billwise-transfer-request-detail',
       "getBatchBillwise": "/api/fetch-bill-wise-batch",
-        "getCounterDetail": "/api/get-counter-det",
-        "getBannertype": "/api/banner-type",
-        "getType":"/api/banner-cat"
+      "getCounterDetail": "/api/get-counter-det",
+      "getBannertype": "/api/banner-type",
+      "getType":"/api/banner-cat",
+      "getThresholdProduct":"/api/inventory-threshold-products"
     }
     public static PKGMASTER = {
         'Product': 1,

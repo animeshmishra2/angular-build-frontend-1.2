@@ -126,4 +126,44 @@ export class StoreWareService {
     }));
   }
 
+  createShipingCharge(req) {
+    return this.http.post<any>(AppSetting.API_ENDPOINT + '/api/create-shipping-charge', req)
+      .pipe(map(data => {
+        return data.data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
+
+  updateShipingcharge(id, req) {
+    return this.http.post<any>(AppSetting.API_ENDPOINT + '/api/update-shipping-charge/' + 'id', req)
+      .pipe(map(data => {
+        return data.data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
+
+  createCoupon(req) {
+    return this.http.post<any>(AppSetting.API_ENDPOINT + '/api/create-coupon', req)
+      .pipe(map(data => {
+        return data.data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
+
+  updateCoupon(id, req) {
+    return this.http.post<any>(AppSetting.API_ENDPOINT + '/api/update-coupon/' + id, req)
+      .pipe(map(data => {
+        return data.data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
+
 }

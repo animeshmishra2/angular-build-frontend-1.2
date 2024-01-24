@@ -141,4 +141,41 @@ export class BannerOfferService {
     }));
   }
 
+  getShipingcharges() {
+    return this.http.get<any>(AppSetting.API_ENDPOINT + '/api/get-shipping-charge')
+      .pipe(map(data => {
+        return data.data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
+
+  deleteShipingCharge(id) {
+    return this.http.get<any>(AppSetting.API_ENDPOINT + '/api/delete-shipping-charge/' + id)
+      .pipe(map(data => {
+        return data.data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
+  getAllCoupns() {
+    return this.http.get<any>(AppSetting.API_ENDPOINT + '/api/get-all-coupons')
+      .pipe(map(data => {
+        return data.data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
+  deleteCoupons(id) {
+    return this.http.get<any>(AppSetting.API_ENDPOINT + '/api/delete-coupon-by-id/' + id)
+      .pipe(map(data => {
+        return data.data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
 }

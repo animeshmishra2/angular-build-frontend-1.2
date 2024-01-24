@@ -1,0 +1,131 @@
+<div fxFlex="100" class="inner-card mat-elevation-z1" fxLayout="column">
+	<div fxFlex="10" class="h1-txt">
+		{{(row?.idcoupon) ? "Update" : "Add New"}} Coupon
+	</div>
+	<div class="margin-top-25"></div>
+	<form fxLayout="column" [formGroup]="lForm" (ngSubmit)="onSubmit()" fxFlex="100">
+		<div fxLayout="column" fxLayoutGap="40px">
+			<div fxFlex fxLayout="row" fxLayoutGap="10px">
+				<mat-form-field fxFlex>
+					<mat-label>Store</mat-label>
+					<mat-select formControlName="idstore_warehouse">
+						<mat-option *ngFor="let store of storeList" [value]="store.idstore_warehouse">{{store.name}}</mat-option>
+					</mat-select>
+					<mat-error
+						*ngIf="!lForm.controls['idstore_warehouse'].valid && lForm.controls['idstore_warehouse'].touched">
+						Select Store.
+					</mat-error>
+				</mat-form-field>
+				<mat-form-field fxFlex>
+					<mat-label>Name</mat-label>
+					<input matInput placeholder="Enter Name" type="text" formControlName="name"
+						autocomplete="off" required>
+					<mat-error *ngIf="!lForm.controls['name'].valid && lForm.controls['name'].touched">
+						Enter a Name.
+					</mat-error>
+				</mat-form-field>
+				<mat-form-field fxFlex>
+					<mat-label>Discount Percentage</mat-label>
+					<input matInput placeholder="Enter Discount Percentage" type="number" formControlName="discount_percentage" autocomplete="off" required>
+					<mat-error *ngIf="!lForm.controls['discount_percentage'].valid && lForm.controls['discount_percentage'].touched">
+						Enter a Discount Percentage.
+					</mat-error>
+				</mat-form-field>
+				<mat-form-field fxFlex>
+					<mat-label>Uptomax Amount</mat-label>
+					<input matInput placeholder="Enter Uptomax Amount" type="number" formControlName="uptomax_amount"
+						autocomplete="off" required>
+					<mat-error *ngIf="!lForm.controls['uptomax_amount'].valid && lForm.controls['uptomax_amount'].touched">
+						Enter a Uptomax Amount.
+					</mat-error>
+				</mat-form-field>
+			</div>
+
+			<div fxFlex fxLayout="row" fxLayoutGap="10px">
+				<mat-form-field fxFlex>
+					<mat-label>Minorder</mat-label>
+					<input matInput placeholder="Enter Minorder" type="text" formControlName="minordervalue"
+						autocomplete="off" required>
+					<mat-error *ngIf="!lForm.controls['minordervalue'].valid && lForm.controls['minordervalue'].touched">
+						Enter a Minorder.
+					</mat-error>
+				</mat-form-field>
+				<mat-form-field fxFlex>
+					<mat-label>Discount</mat-label>
+					<input matInput placeholder="Enter Discount" type="number" formControlName="discount" autocomplete="off" required>
+					<mat-error *ngIf="!lForm.controls['discount'].valid && lForm.controls['discount'].touched">
+						Enter a Discount.
+					</mat-error>
+				</mat-form-field>
+				<mat-form-field fxFlex>
+					<mat-label>Usable Days</mat-label>
+					<input matInput placeholder="Enter Usable Days" type="number" formControlName="usable_days"
+						autocomplete="off" required>
+					<mat-error *ngIf="!lForm.controls['usable_days'].valid && lForm.controls['usable_days'].touched">
+						Enter a Usable Days.
+					</mat-error>
+				</mat-form-field>
+			</div>
+
+			<div fxFlex fxLayout="row" fxLayoutGap="10px">
+				<mat-form-field fxFlex>
+					<mat-label> From Date</mat-label>
+					<input matInput [matDatepicker]="fpicker" (dateChange)="onDateChange()" readonly [min]="todayDate" formControlName="active_from" />
+					<mat-hint>MM/DD/YYYY</mat-hint>
+					<mat-datepicker-toggle matSuffix [for]="fpicker"></mat-datepicker-toggle>
+					<mat-datepicker #fpicker></mat-datepicker>
+					<mat-error *ngIf="!lForm.controls['active_from'].valid && lForm.controls['active_from'].touched">
+						Choose a Valid Date.
+					</mat-error>
+				</mat-form-field>
+				<mat-form-field fxFlex>
+					<mat-label>End date</mat-label>
+					<input matInput [matDatepicker]="fpickerend" readonly [min]="lForm.controls['active_from'].value" formControlName="active_till" />
+					<mat-hint>MM/DD/YYYY</mat-hint>
+					<mat-datepicker-toggle matSuffix [for]="fpickerend"></mat-datepicker-toggle>
+					<mat-datepicker #fpickerend></mat-datepicker>
+					<mat-error *ngIf="!lForm.controls['active_till'].valid && lForm.controls['active_till'].touched">
+						Choose a Valid Date.
+					</mat-error>
+				</mat-form-field>
+			</div>
+
+			<div fxFlex fxLayout="row" fxLayoutGap="10px">
+				<mat-form-field fxFlex>
+					<mat-label>Is General</mat-label>
+					<mat-select formControlName="isgeneral">
+						<mat-option [value]="'yes'">Yes</mat-option>
+						<mat-option [value]="'no'">No</mat-option>
+					</mat-select>
+					<mat-error *ngIf="!lForm.controls['isgeneral'].valid && lForm.controls['isgeneral'].touched">
+						Please select General.
+					</mat-error>
+				</mat-form-field>
+				<mat-form-field fxFlex>
+					<mat-label>Reuse Limit</mat-label>
+					<input matInput placeholder="Enter Reuse Limit" type="number" formControlName="reuse_limit" autocomplete="off" required>
+					<mat-error *ngIf="!lForm.controls['reuse_limit'].valid && lForm.controls['reuse_limit'].touched">
+						Enter a Reuse Limit.
+					</mat-error>
+				</mat-form-field>
+				<mat-form-field fxFlex>
+					<mat-label>Status</mat-label>
+					<mat-select formControlName="status">
+						<mat-option [value]="1">Active</mat-option>
+						<mat-option [value]="0">Inactive</mat-option>
+					</mat-select>
+					<mat-error *ngIf="!lForm.controls['status'].valid && lForm.controls['status'].touched">
+						Enter a Status.
+					</mat-error>
+				</mat-form-field>
+			</div>
+
+		</div>
+		<div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center" style="margin: 20px 0px;">
+			<button [disabled]="loading || lForm.invalid" mat-raised-button color="primary" type="submit">
+				{{(row?.idcoupon) ? "Update" : "Add New"}} Coupon
+			</button>
+			<button mat-raised-button type="button" (click)="cancel()">Cancel</button>
+		</div>
+	</form>
+</div>

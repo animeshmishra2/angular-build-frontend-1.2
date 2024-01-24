@@ -1,0 +1,40 @@
+<div fxFlex="100" class="inner-card mat-elevation-z1" fxLayout="column">
+	<div fxFlex="10" class="h1-txt">
+		{{(row?.id) ? "Update" : "Add New"}} Shiping charges
+	</div>
+	<div class="margin-top-25"></div>
+	<form fxLayout="column" [formGroup]="lForm" (ngSubmit)="onSubmit()" fxFlex="100">
+		<div fxLayout="column" fxLayoutGap="40px">
+			<div fxFlex fxLayout="row" fxLayoutGap="10px">
+                <mat-form-field fxFlex>
+					<mat-label>Shiping Charge</mat-label>
+					<input matInput placeholder="Enter Shiping Charge" type="number" formControlName="shipingcharge" autocomplete="off" required>
+					<mat-error *ngIf="!lForm.controls['shipingcharge'].valid && lForm.controls['shipingcharge'].touched">
+						Enter a Shiping Charge.
+					</mat-error>
+				</mat-form-field>
+                <mat-form-field fxFlex>
+					<mat-label>Title</mat-label>
+					<input matInput placeholder="Enter Title" formControlName="title" autocomplete="off" required>
+					<mat-error *ngIf="!lForm.controls['title'].valid && lForm.controls['title'].touched">
+						Enter a Title.
+					</mat-error>
+				</mat-form-field>
+				<mat-form-field fxFlex>
+					<mat-label>Order Amount</mat-label>
+					<input matInput placeholder="Enter order Amount" type="number" formControlName="orderamount" autocomplete="off" required>
+					<mat-error *ngIf="!lForm.controls['orderamount'].valid && lForm.controls['orderamount'].touched">
+                        Enter a Order Amount.
+                    </mat-error>
+				</mat-form-field>
+			</div>
+			
+		</div>
+		<div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
+			<button [disabled]="loading || lForm.invalid" mat-raised-button color="primary" type="submit">
+				{{(row?.id) ? "Update" : "Add New"}} Shiping charges
+			</button>
+			<button mat-raised-button type="button" (click)="cancel()">Cancel</button>
+		</div>
+	</form>
+</div>

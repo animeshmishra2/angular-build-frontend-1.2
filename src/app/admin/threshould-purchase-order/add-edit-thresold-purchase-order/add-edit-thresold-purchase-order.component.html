@@ -1,0 +1,57 @@
+<div fxFlex="100" class="inner-card mat-elevation-z1" fxLayout="column">
+	<div fxFlex="10" class="h1-txt">
+		{{(row?.id) ? "Update" : "Add New"}} Inventory Threshold
+	</div>
+	<div class="margin-top-25"></div>
+	<form fxLayout="column" [formGroup]="slotForm" (ngSubmit)="onSubmit()" fxFlex="100">
+		<div fxLayout="column" fxLayoutGap="40px">
+			<div fxFlex fxLayout="row" fxLayoutGap="10px">
+				<mat-form-field fxFlex>
+					<mat-label>Store</mat-label>
+					<mat-select formControlName="idstore_warehouse">
+						<mat-option *ngFor="let store of storeList" [value]="store.idstore_warehouse">{{store.name}}</mat-option>
+					</mat-select>
+					<mat-error
+						*ngIf="!slotForm.controls['idstore_warehouse'].valid && slotForm.controls['idstore_warehouse'].touched">
+						Select Store.
+					</mat-error>
+				</mat-form-field>
+
+				<mat-form-field fxFlex>
+					<mat-label>Threshold Product</mat-label>
+					<mat-select formControlName="tproduct">
+						<mat-option *ngFor="let store of threshldproductlist" [value]="store?.idstore_warehouse">{{store?.product_name}}</mat-option>
+					</mat-select>
+					<mat-error
+						*ngIf="!slotForm.controls['tproduct'].valid && slotForm.controls['tproduct'].touched">
+						Select Product.
+					</mat-error>
+				</mat-form-field>
+				<mat-form-field fxFlex>
+					<mat-label>Threshold Quantity</mat-label>
+					<input matInput placeholder="Enter thresold Qantity" type="number" formControlName="thresholdq" autocomplete="off" required>
+					<mat-error *ngIf="!slotForm.controls['thresholdq'].valid && slotForm.controls['thresholdq'].touched">
+                        Enter a Threshold Quantity.
+                    </mat-error>
+				</mat-form-field>
+
+				<mat-form-field fxFlex>
+					<mat-label>Sent Quantity</mat-label>
+					<input matInput placeholder="Enter Sent Qantity" type="number" formControlName="sentquantity" autocomplete="off" required>
+					<mat-error *ngIf="!slotForm.controls['sentquantity'].valid && slotForm.controls['sentquantity'].touched">
+                        Enter a Sent Qantity.
+                    </mat-error>
+				</mat-form-field>
+				
+				
+			</div>
+			
+		</div>
+		<div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
+			<button [disabled]="loading || slotForm.invalid" mat-raised-button color="primary" type="submit">
+				{{(row?.id) ? "Update" : "Add New"}} Inventory Threshold
+			</button>
+			<button mat-raised-button type="button" (click)="cancel()">Cancel</button>
+		</div>
+	</form>
+</div>

@@ -15,6 +15,7 @@ import { StoreWareService } from 'src/app/shared/_service/store-ware.service';
 export class AddEditBannerComponent implements OnInit {
 
   row: any;
+  env =  'https://www.allwinmedico.in/';
   loading: boolean = false;
   selectedFile: any;
   fileSizeError = false;
@@ -37,6 +38,7 @@ export class AddEditBannerComponent implements OnInit {
   });
   bannerTypes: any;
   typelist: any[];
+  imageUrl: any;
 
   constructor(public dialogRef: MatDialogRef<AddEditBannerComponent>,
     private alertService: AlertService,
@@ -45,6 +47,8 @@ export class AddEditBannerComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.row = data.data;
+    console.log("roww",this.row);
+    
     if (this.row?.id) {
       this.lForm.controls["title"].setValue(this.row.title);
       this.lForm.controls["subtitle"].setValue(this.row.sub_title);
@@ -53,6 +57,7 @@ export class AddEditBannerComponent implements OnInit {
       this.lForm.controls["typelist"].setValue(this.row?.type_id);
       this.typeList(this.row?.banner_type);
       this.selectedFile = this.row?.image;
+      this.imageUrl = this.row?.image.toString();
     }
   }
 

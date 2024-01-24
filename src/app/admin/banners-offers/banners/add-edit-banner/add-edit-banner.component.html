@@ -47,6 +47,19 @@
 						Select Type
 					</mat-error>
 				</mat-form-field>
+				<!-- <div fxFlex fxLayoutAlign="start center" style="margin-top: 20px 0px;">
+					<ng-container *ngIf="!selectedFile">
+						<label for="frontImage">Banner Image </label>
+						<input (change)="onFileSelected($event, 'BACK')" type="file" id="backImage">
+						<div *ngIf="fileSizeError" class="error-message">File size exceeds the maximum limit (4 MB).</div>
+					</ng-container>
+					<ng-container *ngIf="selectedFile">
+						<span>{{selectedFile?.name || selectedFile}}</span>
+						<mat-icon (click)="selectedFile = null">delete</mat-icon>
+					</ng-container>
+				</div> -->
+			</div>
+			<div fxFlex fxLayout="row" fxLayoutGap="10px">
 				<div fxFlex fxLayoutAlign="start center" style="margin-top: 20px 0px;">
 					<ng-container *ngIf="!selectedFile">
 						<label for="frontImage">Banner Image </label>
@@ -54,6 +67,8 @@
 						<div *ngIf="fileSizeError" class="error-message">File size exceeds the maximum limit (4 MB).</div>
 					</ng-container>
 					<ng-container *ngIf="selectedFile">
+						<!-- <span>{{'https://www.allwinmedico.in/' + imageUrl}}</span> -->
+						<img [src]="env + imageUrl"/>
 						<span>{{selectedFile?.name || selectedFile}}</span>
 						<mat-icon (click)="selectedFile = null">delete</mat-icon>
 					</ng-container>

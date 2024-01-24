@@ -34,7 +34,7 @@ import { AddEditBannerComponent } from './banners/add-edit-banner/add-edit-banne
 
 
 const routes: Routes = [
-  { path: '', component: BannersOffersComponent },
+  { path: '', component: BannersComponent },
   { path: 'banners', component: BannersComponent },
   { path: 'offers', component: OffersComponent },
 ]

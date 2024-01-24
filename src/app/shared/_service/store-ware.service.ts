@@ -119,7 +119,7 @@ export class StoreWareService {
   }
 
   updateSlots(req, id) {
-    return this.http.post<any>(AppSetting.API_ENDPOINT + '/api/edit-slot/' + id, req).pipe(map(data => {
+    return this.http.post<any>(AppSetting.API_ENDPOINT + '/api/update-slot/' + id, req).pipe(map(data => {
       return data.data;
     }), catchError(err => {
       return throwError(err);

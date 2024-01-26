@@ -20,6 +20,14 @@
                         Enter a valid barcode.
                     </mat-error>
                 </mat-form-field>
+                <mat-form-field fxFlex>
+                    <mat-label>Is Veg</mat-label>
+                    <mat-select formControlName="isveg" >
+                        <mat-option value="veg" >Veg</mat-option>
+                        <mat-option value="non-veg" >Non Veg</mat-option>
+                        <mat-option value="egg" >egg</mat-option>
+                    </mat-select>
+                </mat-form-field>
             </div> 
             <div fxFlex fxLayout="row" fxLayoutGap="10px">
                 <mat-form-field fxFlex>
@@ -65,6 +73,13 @@
             </div> 
 
             <div fxFlex fxLayout="row" fxLayoutGap="10px">
+                <mat-form-field fxFlex>
+                    <mat-label>Threshold Qunatity</mat-label>
+                    <input type="number" matInput placeholder="Enter Threshold Qunatity" formControlName="tqunatity" autocomplete="off" required>
+                    <mat-error *ngIf="!lForm.controls['tqunatity'].valid && lForm.controls['tqunatity'].touched">
+                        Enter a Threshold Qunatity.
+                    </mat-error>
+                </mat-form-field>
                 <mat-form-field fxFlex>
                     <mat-label>Description</mat-label>
                     <textarea matInput placeholder="Enter Detail" formControlName="description" autocomplete="off"

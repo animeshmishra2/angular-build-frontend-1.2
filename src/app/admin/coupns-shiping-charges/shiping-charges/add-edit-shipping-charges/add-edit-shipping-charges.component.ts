@@ -28,6 +28,9 @@ export class AddEditShippingChargesComponent implements OnInit {
     orderamount: new FormControl('', [
       Validators.required
     ]),
+    applicable_on: new FormControl('', [
+      Validators.required
+    ]),
   });
 
   constructor(public dialogRef: MatDialogRef<AddEditShippingChargesComponent>,
@@ -41,6 +44,7 @@ export class AddEditShippingChargesComponent implements OnInit {
       this.lForm.controls["title"].setValue(this.row.title);
       this.lForm.controls["shipingcharge"].setValue(this.row.shipping_charge);
       this.lForm.controls["orderamount"].setValue(this.row.order_amount);
+      this.lForm.controls["applicable_on"].setValue(this.row.applicable_on);
     }
   }
 
@@ -58,6 +62,7 @@ export class AddEditShippingChargesComponent implements OnInit {
     let payload = {
       'shipping_charge' :  this.lForm.get('shipingcharge')!.value,
       'order_amount' :  this.lForm.get('orderamount')!.value,
+      'applicable_on' :  this.lForm.get('applicable_on')!.value,
       'title' :  this.lForm.get('title')!.value,
       'created_by' : 1
     }

@@ -27,6 +27,17 @@
                         Enter a Order Amount.
                     </mat-error>
 				</mat-form-field>
+				<mat-form-field fxFlex>
+					<mat-label>Applicable On</mat-label>
+					<mat-select formControlName="applicable_on">
+						<mat-option [value]="'M'">Member</mat-option>
+						<mat-option [value]="'NM'">Non Member</mat-option>
+                        <mat-option [value]="'BOTH'">Both</mat-option>
+					</mat-select>
+					<mat-error *ngIf="!lForm.controls['applicable_on'].valid && lForm.controls['applicable_on'].touched">
+						Please select Option.
+					</mat-error>
+				</mat-form-field>
 			</div>
 			
 		</div>

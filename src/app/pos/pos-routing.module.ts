@@ -7,6 +7,7 @@ import { NewOrderComponent } from './new-order/new-order.component';
 import { ReciptComponent } from './new-order/recipt/recipt.component';
 import { OpenCloseCounterComponent } from './open-close-counter/open-close-counter.component';
 import { OrderDetailComponent } from './order-detail/order-detail.component';
+import { OnlineOrderComponent } from './online-order/online-order.component';
 
 // const routes: Routes = [{ path: '', component: PosComponent }];
 const routes: Routes = [
@@ -31,6 +32,7 @@ const routes: Routes = [
     component: OpenCloseCounterComponent,
   },
   { path: 'counter-order', component: CounterOrdersComponent },
+  { path: 'online-order', component: OnlineOrderComponent },
   // { path: 'counter-order/:id', component: OrderDetailComponent },
   { path: '', component: DashboardComponent },
   { path: 'dashboard', component: DashboardComponent },

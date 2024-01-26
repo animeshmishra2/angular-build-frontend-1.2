@@ -166,4 +166,14 @@ export class StoreWareService {
         }));
   }
 
+  updateOrderStatus(id, req) {
+    return this.http.post<any>(AppSetting.API_ENDPOINT + '/api/update-order-status', req)
+      .pipe(map(data => {
+        return data.data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
+
 }

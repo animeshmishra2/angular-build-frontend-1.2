@@ -38,6 +38,15 @@
               </mat-card-content>
             </mat-card>
 
+            <mat-card *ngIf="isCounterOpen" fxFlex class="center" [ngClass]="couOrd"
+              (mouseover)="couOrd = 'mat-elevation-z6'" (mouseout)="couOrd = 'mat-elevation-z2'"
+              [routerLink]="['/pos/online-order']">
+              <img mat-card-image src="assets/icons/past-orders.png" alt="New Order" />
+              <mat-card-content>
+                <h2>Online Orders</h2>
+              </mat-card-content>
+            </mat-card>
+
             <mat-card fxFlex class="center" [ngClass]="bl1" (mouseover)="bl1 = 'mat-elevation-z6'"
               (mouseout)="bl1 = 'mat-elevation-z2'" [routerLink]="['/inventory/requirement-request']">
               <img mat-card-image src="assets/icons/demand.png" alt="Product Request" />

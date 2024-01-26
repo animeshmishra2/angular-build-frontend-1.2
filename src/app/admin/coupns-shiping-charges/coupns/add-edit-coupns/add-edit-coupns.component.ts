@@ -33,6 +33,7 @@ export class AddEditCoupnsComponent implements OnInit {
     isgeneral: new FormControl('', [Validators.required]),
     reuse_limit: new FormControl('', [Validators.required]),
     status: new FormControl('', [Validators.required]),
+    applicable_on: new FormControl('', [Validators.required]),
   });
 
   constructor(public dialogRef: MatDialogRef<AddEditCoupnsComponent>,
@@ -55,7 +56,7 @@ export class AddEditCoupnsComponent implements OnInit {
       this.lForm.controls["reuse_limit"].setValue(this.row.reuse_limit);
       this.lForm.controls["status"].setValue(this.row.status);
       this.lForm.controls["isgeneral"].setValue(this.row.isgeneral);
-
+      this.lForm.controls["applicable_on"].setValue(this.row?.applicable_on);
       
     }
   }
@@ -100,6 +101,7 @@ export class AddEditCoupnsComponent implements OnInit {
       'isgeneral' : this.lForm.get('isgeneral')!.value,
       'reuse_limit': this.lForm.get('reuse_limit')!.value,
       'status': this.lForm.get('status')!.value,
+      'applicable_on' :  this.lForm.get('applicable_on')!.value,
     }
     if (this.row.idcoupon) {
       this.storeWareServ.updateCoupon(this.row?.idcoupon, payload).subscribe((data: any) => {

@@ -1,0 +1,42 @@
+<div fxFlex="100" class="inner-card mat-elevation-z1" fxLayout="column">
+	<div fxFlex="10" class="h1-txt">
+		Change Status
+	</div>
+	<div class="margin-top-25"></div>
+	<form fxLayout="column" [formGroup]="lForm" (ngSubmit)="onSubmit()" fxFlex="100">
+		<div fxLayout="column" fxLayoutGap="40px">
+			<div fxFlex fxLayout="row" fxLayoutGap="10px">
+                <mat-form-field fxFlex>
+					<mat-label>Status</mat-label>
+					<mat-select formControlName="status">
+						<mat-option [value]="'yes'">Placed</mat-option>
+						<mat-option [value]="'no'">Approved</mat-option>
+                        <mat-option [value]="'yes'">Ready To Dispatch</mat-option>
+						<mat-option [value]="'no'">Dispatched</mat-option>
+                        <mat-option [value]="'yes'">Delivered</mat-option>
+						<mat-option [value]="'no'">Cancelled</mat-option>
+                        <mat-option [value]="'yes'">Rejected</mat-option>
+					</mat-select>
+					<mat-error *ngIf="!lForm.controls['status'].valid && lForm.controls['status'].touched">
+						Please select Status.
+					</mat-error>
+				</mat-form-field>
+			</div>
+			<div fxFlex fxLayout="row" fxLayoutGap="10px">
+                <mat-form-field fxFlex>
+					<mat-label>Reason</mat-label>
+					<input matInput placeholder="Enter Reason" formControlName="reason" autocomplete="off" required>
+					<mat-error *ngIf="!lForm.controls['reason'].valid && lForm.controls['reason'].touched">
+						Enter a Reason.
+					</mat-error>
+				</mat-form-field>
+			</div>
+		</div>
+		<div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
+			<button [disabled]="loading || lForm.invalid" mat-raised-button color="primary" type="submit">
+				Change Status
+			</button>
+			<button mat-raised-button type="button" (click)="cancel()">Cancel</button>
+		</div>
+	</form>
+</div>

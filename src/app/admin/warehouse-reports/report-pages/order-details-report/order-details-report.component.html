@@ -1,0 +1,56 @@
+<app-header></app-header>
+<div class="wh-reports-container">
+    <div class="main-card">
+        <div class="flex justify-content-between">
+            <div class="h1-txt p-2">
+                <a appBackButton><mat-icon>arrow_back</mat-icon></a>
+                Order Details Report
+            </div>
+        </div>
+        <div class="p-2">
+       
+            <p-table #dt1 [value]="tableData" responsiveLayout="scroll"
+                styleClass="p-datatable-sm p-datatable-gridlines"        [paginator]="false" [rows]="25" [showCurrentPageReport]="true" class="m-1"
+                [totalRecords]="totalRecords" [first]="first" [loading]="loading"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th rowspan="1">Product Name</th>
+                        <th rowspan="1">Quantity</th>
+                        <th rowspan="1">CGST</th>
+                        <th rowspan="1">SGST</th>
+                        <th rowspan="1">Discount</th>
+                        <th rowspan="1">Price</th>
+                    
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-record>
+                    <tr>
+                        <td>{{ record.name }}</td>
+                        <td>{{ record.quantity}}</td>
+                        <td>{{ record.total_cgst}}</td>
+                        <td>{{ record.total_sgst}}</td>
+                        <td>{{ record.discount}}</td>
+                        <td>{{ record.total_price}}</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td class="text-center" colspan="11">No Records Found</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center" colspan="11">Please select Store or Inventory</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <p-paginator
+      
+            [first]="first"
+            [rows]="25" [showCurrentPageReport]="true"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            [totalRecords]="totalRecords"
+            (onPageChange)="paginate($event)"
+          ></p-paginator>
+        </div>
+    </div>
+</div>

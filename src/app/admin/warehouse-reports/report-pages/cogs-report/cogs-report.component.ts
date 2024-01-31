@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { Store, Warehouse } from '../inventory-report/inventory-report.component';
-import { ReportApiService } from 'src/app/shared/_service/report-apis/report-api.service';
+import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ExcelService } from 'src/app/shared/_service/exports/excel.service';
-import { Router } from '@angular/router';
+import { ReportApiService } from 'src/app/shared/_service/report-apis/report-api.service';
+import { Store, Warehouse } from '../inventory-report/inventory-report.component';
 
 @Component({
-  selector: 'app-sales-report',
-  templateUrl: './sales-report.component.html',
-  styleUrls: ['./sales-report.component.scss']
+  selector: 'app-cogs-report',
+  templateUrl: './cogs-report.component.html',
+  styleUrls: ['./cogs-report.component.scss']
 })
-export class SalesReportComponent implements OnInit {
+export class CogsReportComponent implements OnInit {
+
 
   tableData!: any[];
   totalRecords = 0
@@ -20,13 +21,14 @@ export class SalesReportComponent implements OnInit {
   rows = 10;
   first = 0;
   warehouses!: Warehouse[];
-  selectedStore?: any=2;
-  selectedWarehouse?: any ;
+  selectedStore?: any;
+  selectedWarehouse?:any=1;
   params: any = {
     field: '',
-    first:0,
     searchTerm: '',
-    rows:10
+    idstore_warehouse:1,
+    rows:10,
+    first:0
   }
   searchTerm: any
   from_date: any;
@@ -39,16 +41,24 @@ export class SalesReportComponent implements OnInit {
   exportColumns: any = [];
   fieldsArray = [
     {
-      id: "customer",
-      name: "Customer Name"
+      id: "brand",
+      name: "Brand"
     },
     {
-      id: "pay_mode",
-      name: "Payment Mode"
+      id: "product",
+      name: "Product Name"
     },
     {
-      id: "discount_type",
-      name: "Discount Type"
+      id: "barcode",
+      name: "Barcode"
+    },
+    {
+      id: "category",
+      name: "Category"
+    },
+    {
+      id: "sub_category",
+      name: "Sub Category"
     }
   ]
   constructor(private apiService: ReportApiService,
@@ -56,79 +66,53 @@ export class SalesReportComponent implements OnInit {
     private router: Router,
     private excelService: ExcelService) { }
   ngOnInit(): void {
-
-    this.getSalesReport()
+    this.fetchStoreList()
+    this.fetchWarehouseList()
+    this.getCOGSReport()
   }
   applyFilter(event) {
     console.log(event)
   }
-  filterByStore(event) {
-    this.params.idstore_warehouse = event.value
-this.selectedWarehouse=undefined
-this.getSalesReport()
-  }
-  filterBywarehouse(event) {
-    this.params.idstore_warehouse = event.value
-    this.selectedStore=undefined
-    this.getSalesReport()
-  }
-  fetchWarehouseList(): void {
-    this.spinner.show();
-    this.apiService.getWarehouseList().subscribe(
-      (response) => {
-        this.warehouses = response;
-        this.spinner.hide();
-      },
-      (error) => {
-        console.error('Error fetching Warehouse List:', error);
-        this.spinner.hide();
-      }
-    );
-  }
   fetchStoreList(): void {
-    this.spinner.show();
+
     this.apiService.getStoreList().subscribe(
       (response) => {
         this.stores = response;
-        this.spinner.hide();
+
       },
       (error) => {
         console.error('Error fetching Store List:', error);
-        this.spinner.hide();
+
       }
     );
   }
   tableFilter() { }
-  exportExcel() {
+  async exportExcel() {
 
-    let excelParams = JSON.parse(JSON.stringify( this.params));
-   
-    delete excelParams.page
-    excelParams.first = 0
-    excelParams.rows= this.totalRecords
-    this.loading=true
-    this.apiService.getSalesReport(excelParams).subscribe(
+    let tempobject = JSON.parse(JSON.stringify( this.params));
+    tempobject.first = 0;
+    tempobject.rows = this.totalRecords
+    this.spinner.show();
+    this.apiService.getCOGSReport(tempobject).subscribe(
       (response) => {
-        let tableData = response.data;
-        this.loading=false
-        const exceldata=tableData.map(x=>{
-          return{
-            "Customer Order Id":x.idcustomer_order,
-            "Customer Name":x.name,
-            "Store Name":x.store,
-            "Payment Mode":x.pay_mode,
-            "Discount Type":x.discount_type,
-            "Quantity":x.total_quantity,
-            "CGST":x.total_cgst,
-            "SGST":x.total_sgst,
-            "Total Discount":x.total_discount,
-            "Total Amount":x.total_price,
-            "Order count":x.oreder_details.length
-    
-          }
+        let tableData = response.data
+        const excelData = tableData.map((x) => {
+
+          return {
+            "Barcode": x.barcode,
+            "Brand Name": x.brand_name,
+            "Product Name": x.name,
+            "Category Name": x.selling_price,
+            "Sub Category Name": x.sub_category_name,
+            "Sub Sub Category Name": x.sub_sub_category_name,
+            "total_quantity": x.selling_margin_rupees,
+            "COGS": x.cogs,
+            "Purchase Price": x.purchase_price,
+          };
         })
+      
         let body:any = {
-          reportName: 'Sales Report'
+          reportName: 'COGS Report'
         }
         if(this.selectedStore){
           body.warehouseName= this.stores.find(x=> {
@@ -147,40 +131,52 @@ this.getSalesReport()
           })
         }
         }
-        console.log(excelParams,this.params)
-        this.excelService.salseReport('Sales Report', exceldata,body)
+        console.log(body)
+        this.excelService.COGSReport('COGS Report', excelData,body)
+        this.spinner.hide();
       },
       (error) => {
         console.error('Error fetching Product Report:', error);
-        this.loading=false
+
+        this.spinner.hide();
       }
     );
-    
-
-   }
+  }
   exportPdf() { }
   clearAllData(event) {
     this.params = {
       field: '',
-      first:0,
       searchTerm: '',
-      rows:10
+      idstore_warehouse:1,
+      rows:10,
+      first:0
     }
-    this.dateRange=undefined
-    this.getSalesReport()
+    this.dateRange = undefined
+    this.getCOGSReport()
+  }
+  fetchWarehouseList(): void {
+    // this.spinner.show();
+    this.apiService.getWarehouseList().subscribe(
+      (response) => {
+        this.warehouses = response;
+        // this.spinner.hide();
+      },
+      (error) => {
+        console.error('Error fetching Warehouse List:', error);
+        // this.spinner.hide();
+      }
+    );
   }
   paginate(event) {
     console.log(event)
     this.params.first = (event.first ? event.first : 0)
     this.params.rows = (event.first ? event.first : 0) + (event.rows ? event.rows : 10)
     this.loading = true
-    this.apiService.getSalesReport(this.params).subscribe(
+    this.apiService.getCOGSReport(this.params).subscribe(
       (response) => {
         this.tableData = response.data;
         this.totalRecords = response.total
         this.loading = false
-        this.fetchWarehouseList();
-        this.fetchStoreList();
       },
       (error) => {
         console.error('Error fetching Product Report:', error);
@@ -188,33 +184,41 @@ this.getSalesReport()
       }
     );
   }
-  getSalesReport() {
+  getCOGSReport() {
     this.loading = true
-    this.apiService.getSalesReport(this.params).subscribe(
+    this.apiService.getCOGSReport(this.params).subscribe(
       (response) => {
         this.tableData = response.data;
         this.totalRecords = response.total
         this.loading = false
-        this.fetchWarehouseList();
-        this.fetchStoreList();
       },
       (error) => {
         console.error('Error fetching Product Report:', error);
         this.loading = false
       }
     );
+  }
+  filterByStore(event) {
+    this.params.idstore_warehouse = event.value
+    this.selectedWarehouse = undefined
+    this.getCOGSReport()
+  }
+  filterBywarehouse(event) {
+    this.params.idstore_warehouse = event.value
+    this.selectedStore = undefined
+    this.getCOGSReport()
   }
   filterByDate() {
     if (!this.dateRange) {
       return
     } else {
-      let tempdate:any=[]
+      let tempdate:any = []
       for (const [index, iterator] of this.dateRange.entries()) {
         tempdate[index] = this.formatDate(iterator)
       }
       this.params.start_date = tempdate[0]
       this.params.end_date = tempdate[1]
-      this.getSalesReport()
+      this.getCOGSReport()
     }
   }
   formatDate(date) {
@@ -239,11 +243,7 @@ this.getSalesReport()
   }
   search(value) {
     this.params.searchTerm = value
-    this.getSalesReport()
+    this.getCOGSReport()
   }
-  OrderDetails(data){
-    this.router.navigate(['/ggb-admin/wh-reports/order-details-report'], {
-      queryParams: { data: btoa(JSON.stringify(data)) }
-  })
-  }
+
 }

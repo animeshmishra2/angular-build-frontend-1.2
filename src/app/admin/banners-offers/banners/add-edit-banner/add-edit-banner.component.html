@@ -68,7 +68,7 @@
 					</ng-container>
 					<ng-container *ngIf="selectedFile">
 						<!-- <span>{{'https://www.allwinmedico.in/' + imageUrl}}</span> -->
-						<img [src]="env + imageUrl"/>
+						<img [src]="env + imageUrl" style="width:100%;height:auto;"/>
 						<span>{{selectedFile?.name || selectedFile}}</span>
 						<mat-icon (click)="selectedFile = null">delete</mat-icon>
 					</ng-container>

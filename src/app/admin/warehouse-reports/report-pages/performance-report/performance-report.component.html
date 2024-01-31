@@ -1,0 +1,83 @@
+<app-header></app-header>
+<div class="wh-reports-container">
+  <div class="main-card">
+    <div class="flex justify-content-between">
+      <div class="h1-txt p-2">
+        <a appBackButton><mat-icon>arrow_back</mat-icon></a>
+        Performance Report
+      </div>
+
+
+    </div>
+    <!-- <div style="display: flex;justify-content: space-around;">
+            <div class="profile-card" *ngFor="let user of users">
+                <mat-card class="mat-card">
+                  <div class="background" [style.backgroundColor]="user.backgroundColor"></div>
+                  <div class="profile-img-container">
+                    <img [src]="user.profileImage" alt="User Profile" class="profile-img" />
+                  </div>
+                  <div class="content">
+                    <mat-grid-list cols="2" rowHeight="1:1">
+                    
+                        <mat-grid-tile>
+                            <mat-icon>person_outline</mat-icon>
+                        </mat-grid-tile>
+                        <mat-grid-tile>
+                            <mat-icon>person_outline</mat-icon>
+                        </mat-grid-tile>
+                        <mat-grid-tile>
+                          <p>{{ user.name }}</p>
+                        </mat-grid-tile>
+                        <mat-grid-tile>
+                            <p>{{ user.email }}</p>
+                        </mat-grid-tile>
+                      </mat-grid-list>
+                  </div>
+                </mat-card>
+              </div>
+        </div> -->
+    <div style="display: flex;justify-content: space-around;">
+      <mat-card class="user-profile-card" *ngIf="bestVendor" style="width: 80rem; padding: 2rem; text-align: center ;">
+        <div style="justify-content: center; display: flex;"> <div mat-card-avatar class="example-header-image"></div></div>
+        <mat-card-header style="justify-content: center ;" class="mt-2">
+          <mat-card-title >Best Seller</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>Name: {{bestVendor?.name}}</p>
+          <p>Phone: {{bestVendor?.phone}}</p>
+          <p>Total Sales: {{bestVendor?.total_sales}}</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="user-profile-card" *ngIf="worstVendor" style="width: 80rem; padding: 2rem; text-align: center ;">
+        <div style="justify-content: center; display: flex;"> <div mat-card-avatar class="example-header-image"></div></div>
+        <mat-card-header  style="justify-content: center ;" class="mt-2">
+
+          <mat-card-title>Worst Seller</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>Name: {{worstVendor?.name}}</p>
+          <p>Phone: {{worstVendor?.phone}}</p>
+          <p>Total Sales: {{worstVendor?.total_sales}}</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="user-profile-card" *ngIf="yearGrowth" style="width: 80rem; padding: 2rem; text-align: center ;">
+        <div style="justify-content: center; display: flex;"> <div mat-card-avatar class="example-header-image"></div></div>
+        <mat-card-header style="justify-content: center ;" class="mt-2">
+         
+          <mat-card-title>Year Over Year Growth</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>Percentage: {{yearGrowth?.percentage | number:'1.2-2' }}</p>
+          <p>Total Salled Quantity: {{yearGrowth?.total_salled_quantity | number:'1.2-2' }}</p>
+
+        </mat-card-content>
+      </mat-card>
+    </div>
+   
+
+
+
+  </div>
+</div>

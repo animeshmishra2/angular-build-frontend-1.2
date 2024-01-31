@@ -4,7 +4,7 @@
         <div class="flex justify-content-between">
             <div class="h1-txt p-2">
                 <a appBackButton><mat-icon>arrow_back</mat-icon></a>
-                Margin Report
+                COGS Report
             </div>
             <div class="flex gap-1 mr-3">
                 <p-dropdown [options]="stores" class="p-1" optionValue="idstore_warehouse"
@@ -15,7 +15,7 @@
                     optionLabel="name" [(ngModel)]="selectedWarehouse"
                     (onChange)="filterBywarehouse($event)"
                     placeholder="Select an Warehouses"></p-dropdown>
-            </div>
+            </div> 
         </div>
         <div class="pt-2">
             <p-dropdown [options]="fieldsArray" class="p-1" optionValue="id"
@@ -27,11 +27,12 @@
                 <input [disabled]="!params.field" [(ngModel)]="searchTerm" matInput type="search" (input)="search($any($event.target).value)" placeholder="search here" class="search-input" style="height: 100%;">
             </mat-form-field>
         </div>
+    
         <div class="p-2">
        
             <p-table #dt1 [value]="tableData" responsiveLayout="scroll"
                 styleClass="p-datatable-sm p-datatable-gridlines"        [paginator]="false" [rows]="10" [showCurrentPageReport]="true" class="m-1"
-                [tableStyle]="{ 'min-width': '50rem' }" [totalRecords]="totalRecords" [first]="first" [loading]="loading"
+                [totalRecords]="totalRecords" [first]="first" [loading]="loading"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
                 <ng-template pTemplate="caption" >
                     <div class="flex justify-content-between">
@@ -57,44 +58,39 @@
                             </button> -->
                         </div>
                     </div>
-                
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
                         <th rowspan="2">Barcode</th>
+                        <th rowspan="2">Brand Name</th>
                         <th rowspan="2">Product Name</th>
                         <th rowspan="2">Category Name</th>
-                        <th rowspan="2">Selling Price</th>
+                        <th rowspan="2">Sub Category Name</th>
+                        <th rowspan="2">Sub Sub Category Name</th>
+                        <th rowspan="2">Quantity</th>
+                        <th rowspan="2">COGS</th>
                         <th rowspan="2">Purchase Price</th>
-                        <th class="text-center" colspan="2">Selling Margin</th>
-                        <th class="text-center" colspan="2">Purchase Margin</th>
-                    </tr>
-                    <tr class="text-center">
-                        <th>%age</th>
-                        <th>Amount</th>
-                        <th>%age</th>
-                        <th>Amount</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-record>
                     <tr>
                         <td>{{ record.barcode }}</td>
-                        <td>{{ record.name }}</td>
-                        <td>{{ record.category_name }}</td>
-                        <td>{{ record.selling_price | number:'1.2-2' }}</td>
-                        <td>{{ record.purchase_price | number:'1.2-2'}}</td>
-                        <td>{{ record.selling_margin_percentage | number:'1.2-2'}}</td>
-                        <td>{{ record.selling_margin_rupees | number:'1.2-2' }}</td>
-                        <td>{{ record.purchase_margin_percentage | number:'1.2-2' }}</td>
-                        <td>{{ record.purchase_margin_rupees | number:'1.2-2'}}</td>
+                        <td>{{ record.brand_name}}</td>
+                        <td>{{ record.name}}</td>
+                        <td>{{ record.category_name}}</td>
+                        <td>{{ record.sub_category_name}}</td>
+                        <td>{{ record.sub_sub_category_name}}</td>
+                        <td>{{ record.total_quantity | number:'1.2-2'  }}</td>
+                        <td>{{ record.cogs | number:'1.2-2'}}</td>
+                        <td>{{ record.purchase_price| number:'1.2-2'}}</td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
                     <tr>
-                        <td class="text-center" colspan="8">No Records Found</td>
+                        <td class="text-center" colspan="11">No Records Found</td>
                     </tr>
                     <tr>
-                        <td class="text-center" colspan="8">Please select Store or Inventory</td>
+                        <td class="text-center" colspan="11">Please select Store or Inventory</td>
                     </tr>
                 </ng-template>
             </p-table>

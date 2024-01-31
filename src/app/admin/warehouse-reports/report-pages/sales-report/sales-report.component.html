@@ -6,22 +6,32 @@
                 <a appBackButton><mat-icon>arrow_back</mat-icon></a>
                 Sales Report
             </div>
-            <!-- <div class="flex gap-1 mr-3">
+            <div class="flex gap-1 mr-3">
                 <p-dropdown [options]="stores" class="p-1" optionValue="idstore_warehouse"
                     optionLabel="name" [(ngModel)]="selectedStore"
-                    (onChange)="fetchProductReport($event,'Store')"
+                    (onChange)="filterByStore($event)"
                     placeholder="Select a Store"></p-dropdown>
-                <p-dropdown [options]="warehouses" class="p-1" optionValue="idstore_warehouse"
+                <!-- <p-dropdown [options]="warehouses" class="p-1" optionValue="idstore_warehouse"
                     optionLabel="name" [(ngModel)]="selectedWarehouse"
-                    (onChange)="fetchProductReport($event,'Warehouses')"
-                    placeholder="Select an Warehouses"></p-dropdown>
-            </div> -->
+                    (onChange)="filterBywarehouse($event)"
+                    placeholder="Select an Warehouses"></p-dropdown> -->
+            </div> 
+        </div>
+        <div class="pt-2">
+            <p-dropdown [options]="fieldsArray" class="p-1" optionValue="id"
+            optionLabel="name" [(ngModel)]="params.field"
+            (onChange)="selectFields($event)"
+            placeholder="Select a fields"></p-dropdown>
+            <mat-form-field>
+                <mat-icon matPrefix>search</mat-icon>
+                <input [disabled]="!params.field" [(ngModel)]="searchTerm" matInput type="search" (input)="search($any($event.target).value)" placeholder="search here" class="search-input" style="height: 100%;">
+            </mat-form-field>
         </div>
     
         <div class="p-2">
        
             <p-table #dt1 [value]="tableData" responsiveLayout="scroll"
-                styleClass="p-datatable-sm p-datatable-gridlines"        [paginator]="false" [rows]="25" [showCurrentPageReport]="true" class="m-1"
+                styleClass="p-datatable-sm p-datatable-gridlines"        [paginator]="false" [rows]="10" [showCurrentPageReport]="true" class="m-1"
                 [totalRecords]="totalRecords" [first]="first" [loading]="loading"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
                 <ng-template pTemplate="caption" >
@@ -29,11 +39,11 @@
                         <div class="flex gap-2">
                             <button pButton label="Clear" class="p-button-outlined"
                                 icon="pi pi-filter-slash" (click)="clearAllData(dt1)" ></button>
-                            <!-- <p-calendar [(ngModel)]="dateRange" selectionMode="range"
+                            <p-calendar [(ngModel)]="dateRange" selectionMode="range"
                                 placeholder="Choose your date range" [readonlyInput]="true"
                                 [appendTo]="'body'"></p-calendar>
                             <button pButton label="Search" class="p-button-outlined p-button-success"
-                                icon="pi pi-search" (click)="filterByDate()" [disabled]="!dateRange"></button> -->
+                                icon="pi pi-search" (click)="filterByDate()" [disabled]="!dateRange"></button>
                         </div>
                         <div class="flex gap-2">
                             <button mat-raised-button class="success-button" class="resizebtn"
@@ -48,53 +58,41 @@
                             </button> -->
                         </div>
                     </div>
-                
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th rowspan="2">Product Name</th>
-                        <th rowspan="2">Category</th>
-                        <th rowspan="2">Sub Category</th>
-                        <th rowspan="2">Sub Sub Category</th>
-                        <th rowspan="2">Brand</th>
+                        <th rowspan="2">Customer Order Id</th>
+                        <th rowspan="2">Customer Name</th>
+                        <th rowspan="2">Store Name</th>
+                        <th rowspan="2">Payment Mode</th>
+                        <th rowspan="2">Discount Type</th>
                         <th rowspan="2">Quantity</th>
                         <th class="text-center" colspan="2">GST</th>
-                        <th class="text-center" colspan="3">Purchase</th>
+                        <th class="text-center" colspan="2">Amount</th>
+                        <th rowspan="2">Order Details</th>
                     </tr>
                     <tr class="text-center">
                         <th>CGST</th>
                         <th>SGST</th>
-                        <th>Purchase Price</th>
-                        <th>Amount</th>
-                        <th>Amount with tax</th>
-                    </tr>
-                    <tr class="column-filter">
-                        <th><input pInputText type="text" (input)="dt1.filter($any($event.target).value, 'name', 'contains')"></th>
-                        <th><input pInputText type="text" (input)="dt1.filter($any($event.target).value, 'category_name', 'contains')"></th>
-                        <th><input pInputText type="text" (input)="dt1.filter($any($event.target).value, 'sub_category_name', 'contains')"></th>
-                        <th><input pInputText type="text" (input)="dt1.filter($any($event.target).value, 'sub_sub_category_name', 'contains')"></th>
-                        <th><input pInputText type="text" (input)="dt1.filter($any($event.target).value, 'brand_name', 'contains')"></th>
-                        <th><input pInputText type="text" (input)="dt1.filter($any($event.target).value, 'quantity', 'contains')"></th>
-                        <th><input pInputText type="text" (input)="dt1.filter($any($event.target).value, 'cgst', 'contains')"></th>
-                        <th><input pInputText type="text" (input)="dt1.filter($any($event.target).value, 'sgst', 'contains')"></th>
-                        <th><input pInputText type="text" (input)="dt1.filter($any($event.target).value, 'purchase_price', 'contains')"></th>
-                        <th><input pInputText type="text" (input)="dt1.filter($any($event.target).value, 'amount', 'contains')"></th>
-                        <th><input pInputText type="text" (input)="dt1.filter($any($event.target).value, 'total_amount_with_tax', 'contains')"></th>
+                        <th>Total Discount</th>
+                        <th>Total Amount</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-record>
                     <tr>
-                        <td>{{ record.name }}</td>
-                        <td>{{ record.category_name }}</td>
-                        <td>{{ record.sub_category_name }}</td>
-                        <td>{{ record.sub_sub_category_name }}</td>
-                        <td>{{ record.brand_name }}</td>
-                        <td>{{ record.quantity }}</td>
-                        <td>{{ record.cgst }}</td>
-                        <td>{{ record.sgst }}</td>
-                        <td>{{ record.purchase_price }}</td>
-                        <td>{{ record.amount }}</td>
-                        <td>{{ record.total_amount_with_tax }}</td>
+                        <td>{{ record.idcustomer_order }}</td>
+                        <td>{{ record.name}}</td>
+                        <td>{{ record.store}}</td>
+                        <td>{{ record.pay_mode}}</td>
+                        <td>{{ record.discount_type}}</td>
+                        <td>{{ record.total_quantity }}</td>
+                        <td>{{ record.total_cgst | number:'1.2-2'  }}</td>
+                        <td>{{ record.total_sgst | number:'1.2-2'}}</td>
+                        <td>{{ record.total_discount | number:'1.2-2'}}</td>
+                        <td>{{ record.total_price | number:'1.2-2'}}</td>
+                       <td style="text-align: center">
+                            <button pButton type="button" class="p-button-secondary" icon="pi pi-book" (click)="OrderDetails(record)"></button>
+                        </td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
@@ -109,7 +107,7 @@
             <p-paginator
       
             [first]="first"
-            [rows]="25" [showCurrentPageReport]="true"
+            [rows]="10" [showCurrentPageReport]="true"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
             [totalRecords]="totalRecords"
             (onPageChange)="paginate($event)"

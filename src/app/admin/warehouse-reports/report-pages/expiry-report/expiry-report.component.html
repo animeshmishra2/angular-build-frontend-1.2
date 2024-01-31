@@ -9,34 +9,79 @@
             <div class="flex gap-1 mr-3">
                 <p-dropdown [options]="stores" class="p-1" optionValue="idstore_warehouse"
                     optionLabel="name" [(ngModel)]="selectedStore"
-                    (onChange)="getSumOfAmount()"
+                    (onChange)="filterByStore($event)"
                     placeholder="Select a Store"></p-dropdown>
                 <p-dropdown [options]="warehouses" class="p-1" optionValue="idstore_warehouse"
                     optionLabel="name" [(ngModel)]="selectedWarehouse"
-                    (onChange)="getSumOfAmount()"
+                    (onChange)="filterBywarehouse($event)"
                     placeholder="Select an Inventory"></p-dropdown>
             </div>
         </div>
-
-        <div class="flex justify-content-center align-items-center">
-            <p-selectButton styleClass="p-2" [options]="stateOptions" [(ngModel)]="value"
-                optionLabel="label" optionValue="value"></p-selectButton>
+        <div class="pt-2">
+            <p-dropdown [options]="fieldsArray" class="p-1" optionValue="id"
+            optionLabel="name" [(ngModel)]="params.graph_type"
+            (onChange)="selectFields($event)"
+            placeholder="Select a fields"></p-dropdown>
+            <mat-form-field>
+                <mat-icon matPrefix>search</mat-icon>
+                <input [disabled]="!params.graph_type" [(ngModel)]="searchTerm" matInput type="search" (input)="search($any($event.target).value)" placeholder="search here" class="search-input" style="height: 100%;">
+            </mat-form-field>
         </div>
+        <!-- <div class="flex justify-content-center align-items-center">
+            <p-selectButton styleClass="p-2" [options]="stateOptions" [(ngModel)]="value" optionLabel="label"
+                optionValue="value" (click)="changeStates()"></p-selectButton>
+        </div> -->
+
+            <div fxLayout="row" class="leftCol p-2">
+                <!-- <mat-form-field appearance="standard" fxFlex="33.5">
+                    <mat-label>Filter</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="Search Here" #input autocomplete="off">
+                </mat-form-field> -->
+                <div class="flex gap-2">
+                    <button pButton label="Clear" class="p-button-outlined"
+                        icon="pi pi-filter-slash" (click)="clearAllData()" ></button>
+                    <p-calendar [(ngModel)]="dateRange" selectionMode="range"
+                        placeholder="Choose your date range" [readonlyInput]="true"
+                        [appendTo]="'body'"></p-calendar>
+                    <button pButton label="Search" class="p-button-outlined p-button-success"
+                        icon="pi pi-search" (click)="filterByDate()" [disabled]="!dateRange"></button>
+                </div>
+                <div class="flex gap-2">
+                    <button mat-raised-button class="success-button" class="resizebtn"
+                        (click)="exportExcel()">
+                        <mat-icon>article</mat-icon>
+                        Export Excel
+                    </button>
+                    <!-- <button mat-raised-button color="error" class="resizebtn"
+                        (click)="exportPdf()">
+                        <mat-icon>picture_as_pdf</mat-icon>
+                        Export PDF
+                    </button> -->
+                </div>
+            </div>
+
+
         <div class="grid">
             <div class="col-10 shadow-1">
                 <h3 class="ml-2">
                     Product Quantity
                 </h3>
                 <p-chart type="bar" [data]="data" [options]="options"></p-chart>
+                <div style="    display: flex;
+             justify-content: space-around;">
+                    <p-button label="Previous" (click)="LoadBarData('Previous')"></p-button>
+                    <p-button label="Next" (click)="LoadBarData('Next')"></p-button>
+                </div>
             </div>
             <div class="col-2 shadow-1">
                 <h3>
                     Product Amount
                 </h3>
-                <p-chart type="pie" [data]="pieData" [options]="pieOptions"></p-chart>
-                <div class="flex flex-column justify-content-center align-items-center mt-3">
+                <p-chart *ngIf="pieData && pieData?.datasets" type="pie" [data]="pieData"
+                    [options]="pieOptions"></p-chart>
+                <div *ngIf="pieData && pieData?.datasets" class="flex flex-column justify-content-center align-items-center mt-3">
                     <span class="mt-2">
-                        Expired Amount : {{pieData.datasets[0].data[1]}} /-
+                        Expired Amount : {{pieData?.datasets[0].data[0]}} /-
                     </span>
                     <span class="mt-2">
                         Total Amount : {{getSumOfAmount()}} /-

@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { Store, Warehouse } from '../inventory-report/inventory-report.component';
-import { ReportApiService } from 'src/app/shared/_service/report-apis/report-api.service';
+import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ExcelService } from 'src/app/shared/_service/exports/excel.service';
-import { Router } from '@angular/router';
+import { ReportApiService } from 'src/app/shared/_service/report-apis/report-api.service';
+import { Store, Warehouse } from '../inventory-report/inventory-report.component';
 
 @Component({
-  selector: 'app-sales-report',
-  templateUrl: './sales-report.component.html',
-  styleUrls: ['./sales-report.component.scss']
+  selector: 'app-stock-replacement-report',
+  templateUrl: './stock-replacement-report.component.html',
+  styleUrls: ['./stock-replacement-report.component.scss']
 })
-export class SalesReportComponent implements OnInit {
+export class StockReplacementReportComponent implements OnInit {
 
+  
   tableData!: any[];
   totalRecords = 0
   dateRange!: any[] | undefined;
@@ -26,7 +27,8 @@ export class SalesReportComponent implements OnInit {
     field: '',
     first:0,
     searchTerm: '',
-    rows:10
+    rows:10,
+    idstore_warehouse:1
   }
   searchTerm: any
   from_date: any;
@@ -57,7 +59,7 @@ export class SalesReportComponent implements OnInit {
     private excelService: ExcelService) { }
   ngOnInit(): void {
 
-    this.getSalesReport()
+    this.getStockReplacementReport()
   }
   applyFilter(event) {
     console.log(event)
@@ -65,12 +67,12 @@ export class SalesReportComponent implements OnInit {
   filterByStore(event) {
     this.params.idstore_warehouse = event.value
 this.selectedWarehouse=undefined
-this.getSalesReport()
+this.getStockReplacementReport()
   }
   filterBywarehouse(event) {
     this.params.idstore_warehouse = event.value
     this.selectedStore=undefined
-    this.getSalesReport()
+    this.getStockReplacementReport()
   }
   fetchWarehouseList(): void {
     this.spinner.show();
@@ -107,9 +109,9 @@ this.getSalesReport()
     excelParams.first = 0
     excelParams.rows= this.totalRecords
     this.loading=true
-    this.apiService.getSalesReport(excelParams).subscribe(
+    this.apiService.getStockReplacementReport(excelParams).subscribe(
       (response) => {
-        let tableData = response.data;
+        let tableData = response.data.replenishment_products;
         this.loading=false
         const exceldata=tableData.map(x=>{
           return{
@@ -164,19 +166,20 @@ this.getSalesReport()
       field: '',
       first:0,
       searchTerm: '',
-      rows:10
+      rows:10,
+      idstore_warehouse:1
     }
     this.dateRange=undefined
-    this.getSalesReport()
+    this.getStockReplacementReport()
   }
   paginate(event) {
     console.log(event)
     this.params.first = (event.first ? event.first : 0)
     this.params.rows = (event.first ? event.first : 0) + (event.rows ? event.rows : 10)
     this.loading = true
-    this.apiService.getSalesReport(this.params).subscribe(
+    this.apiService.getStockReplacementReport(this.params).subscribe(
       (response) => {
-        this.tableData = response.data;
+        this.tableData = response.data.replenishment_products;
         this.totalRecords = response.total
         this.loading = false
         this.fetchWarehouseList();
@@ -188,11 +191,11 @@ this.getSalesReport()
       }
     );
   }
-  getSalesReport() {
+  getStockReplacementReport() {
     this.loading = true
-    this.apiService.getSalesReport(this.params).subscribe(
+    this.apiService.getStockReplacementReport(this.params).subscribe(
       (response) => {
-        this.tableData = response.data;
+        this.tableData = response.data.replenishment_products;
         this.totalRecords = response.total
         this.loading = false
         this.fetchWarehouseList();
@@ -214,7 +217,7 @@ this.getSalesReport()
       }
       this.params.start_date = tempdate[0]
       this.params.end_date = tempdate[1]
-      this.getSalesReport()
+      this.getStockReplacementReport()
     }
   }
   formatDate(date) {
@@ -239,7 +242,7 @@ this.getSalesReport()
   }
   search(value) {
     this.params.searchTerm = value
-    this.getSalesReport()
+    this.getStockReplacementReport()
   }
   OrderDetails(data){
     this.router.navigate(['/ggb-admin/wh-reports/order-details-report'], {

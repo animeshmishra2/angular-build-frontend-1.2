@@ -1,0 +1,11 @@
+.image-container {
+    max-width: 700px; /* Set your desired max-width */
+    max-height: 700px; /* Set your desired max-height */
+    overflow: auto; /* Enable scrolling if the content overflows */
+  }
+  
+  .selected-image {
+    width: 100%; /* Ensure the image takes up 100% of the container width */
+    height: auto; /* Maintain the aspect ratio of the image */
+  }
+  

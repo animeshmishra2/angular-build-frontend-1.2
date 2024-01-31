@@ -1,0 +1,149 @@
+<div class="scroll-container">
+	<div fxFlex="100" class="inner-card mat-elevation-z1" fxLayout="column">
+		<div fxFlex="10" class="h1-txt">
+			Update Package by Brand Category
+		</div>
+		<div class="margin-top-25"></div>
+		<!-- <form fxLayout="column" [formGroup]="lForm" (ngSubmit)="onSubmit()" fxFlex="100"> -->
+			<div fxLayout="column" fxLayoutGap="40px">
+				<div fxFlex fxLayout="row" fxLayoutGap="10px">
+					<mat-form-field fxFlex>
+						<mat-label>Applicable On</mat-label>
+						<mat-select [(ngModel)]="applicable_on" [disabled]="true">
+							<mat-option [value]="'C'">Category</mat-option>
+							<mat-option [value]="'B'">Brand</mat-option>
+							<mat-option [value]="'SC'">Sub Category</mat-option>
+							<mat-option [value]="'SSC'">Sub Sub Category</mat-option>
+							<mat-option [value]="'TG'">Tag</mat-option>
+						</mat-select>
+						<!-- <mat-error *ngIf="!lForm.controls['applicable_on'].valid && lForm.controls['applicable_on'].touched">
+							Choose a Applicable Type.
+						</mat-error> -->
+					</mat-form-field>
+                    <div fxFlex>
+                        <mat-form-field appearance="fill" fxFlex>
+                            <mat-label>Status</mat-label>
+                            <mat-select [(ngModel)]="status">
+                                <mat-option value="1" style="color: green">Active</mat-option>
+                                <mat-option value="0" style="color: red">In-Active</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+				</div>
+				<div fxFlex fxLayout="row" fxLayoutGap="10px">
+					<!-- <mat-form-field fxFlex>
+						<mat-label>Select For</mat-label>
+						<mat-select [(ngModel)]="for_applicable"(ngModelChange)="onForApplicableChange($event)">
+							<mat-option *ngFor="let sType of bannerTypes" [value]="sType">{{sType.name}}</mat-option>
+						</mat-select>
+					</mat-form-field>
+					<mat-form-field fxFlex>
+						<mat-label>Type List</mat-label>
+						<mat-select [(ngModel)]="applicable_on_id">
+							<mat-option *ngFor="let sType of typelist" [value]="sType">{{sType.name}}</mat-option>
+						</mat-select>
+					</mat-form-field> -->
+					<mat-form-field fxFlex>
+						<mat-label>Applicable For</mat-label>
+						<mat-select [(ngModel)]="applicable_for" [disabled]="true">
+							<mat-option [value]="'M'">Member</mat-option>
+							<mat-option [value]="'NM'">Non Member</mat-option>
+						</mat-select>
+						<!-- <mat-error *ngIf="!lForm.controls['applicable_for'].valid && lForm.controls['applicable_for'].touched">
+							Choose a Applicable For.
+						</mat-error> -->
+					</mat-form-field>
+				</div>
+				<div fxFlex fxLayout="row" fxLayoutGap="10px">
+					<mat-form-field fxFlex>
+						<mat-label>Valid From</mat-label>
+                        <input matInput [disabled]="true" [(ngModel)]="valid_from">
+						<!-- <mat-error *ngIf="!lForm.controls['valid_from'].valid && lForm.controls['valid_from'].touched">
+							Choose a Valid From.
+						</mat-error> -->
+					</mat-form-field>
+					<mat-form-field fxFlex>
+						<mat-label>Valid Till</mat-label>
+                        <input matInput [disabled]="true" [(ngModel)]="valid_till">
+						<!-- <mat-error *ngIf="!lForm.controls['valid_till'].valid && lForm.controls['valid_till'].touched">
+							Choose a Valid Till.
+						</mat-error> -->
+					</mat-form-field>
+				</div>
+			</div>
+			<!-- <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
+				<button [disabled]="loading || lForm.invalid" mat-raised-button color="primary" type="submit">
+					{{(this.row.idstore_warehouse) ? "Update" : "Add New"}} Package by Brand Category
+				</button>
+				<button mat-raised-button type="button" (click)="cancel()">Cancel</button>
+			</div> -->
+		<!-- </form> -->
+		<div fxLayout="row" fxLayoutAlign="space-around start" fxLayoutGap="20px" style="margin-top: 20px;">
+			<mat-card fxFlex="100">
+				<mat-card-header>
+					<mat-card-title>Excluded Product(s)</mat-card-title>
+					<mat-card-subtitle>These product is removed </mat-card-subtitle>
+				</mat-card-header>
+				<mat-card-content>
+					<div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="space-between start">
+						<div fxFlex="100" *ngIf="allTaggedProds?.length > 0">
+							<div fxFlex>
+								<h2>Selected Tagged Prods</h2>
+								<div *ngFor="let pro of allTaggedProds; index as i">
+									<mat-card>
+										<div class="product-info">
+											<span class="label">{{i+ 1 + '.'}}</span>
+											<div class="info-item">
+											  <span class="label">Name:</span>
+											  <span>{{pro?.name}}</span>
+											</div>
+											<div class="info-item">
+											  <span class="label">Barcode:</span>
+											  <span>{{pro?.barcode}}</span>
+											</div>
+											<div class="info-item">
+											  <span class="label">HSN:</span>
+											  <span>{{pro?.hsn}}</span>
+											</div>
+										</div>
+										  
+										<!-- <div fxLayout="row" fxLayoutGap="10px">
+											<mat-form-field appearance="fill" class="qty" fxFlex="50">
+												<mat-label>Qty</mat-label>
+												<input matInput placeholder="Qty" required
+													[(ngModel)]="pro.quantity" [disabled]="true">
+											</mat-form-field>
+										</div> -->
+									</mat-card>
+								</div>
+							</div>
+						</div>
+					</div>
+				</mat-card-content>
+			</mat-card>
+            <mat-card fxFlex="50">
+                <mat-card-header>
+                    <mat-card-title>Total Product Exclude</mat-card-title>
+                    <!-- <mat-card-subtitle>Over this amount package will trigger</mat-card-subtitle> -->
+                </mat-card-header>
+
+                <mat-card-content>
+                    <div>
+                        <mat-form-field fxFlex>
+                            <mat-label>Enter number of exclude Product(s)</mat-label>
+                            <input matInput placeholder="Enter amount" type="number"
+                                [(ngModel)]="totaltriggerredproduct" autocomplete="off" [disabled]="true">
+                        </mat-form-field>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+		</div>
+
+		<div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center" style="margin-top: 20px;">
+			<button mat-raised-button color="primary" type="submit" (click)="onSubmit()">
+				Update Package by Brand Category
+			</button>
+			<button mat-raised-button type="button" (click)="cancel()">Cancel</button>
+		</div>
+	</div>
+</div>

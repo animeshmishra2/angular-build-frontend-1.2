@@ -1,0 +1,151 @@
+<div class="scroll-container">
+	<div fxFlex="100" class="inner-card mat-elevation-z1" fxLayout="column">
+		<div fxFlex="10" class="h1-txt">
+			{{(this.row.idstore_warehouse) ? "Update" : "Add New"}} Package by Brand Category
+		</div>
+		<div class="margin-top-25"></div>
+		<!-- <form fxLayout="column" [formGroup]="lForm" (ngSubmit)="onSubmit()" fxFlex="100"> -->
+			<div fxLayout="column" fxLayoutGap="40px">
+				<div fxFlex fxLayout="row" fxLayoutGap="10px">
+					<mat-form-field fxFlex>
+						<mat-label>Applicable On</mat-label>
+						<mat-select [(ngModel)]="applicable_on">
+							<mat-option [value]="'C'">Category</mat-option>
+							<mat-option [value]="'B'">Brand</mat-option>
+							<mat-option [value]="'SC'">Sub Category</mat-option>
+							<mat-option [value]="'SSC'">Sub Sub Category</mat-option>
+							<mat-option [value]="'TG'">Tag</mat-option>
+						</mat-select>
+						<!-- <mat-error *ngIf="!lForm.controls['applicable_on'].valid && lForm.controls['applicable_on'].touched">
+							Choose a Applicable Type.
+						</mat-error> -->
+					</mat-form-field>
+				</div>
+				<div fxFlex fxLayout="row" fxLayoutGap="10px">
+					<mat-form-field fxFlex>
+						<mat-label>Select For</mat-label>
+						<mat-select [(ngModel)]="for_applicable"(ngModelChange)="onForApplicableChange($event)">
+							<mat-option *ngFor="let sType of bannerTypes" [value]="sType">{{sType.name}}</mat-option>
+						</mat-select>
+						<!-- <mat-error *ngIf="!lForm.controls['for_applicable'].valid && lForm.controls['for_applicable'].touched">
+							Choose a Applicable On.
+						</mat-error> -->
+					</mat-form-field>
+					<mat-form-field fxFlex>
+						<mat-label>Type List</mat-label>
+						<mat-select [(ngModel)]="applicable_on_id">
+							<mat-option *ngFor="let sType of typelist" [value]="sType">{{sType.name}}</mat-option>
+						</mat-select>
+						<!-- <mat-error *ngIf="!lForm.controls['applicable_on_id'].valid && lForm.controls['applicable_on_id'].touched">
+							Choose a Applicable On.
+						</mat-error> -->
+					</mat-form-field>
+					<mat-form-field fxFlex>
+						<mat-label>Applicable For</mat-label>
+						<mat-select [(ngModel)]="applicable_for">
+							<mat-option [value]="'M'">Member</mat-option>
+							<mat-option [value]="'NM'">Non Member</mat-option>
+						</mat-select>
+						<!-- <mat-error *ngIf="!lForm.controls['applicable_for'].valid && lForm.controls['applicable_for'].touched">
+							Choose a Applicable For.
+						</mat-error> -->
+					</mat-form-field>
+				</div>
+				<div fxFlex fxLayout="row" fxLayoutGap="10px">
+					<mat-form-field fxFlex>
+						<mat-label>Valid From</mat-label>
+						<input matInput [matDatepicker]="fpicker" (dateChange)="onDateChange()" readonly [min]="todayDate"
+						[(ngModel)]="valid_from" />
+						<mat-hint>MM/DD/YYYY</mat-hint>
+						<mat-datepicker-toggle matSuffix [for]="fpicker"></mat-datepicker-toggle>
+						<mat-datepicker #fpicker></mat-datepicker>
+						<!-- <mat-error *ngIf="!lForm.controls['valid_from'].valid && lForm.controls['valid_from'].touched">
+							Choose a Valid From.
+						</mat-error> -->
+					</mat-form-field>
+					<mat-form-field fxFlex>
+						<mat-label>Valid Till</mat-label>
+						<input matInput [matDatepicker]="fpickerend" readonly [min]="lForm.controls['valid_from'].value"
+						[(ngModel)]="valid_till" />
+						<mat-hint>MM/DD/YYYY</mat-hint>
+						<mat-datepicker-toggle matSuffix [for]="fpickerend"></mat-datepicker-toggle>
+						<mat-datepicker #fpickerend></mat-datepicker>
+						<!-- <mat-error *ngIf="!lForm.controls['valid_till'].valid && lForm.controls['valid_till'].touched">
+							Choose a Valid Till.
+						</mat-error> -->
+					</mat-form-field>
+				</div>
+			</div>
+			<!-- <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
+				<button [disabled]="loading || lForm.invalid" mat-raised-button color="primary" type="submit">
+					{{(this.row.idstore_warehouse) ? "Update" : "Add New"}} Package by Brand Category
+				</button>
+				<button mat-raised-button type="button" (click)="cancel()">Cancel</button>
+			</div> -->
+		<!-- </form> -->
+		<div fxLayout="row" fxLayoutAlign="space-around start" fxLayoutGap="20px" style="margin-top: 20px;">
+			<mat-card fxFlex="100">
+				<mat-card-content>
+						<div>
+								<mat-form-field fxFlex>
+										<mat-label>Search Trigger Product(s)</mat-label>
+										<input matInput placeholder="Enter product name or Barcode"
+												onfocus="this.value=''" [ngModel]="trigSearch"
+												(ngModelChange)="doSearch($event, true)" autocomplete="off">
+								</mat-form-field>
+						</div>
+						<div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="space-between start">
+								<div fxFlex="47" *ngIf="trigProducts?.length > 0">
+										<div class="inner-card mat-elevation-z8" class="fetch-prods">
+												<div *ngFor="let pro of trigProducts; index as i">
+														<div fxFlex="80">
+																{{pro.prod_name}}
+														</div>
+														<div fxFlex>
+																<button mat-mini-fab color="primary" aria-label="Add Product"
+																		(click)="addProduct(pro, true)">
+																		<mat-icon>add_circle_outline</mat-icon>
+																</button>
+														</div>
+												</div>
+										</div>
+
+								</div>
+								<div fxFlex="47" *ngIf="allTriggerProds?.length > 0">
+										<div class="mat-elevation-z8 inner-card " fxFlex>
+												<h2>Selected Trigger Prods</h2>
+												<div *ngFor="let pro of allTriggerProds; index as i">
+														<mat-card>
+																<div fxLayout="row" fxLayoutGap="10px">
+																		<!-- <mat-form-field appearance="fill" class="qty" fxFlex="50">
+																				<mat-label>Qty</mat-label>
+																				<input matInput placeholder="Qty" required
+																						[(ngModel)]="pro.quantity">
+																		</mat-form-field> -->
+																		<span>{{pro.name}}</span>
+																		<div fxFlex="50">
+																				<button mat-raised-button color="warn"
+																						aria-label="Remove Product"
+																						(click)="removeProduct(pro, true)">
+																						Remove Product
+																				</button>
+																		</div>
+
+																</div>
+														</mat-card>
+												</div>
+										</div>
+								</div>
+						</div>
+				</mat-card-content>
+			</mat-card>
+		</div>
+
+		<div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center" style="margin-top: 20px;">
+			<button mat-raised-button color="primary" type="submit" (click)="onSubmit()">
+				Add Package by Brand Category
+			</button>
+			<button mat-raised-button type="button" (click)="cancel()">Cancel</button>
+		</div>
+	</div>
+</div>

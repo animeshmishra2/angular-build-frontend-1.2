@@ -65,6 +65,7 @@ import { ThreshouldPurchaseOrderComponent } from './threshould-purchase-order/th
 import { DeleiverySlotsComponent } from './deleivery-slots/deleivery-slots.component';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { AddEditThresoldPurchaseOrderComponent } from './threshould-purchase-order/add-edit-thresold-purchase-order/add-edit-thresold-purchase-order.component';
+import { PackageBranchCategoryModule } from './package-branch-category/package-branch-category.module';
 
 @NgModule({
   declarations: [
@@ -135,7 +136,8 @@ import { AddEditThresoldPurchaseOrderComponent } from './threshould-purchase-ord
     MatStepperModule,
     MatAutocompleteModule,
     MatTooltipModule,
-    NgxMaterialTimepickerModule
+    NgxMaterialTimepickerModule,
+    PackageBranchCategoryModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },

@@ -41,7 +41,7 @@
 				<mat-form-field fxFlex>
 					<mat-label>Type list</mat-label>
 					<mat-select formControlName="typelist">
-						<mat-option *ngFor="let sType of typelist" [value]="sType.idcategory">{{sType.name}}</mat-option>
+						<mat-option *ngFor="let sType of typelist" [value]="sType.id">{{sType.name}}</mat-option>
 					</mat-select>
 					<mat-error *ngIf="!lForm.controls['typelist'].valid && lForm.controls['typelist'].touched">
 						Select Type
@@ -68,7 +68,7 @@
 					</ng-container>
 					<ng-container *ngIf="selectedFile">
 						<!-- <span>{{'https://www.allwinmedico.in/' + imageUrl}}</span> -->
-						<img [src]="env + imageUrl" style="width:100%;height:auto;"/>
+						<img [src]="env + imageUrl"/>
 						<span>{{selectedFile?.name || selectedFile}}</span>
 						<mat-icon (click)="selectedFile = null">delete</mat-icon>
 					</ng-container>

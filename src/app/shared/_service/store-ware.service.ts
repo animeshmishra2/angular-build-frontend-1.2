@@ -166,4 +166,64 @@ export class StoreWareService {
         }));
   }
 
+  updateOrderStatus(id, req) {
+    return this.http.post<any>(AppSetting.API_ENDPOINT + '/api/update-order-status', req)
+      .pipe(map(data => {
+        return data.data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
+
+
+  createpackage(req) {
+    return this.http.post<any>(AppSetting.API_ENDPOINT + '/api/discount/create-package', req)
+      .pipe(map(data => {
+        return data.data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
+
+  updatepackage(id, req) {
+    return this.http.post<any>(AppSetting.API_ENDPOINT + '/api/discount/update-package/' + id, req)
+      .pipe(map(data => {
+        return data.data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
+
+  getProductData(payload) {
+    return this.http.get<any>(AppSetting.API_ENDPOINT + '/api/get-all-pro/' + payload?.type + '/' +  payload?.id)
+      .pipe(map(data => {
+        return data.data;
+      }), catchError(err => {
+        return throwError(err);
+      }));
+  }
+
+  getAllPackageList(id) {
+    return this.http.get<any>(AppSetting.API_ENDPOINT + '/api/discount/package-list/' + id)
+      .pipe(map(data => {
+        return data.data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
+
+  getbyIdpackage(id) {
+    return this.http.get<any>(AppSetting.API_ENDPOINT + '/api/discount/edit-package/'+ id)
+      .pipe(map(data => {
+        return data.data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
+
 }

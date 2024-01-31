@@ -44,14 +44,14 @@
 									<th mat-header-cell *matHeaderCellDef mat-sort-header>
 										Active From
 									</th>
-									<td mat-cell *matCellDef="let row">{{ row?.active_from | date}}</td>
+									<td mat-cell *matCellDef="let row">{{ row?.active_from}}</td>
 								</ng-container>
 
 								<ng-container matColumnDef="active_till">
 									<th mat-header-cell *matHeaderCellDef mat-sort-header>
 										Active Till
 									</th>
-									<td mat-cell *matCellDef="let row">{{ row?.active_till | date}}</td>
+									<td mat-cell *matCellDef="let row">{{ row?.active_till}}</td>
 								</ng-container>
 
 								<ng-container matColumnDef="minordervalue">

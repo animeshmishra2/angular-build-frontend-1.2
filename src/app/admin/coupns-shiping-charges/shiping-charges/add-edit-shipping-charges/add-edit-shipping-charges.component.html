@@ -6,6 +6,16 @@
 	<form fxLayout="column" [formGroup]="lForm" (ngSubmit)="onSubmit()" fxFlex="100">
 		<div fxLayout="column" fxLayoutGap="40px">
 			<div fxFlex fxLayout="row" fxLayoutGap="10px">
+				<mat-form-field fxFlex>
+					<mat-label>Store</mat-label>
+					<mat-select formControlName="idstore_warehouse" [multiple]="!row.id">
+						<mat-option *ngFor="let store of storeList" [value]="store.idstore_warehouse">{{store.name}}</mat-option>
+					</mat-select>
+					<mat-error
+						*ngIf="!lForm.controls['idstore_warehouse'].valid && lForm.controls['idstore_warehouse'].touched">
+						Select Store.
+					</mat-error>
+				</mat-form-field>
                 <mat-form-field fxFlex>
 					<mat-label>Shiping Charge</mat-label>
 					<input matInput placeholder="Enter Shiping Charge" type="number" formControlName="shipingcharge" autocomplete="off" required>
@@ -26,6 +36,17 @@
 					<mat-error *ngIf="!lForm.controls['orderamount'].valid && lForm.controls['orderamount'].touched">
                         Enter a Order Amount.
                     </mat-error>
+				</mat-form-field>
+				<mat-form-field fxFlex>
+					<mat-label>Applicable On</mat-label>
+					<mat-select formControlName="applicable_on">
+						<mat-option [value]="'M'">Member</mat-option>
+						<mat-option [value]="'NM'">Non Member</mat-option>
+                        <mat-option [value]="'BOTH'">Both</mat-option>
+					</mat-select>
+					<mat-error *ngIf="!lForm.controls['applicable_on'].valid && lForm.controls['applicable_on'].touched">
+						Please select Option.
+					</mat-error>
 				</mat-form-field>
 			</div>
 			

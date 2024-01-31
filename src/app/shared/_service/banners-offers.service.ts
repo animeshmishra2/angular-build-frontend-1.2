@@ -170,7 +170,7 @@ export class BannerOfferService {
         }));
   }
   deleteCoupons(id) {
-    return this.http.get<any>(AppSetting.API_ENDPOINT + '/api/delete-coupon-by-id/' + id)
+    return this.http.get<any>(AppSetting.API_ENDPOINT + '/api/delete-coupon/' + id)
       .pipe(map(data => {
         return data.data;
       }),

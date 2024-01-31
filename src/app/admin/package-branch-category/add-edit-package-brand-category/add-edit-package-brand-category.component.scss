@@ -1,0 +1,12 @@
+.scroll-container {
+    max-height: 400px; /* Set a maximum height for vertical scrolling */
+    overflow: auto; /* Enable vertical scrolling */
+    white-space: nowrap; /* Prevent line breaks for horizontal scrolling */
+  }
+  
+  .inner-card {
+    /* Optional: You can set a maximum width for the inner content to enable horizontal scrolling */
+    max-width: 800px; /* Adjust the value based on your design */
+    overflow-x: auto; /* Enable horizontal scrolling */
+  }
+  

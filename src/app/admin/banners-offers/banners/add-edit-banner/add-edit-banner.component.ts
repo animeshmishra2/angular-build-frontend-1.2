@@ -16,6 +16,7 @@ export class AddEditBannerComponent implements OnInit {
 
   row: any;
   env =  'https://www.allwinmedico.in/ggb-api/public/banners/main-banner/';
+
   loading: boolean = false;
   selectedFile: any;
   fileSizeError = false;

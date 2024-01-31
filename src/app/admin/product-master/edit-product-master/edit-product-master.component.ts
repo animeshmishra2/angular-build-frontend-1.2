@@ -40,6 +40,12 @@ export class EditProductMasterComponent implements OnInit {
     cgst: new FormControl('', [
       Validators.required
     ]),
+    tqunatity: new FormControl('', [
+      Validators.required
+    ]),
+    isveg: new FormControl('', [
+      Validators.required
+    ]),
     sgst: new FormControl('', [
       Validators.required
     ]),
@@ -63,6 +69,7 @@ export class EditProductMasterComponent implements OnInit {
       this.lForm.controls["description"].setValue(this.row.description);
       this.lForm.controls["status"].setValue(`${this.row.status}`);
       this.lForm.controls["cgst"].setValue(this.row.cgst);
+      this.lForm.controls["tqunatity"].setValue(this.row?.threshold);
       this.lForm.controls["sgst"].setValue(this.row.sgst);
       this.lForm.controls["bar"].setValue(this.row.barcode);
       this.getSubCats(this.row.idcategory);
@@ -174,6 +181,8 @@ export class EditProductMasterComponent implements OnInit {
       "barcode": this.lForm.get('bar')!.value,
       "sgst": this.lForm.get('sgst')!.value,
       "cgst": this.lForm.get('cgst')!.value,
+      "threshold": this.lForm.get('tqunatity')!.value,
+      "Is_veg": this.lForm.get('isveg')!.value,
       "description": this.lForm.get('description')!.value,
       "idbrand": this.lForm.get('brand')!.value,
       "idcategory": this.lForm.get('category')!.value,

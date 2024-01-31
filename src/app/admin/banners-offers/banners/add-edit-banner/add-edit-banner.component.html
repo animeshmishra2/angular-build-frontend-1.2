@@ -41,7 +41,7 @@
 				<mat-form-field fxFlex>
 					<mat-label>Type list</mat-label>
 					<mat-select formControlName="typelist">
-						<mat-option *ngFor="let sType of typelist" [value]="sType.idcategory">{{sType.name}}</mat-option>
+						<mat-option *ngFor="let sType of typelist" [value]="sType.id">{{sType.name}}</mat-option>
 					</mat-select>
 					<mat-error *ngIf="!lForm.controls['typelist'].valid && lForm.controls['typelist'].touched">
 						Select Type
@@ -67,11 +67,12 @@
 						<div *ngIf="fileSizeError" class="error-message">File size exceeds the maximum limit (4 MB).</div>
 					</ng-container>
 					<ng-container *ngIf="selectedFile">
-						<!-- <span>{{'https://www.allwinmedico.in/' + imageUrl}}</span> -->
-						<img [src]="env + imageUrl"/>
-						<span>{{selectedFile?.name || selectedFile}}</span>
-						<mat-icon (click)="selectedFile = null">delete</mat-icon>
-					</ng-container>
+						<div class="image-container">
+						  <img [src]="env + imageUrl" alt="Selected Image" class="selected-image"/>
+						  <span>{{selectedFile?.name || selectedFile}}</span>
+						  <mat-icon (click)="selectedFile = null">delete</mat-icon>
+						</div>
+					  </ng-container>					  
 				</div>
 			</div>
 		</div>

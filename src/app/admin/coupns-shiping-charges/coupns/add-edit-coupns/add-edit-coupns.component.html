@@ -8,7 +8,7 @@
 			<div fxFlex fxLayout="row" fxLayoutGap="10px">
 				<mat-form-field fxFlex>
 					<mat-label>Store</mat-label>
-					<mat-select formControlName="idstore_warehouse">
+					<mat-select formControlName="idstore_warehouse"  [multiple]="!row?.idcoupon">
 						<mat-option *ngFor="let store of storeList" [value]="store.idstore_warehouse">{{store.name}}</mat-option>
 					</mat-select>
 					<mat-error
@@ -16,6 +16,7 @@
 						Select Store.
 					</mat-error>
 				</mat-form-field>
+
 				<mat-form-field fxFlex>
 					<mat-label>Name</mat-label>
 					<input matInput placeholder="Enter Name" type="text" formControlName="name"

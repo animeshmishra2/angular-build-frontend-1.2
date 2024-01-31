@@ -15,7 +15,7 @@ import { StoreWareService } from 'src/app/shared/_service/store-ware.service';
 export class AddEditBannerComponent implements OnInit {
 
   row: any;
-  env =  'https://www.allwinmedico.in/';
+  env =  'https://allwinmedico.in/ggb-api/public/banners/main-banner/';
   loading: boolean = false;
   selectedFile: any;
   fileSizeError = false;

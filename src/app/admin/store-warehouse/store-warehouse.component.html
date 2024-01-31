@@ -101,6 +101,13 @@
                     (click)="manageStaffAccess(row)">
                       <mat-icon>manage_accounts</mat-icon>
                     </button>
+                    <button mat-mini-fab 
+                    color="primary" 
+                    aria-label="Package"
+                    matTooltip="Create Coupn package"
+                    (click)="coupn(row)">
+                      <mat-icon>list</mat-icon>
+                    </button>
                   </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

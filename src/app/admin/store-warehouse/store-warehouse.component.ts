@@ -91,5 +91,11 @@ export class StoreWarehouseComponent implements OnInit {
   manageStaffAccess(row){
     this.router.navigate(['/ggb-admin/staff-access'], { state: { data: row } });
   }
+
+  coupn(row){
+    console.log("rowww",row);
+    
+    this.router.navigate(['/ggb-admin/package-by-branch-category'], { state: { data: row } });
+  }
 }
 

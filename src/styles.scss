@@ -31,6 +31,13 @@ body {
 ngx-material-timepicker-container .timepicker-overlay {
     z-index: 9999 !important;
 }
+ngx-dropzone-label {
+    display: -webkit-box;
+    max-width: 200px;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
 .container {
     min-height: 89%;
     width: 98%;
@@ -42,8 +49,8 @@ ngx-material-timepicker-container .timepicker-overlay {
     background-image: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
 }
 .adm-container{
-    height: 100%;
-    width: 98%;
+    height: 80rem;
+    width: 95rem;
     // background-color: #ebeff2;
     padding: 15px;
 

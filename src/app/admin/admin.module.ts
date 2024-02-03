@@ -66,6 +66,12 @@ import { DeleiverySlotsComponent } from './deleivery-slots/deleivery-slots.compo
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { AddEditThresoldPurchaseOrderComponent } from './threshould-purchase-order/add-edit-thresold-purchase-order/add-edit-thresold-purchase-order.component';
 import { PackageBranchCategoryModule } from './package-branch-category/package-branch-category.module';
+import { WebSettingComponent } from './web-setting/web-setting.component';
+import { EmailComponent } from './email/email.component';
+import { AddEditEmailComponent } from './email/add-edit-email/add-edit-email.component';
+import { SmsTemplateComponent } from './sms-template/sms-template.component';
+import { AddEditSmsTemplateComponent } from './sms-template/add-edit-sms-template/add-edit-sms-template.component';
+import { ReportsComponent } from './reports/reports.component';
 
 @NgModule({
   declarations: [
@@ -101,7 +107,13 @@ import { PackageBranchCategoryModule } from './package-branch-category/package-b
     DeleiverySlotsComponent,
     ThreshouldPurchaseOrderComponent,
     AddEditSlotsComponent,
-    AddEditThresoldPurchaseOrderComponent
+    AddEditThresoldPurchaseOrderComponent,
+    WebSettingComponent,
+    EmailComponent,
+    AddEditEmailComponent,
+    SmsTemplateComponent,
+    AddEditSmsTemplateComponent,
+    ReportsComponent
   ],
   imports: [
     DirectiveModule,
@@ -137,7 +149,8 @@ import { PackageBranchCategoryModule } from './package-branch-category/package-b
     MatAutocompleteModule,
     MatTooltipModule,
     NgxMaterialTimepickerModule,
-    PackageBranchCategoryModule
+    PackageBranchCategoryModule,
+    
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },

@@ -1,0 +1,20 @@
+img{
+    width: 100px;
+    margin-top: 20px !important;
+}
+mat-card{
+    border-radius: 25px;;
+}
+.mat-elevation-z6{
+    cursor: pointer;
+}
+.adm-container{
+    height: 45rem;
+    width: 95rem;
+    // background-color: #ebeff2;
+    padding: 15px;
+
+    background-color: #7f83b0;
+    background-size: 56px 56px;
+    background-image: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);;
+}

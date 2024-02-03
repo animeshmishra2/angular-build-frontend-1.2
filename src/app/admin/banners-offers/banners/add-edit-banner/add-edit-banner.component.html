@@ -22,7 +22,7 @@
 				</mat-form-field>
 				<mat-form-field fxFlex>
 					<mat-label>Link</mat-label>
-					<input matInput placeholder="Enter Link" formControlName="link" autocomplete="off" required>
+					<input readonly matInput placeholder="Enter Link" formControlName="link" autocomplete="off" required>
 					<mat-error *ngIf="!lForm.controls['link'].valid && lForm.controls['link'].touched">
                         Enter a valid Link.
                     </mat-error>
@@ -47,6 +47,13 @@
 						Select Type
 					</mat-error>
 				</mat-form-field>
+				<mat-form-field fxFlex>
+					<mat-label>Position</mat-label>
+					<input matInput placeholder="Enter Position" formControlName="position" autocomplete="off" required>
+					<mat-error *ngIf="!lForm.controls['position'].valid && lForm.controls['position'].touched">
+						Enter a valid Position.
+					</mat-error>
+				</mat-form-field>
 				<!-- <div fxFlex fxLayoutAlign="start center" style="margin-top: 20px 0px;">
 					<ng-container *ngIf="!selectedFile">
 						<label for="frontImage">Banner Image </label>
@@ -59,20 +66,26 @@
 					</ng-container>
 				</div> -->
 			</div>
+			<label for="frontImage">Banner Image </label>
 			<div fxFlex fxLayout="row" fxLayoutGap="10px">
-				<div fxFlex fxLayoutAlign="start center" style="margin-top: 20px 0px;">
-					<ng-container *ngIf="!selectedFile">
-						<label for="frontImage">Banner Image </label>
+				<div fxFlex fxLayoutAlign="start center">
+					<!-- <ng-container *ngIf="!selectedFile">
 						<input (change)="onFileSelected($event, 'BACK')" type="file" id="backImage">
 						<div *ngIf="fileSizeError" class="error-message">File size exceeds the maximum limit (4 MB).</div>
-					</ng-container>
-					<ng-container *ngIf="selectedFile">
+					</ng-container> -->
+					<ngx-dropzone style="width: 100%;" (change)="onFileSelected($event, 'BACK')">
+						<ngx-dropzone-label>Select Multiple files!</ngx-dropzone-label>
+						<ngx-dropzone-preview *ngFor="let f of selectedFile" [removable]="true">
+							<ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+						</ngx-dropzone-preview>
+					</ngx-dropzone>
+					<!-- <ng-container *ngIf="selectedFile">
 						<div class="image-container">
 						  <img [src]="env + imageUrl" alt="Selected Image" class="selected-image"/>
 						  <span>{{selectedFile?.name || selectedFile}}</span>
 						  <mat-icon (click)="selectedFile = null">delete</mat-icon>
 						</div>
-					  </ng-container>					  
+					  </ng-container>					   -->
 				</div>
 			</div>
 		</div>

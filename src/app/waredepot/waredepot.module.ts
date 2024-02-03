@@ -51,6 +51,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import { AutomaticTransferDetailsComponent } from './automatic-transfer-details/automatic-transfer-details.component';
 import { AutomaticTransferRequestListComponent } from './automatic-transfer-request-list/automatic-transfer-request-list.component';
 import { DirectTransferDetailsComponent } from './direct-transfer-details/direct-transfer-details.component';
+import { TransfersComponent } from './transfers/transfers.component';
 
 
 @NgModule({
@@ -77,7 +78,8 @@ import { DirectTransferDetailsComponent } from './direct-transfer-details/direct
     AutomaticTransferProductComponent,
     AutomaticTransferDetailsComponent,
     AutomaticTransferRequestListComponent,
-    DirectTransferDetailsComponent
+    DirectTransferDetailsComponent,
+    TransfersComponent
   ],
   imports: [
     DirectiveModule,

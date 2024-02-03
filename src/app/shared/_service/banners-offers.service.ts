@@ -178,4 +178,46 @@ export class BannerOfferService {
           return throwError(err);
         }));
   }
+
+  getEmailList() {
+    return this.http.get<any>(AppSetting.API_ENDPOINT + '/api/get-email-template')
+      .pipe(map(data => {
+        return data.data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
+
+  deleteEmail(id) {
+    return this.http.get<any>(AppSetting.API_ENDPOINT + '/api/delete-email-template/' + id)
+      .pipe(map(data => {
+        return data.data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
+
+  
+  getSMSList() {
+    return this.http.get<any>(AppSetting.API_ENDPOINT + '/api/sms')
+      .pipe(map(data => {
+        return data.data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
+
+  deleteSMS(id) {
+    return this.http.get<any>(AppSetting.API_ENDPOINT + '/api/ddelete-sms-template/' + id)
+      .pipe(map(data => {
+        return data.data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
+
 }

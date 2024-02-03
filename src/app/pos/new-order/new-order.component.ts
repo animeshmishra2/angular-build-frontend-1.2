@@ -140,7 +140,8 @@ export class NewOrderComponent implements OnInit, OnDestroy {
   customDisActive: boolean = false;
   isAppliedDynFxDis: boolean = false;
   cashtTranDetail: never[];
-
+  packagesCategory: any;
+  openpackagesCategory: any[] = [];
   constructor(
     private prodServ: ProductService,
     private alertService: AlertService,
@@ -210,6 +211,22 @@ export class NewOrderComponent implements OnInit, OnDestroy {
         this.getProducts('1');
       }
     });
+    this.apiService.post(AppSetting.ENDPOINTS.showactive, {})
+    .subscribe(
+      (data) => {
+        this.packagesCategory = data?.data;
+        this.packagesCategory.forEach(pkg => {
+          if
+            (pkg.applicable_for == AppSetting.PKG_APPLICABLE_ON.Member || pkg.applicable_on == AppSetting.PKG_APPLICABLE_ON.NonMember) {
+            this.openpackagesCategory.push(pkg);
+          }
+        });
+        
+      },
+      (error) => {
+        this.alertService.openSnackBar(error);
+      }
+    );
   }
 
   ngOnInit(): void {
@@ -359,8 +376,37 @@ export class NewOrderComponent implements OnInit, OnDestroy {
         });
       }
       this.cartItems = data;
-      this.cartProducts = newProd;
+      console.log("newProd", newProd);
 
+      let excludeProd: any[] = [];
+      for (let index = 0; index < this.packagesCategory.length; index++) {
+        const applicableType = this.packagesCategory[index].applicable_on;
+        const applicableId = this.packagesCategory[index].applicable_on_id;
+
+        excludeProd = [...excludeProd, ...this.packagesCategory[index]?.exclude_product_list]
+
+        for (let index2 = 0; index2 < newProd.length; index2++) {
+          const matchId = (applicableType == "SC") && (applicableId == newProd[index2]?.detail?.idsub_category) ? newProd[index2]?.detail?.idsub_category :
+          (applicableType == "C") && (applicableId == newProd[index2]?.detail?.idcategory) ? newProd[index2]?.detail?.idcategory :
+          (applicableType == "B") && (applicableId == newProd[index2]?.detail?.idbrand) ? newProd[index2]?.detail?.idbrand : -1;
+          
+          if (matchId && matchId != -1) {
+            const fIndex = this.packagesCategory[index]?.exclude_product_list?.findIndex((pack: any) => (pack?.idproduct_master != newProd[index2]?.detail?.idproduct_master) && (applicableId == matchId));
+            if(fIndex != -1) {
+              const discount = this.packagesCategory[index]?.discount;
+              newProd[index2].withDiscountCopartnertPrice -= ((newProd[index2].withDiscountCopartnertPrice * discount) / 100)
+              newProd[index2].withDiscountLand -= ((newProd[index2].withDiscountLand * discount) / 100)
+              newProd[index2].withDiscountProduct -= ((newProd[index2].withDiscountProduct * discount) / 100)
+              newProd[index2].selling_price -= ((newProd[index2].selling_price * discount) / 100)
+            }
+          }
+        }
+      }
+
+      this.cartProducts = newProd;
+      console.log("ha", this.cartProducts);
+
+      
       this.reEvaluatePackage()
       setTimeout(() => {
         try {

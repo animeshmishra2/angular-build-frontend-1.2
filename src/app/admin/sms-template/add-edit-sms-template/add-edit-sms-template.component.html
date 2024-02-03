@@ -1,0 +1,31 @@
+<div fxFlex="100" class="inner-card mat-elevation-z1" fxLayout="column">
+	<div fxFlex="10" class="h1-txt">
+		{{(row?.id) ? "Update" : "Add New"}} SMS Template
+	</div>
+    <div fxFlex fxLayout="row">
+        <div fxFlex="98" fxLayout="column" class="leftCol">
+            <div class="margin-top-25"></div>
+            <mat-form-field fxFlex>
+                <mat-label>Name</mat-label>
+                <input matInput placeholder="Enter Name"[ngModel]="trigername"
+                    (ngModelChange)="triggerName($event)" autocomplete="off">
+            </mat-form-field>
+            <mat-form-field fxFlex>
+                <mat-label>Subject</mat-label>
+                <input matInput placeholder="Enter Subject"[ngModel]="subject"
+                    (ngModelChange)="triggersubject($event)" autocomplete="off">
+            </mat-form-field>
+            <mat-form-field fxFlex>
+                <mat-label>Body</mat-label>
+                <textarea matInput placeholder="Enter Body" [ngModel]="body" (ngModelChange)="triggerBody($event)" autocomplete="off"
+                    required></textarea>
+            </mat-form-field>
+            <div fxFlex class="center">
+                <button mat-raised-button (click)="onSubmit()">{{(row?.id) ? "Update" : "Add"}} SMS template</button>
+                <button mat-raised-button type="button" (click)="cancel()">Cancel</button>
+            </div>
+        </div>
+        
+	</div>
+	
+</div>

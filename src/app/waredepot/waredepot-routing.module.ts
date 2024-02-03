@@ -15,6 +15,7 @@ import { GuardGuard } from '../guards/guard.guard';
 import { AutomaticTransferListComponent } from './automatic-transfer-list/automatic-transfer-list.component';
 import { AutomaticTransferProductComponent } from './automatic-transfer-product/automatic-transfer-product.component';
 import { AutomaticTransferRequestListComponent } from './automatic-transfer-request-list/automatic-transfer-request-list.component';
+import { TransfersComponent } from './transfers/transfers.component';
 
 const routes: Routes = [
   { path: '', component: WaredepotHomeComponent },
@@ -63,6 +64,10 @@ const routes: Routes = [
   {
     path: 'automatic-transfer-request-list',
     component: AutomaticTransferRequestListComponent,
+  },
+  {
+    path: 'transfers',
+    component: TransfersComponent,
   },
 ];
 

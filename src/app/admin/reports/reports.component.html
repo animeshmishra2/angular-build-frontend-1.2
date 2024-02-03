@@ -1,0 +1,41 @@
+<!-- <app-header></app-header> -->
+<div class="adm-container">
+	<div fxLayout="column">
+		<div class="padding-20"></div>
+		
+		<div fxFlex>
+			<div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="40px">
+				<mat-card fxFlex="80" fxLayout="column">
+					<div fxFlex fxLayoutAlign="space-between center" class="orderNum">
+						<div fxFlex="40" class="h1-txt"><a appBackButton><mat-icon>arrow_back</mat-icon></a> 
+							Reports
+						</div>
+						<div fxFlex="15" class="info-text" fxLayoutAlign="center center">
+			
+						</div>
+					</div>
+					<div fxLayout="row" fxLayoutGap="50px" style="margin-top: 20px;">
+						<mat-card fxFlex class="center" [ngClass]="bl13" (mouseover)="bl13='mat-elevation-z6'"
+							(mouseout)="bl13='mat-elevation-z2'" [routerLink]="['/ggb-admin/wh-reports']">
+							<img mat-card-image src="assets/icons/invoice.png" alt="Warehouse Reports">
+							<mat-card-content>
+								<h2>
+									Warehouse Reports
+								</h2>
+							</mat-card-content>
+						</mat-card>
+						<mat-card fxFlex class="center" [ngClass]="bl14" (mouseover)="bl14='mat-elevation-z6'"
+							(mouseout)="bl14='mat-elevation-z2'" [routerLink]="['/ggb-admin/gst-reports']">
+							<img mat-card-image src="assets/icons/invoice.png" alt="GST Reports">
+							<mat-card-content>
+								<h2>
+									GST Reports
+								</h2>
+							</mat-card-content>
+						</mat-card>
+					</div>
+				</mat-card>
+			</div>
+		</div>
+	</div>
+</div>

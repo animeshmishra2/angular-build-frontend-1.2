@@ -15,9 +15,9 @@ import { StoreWareService } from 'src/app/shared/_service/store-ware.service';
 export class AddEditBannerComponent implements OnInit {
 
   row: any;
-  env =  'https://allwinmedico.in/ggb-api/public/banners/main-banner/';
+  env = 'https://allwinmedico.in/ggb-api/public/banners/main-banner/';
   loading: boolean = false;
-  selectedFile: any;
+  selectedFile: any[] = [];
   fileSizeError = false;
   lForm = new FormGroup({
     title: new FormControl('', [
@@ -35,6 +35,9 @@ export class AddEditBannerComponent implements OnInit {
     typelist: new FormControl('', [
       Validators.required
     ]),
+    position: new FormControl('', [
+      Validators.required
+    ]),
   });
   bannerTypes: any;
   typelist: any[];
@@ -47,14 +50,15 @@ export class AddEditBannerComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.row = data.data;
-    console.log("roww",this.row);
-    
+    console.log("roww", this.row);
+
     if (this.row?.id) {
       this.lForm.controls["title"].setValue(this.row.title);
       this.lForm.controls["subtitle"].setValue(this.row.sub_title);
       this.lForm.controls["link"].setValue(this.row.link);
       this.lForm.controls["bannertype"].setValue(this.row?.banner_type);
       this.lForm.controls["typelist"].setValue(this.row?.type_id);
+      this.lForm.controls["position"].setValue(this.row?.position);
       this.typeList(this.row?.banner_type);
       this.selectedFile = this.row?.image;
       this.imageUrl = this.row?.image.toString();
@@ -65,9 +69,24 @@ export class AddEditBannerComponent implements OnInit {
     this.getBannerType();
     this.lForm.get('bannertype')?.valueChanges.subscribe((selectedStateId) => {
       if (selectedStateId) {
+        this.lForm.controls["link"].setValue(this.row.link);
         this.typeList(selectedStateId); // Call method to fetch cities based on selected state
       } else {
         this.typelist = []; // Reset cities list if state is not selected
+      }
+    });
+    this.lForm.get('typelist')?.valueChanges.subscribe((type) => {
+      if (type) {
+        
+
+        const fIndex = this.bannerTypes?.findIndex((data: any) => data?.id === this.lForm.get('bannertype')!.value);
+        const typeName = fIndex >= 0 ? this.bannerTypes[fIndex]?.name : '';
+
+        const fIndex2 = this.typelist?.findIndex((data: any) => data?.id === this.lForm.get('typelist')!.value);
+        const typeName2 = fIndex2 >= 0 ? this.typelist[fIndex2]?.name : '';
+
+        this.lForm.controls["link"].setValue(`${AppSetting.API_ENDPOINT}/${typeName}/${typeName2}/${this.lForm.get('bannertype')!.value}/${this.lForm.get('typelist')!.value}`);
+
       }
     });
   }
@@ -79,8 +98,8 @@ export class AddEditBannerComponent implements OnInit {
       return;
     }
 
-    const fIndex = this.typelist?.findIndex((data: any) => data?.idcategory === this.lForm.get('typelist')!.value);
-    const typeName = fIndex >= 0 ? this.typelist[fIndex]?.name : '';
+    const fIndex = this.bannerTypes?.findIndex((data: any) => data?.id === this.lForm.get('bannertype')!.value);
+    const typeName = fIndex >= 0 ? this.bannerTypes[fIndex]?.name[0] : '';
 
     this.loading = true;
     const fd = new FormData();
@@ -88,9 +107,13 @@ export class AddEditBannerComponent implements OnInit {
     fd.append('sub_title', this.lForm.get('subtitle')!.value);
     fd.append('link', this.lForm.get('link')!.value);
     fd.append('banner_type', this.lForm.get('bannertype')!.value);
-    fd.append('type', typeName);
+    fd.append('type', typeName.toUpperCase());
     fd.append('type_id', this.lForm.get('typelist')!.value);
-    if(this.selectedFile)  fd.append('image', this.selectedFile, this.selectedFile.name);
+    fd.append('position', this.lForm.get('position')!.value);
+    // if (this.selectedFile?.length > 0) fd.append('image', JSON.stringify(this.selectedFile));
+    for (let index = 0; index < this.selectedFile.length; index++) {
+      fd.append('images', this.selectedFile[index]);
+    }
 
     if (this.row.id) {
       fd.append('banner_id', this.row.id);
@@ -141,22 +164,11 @@ export class AddEditBannerComponent implements OnInit {
   }
 
   onFileSelected(event: any, imageFor: string) {
-    this.selectedFile = <File>event.target.files[0];
-
-    // Check file size
-    if (this.selectedFile && this.selectedFile.size > 4 * 1024 * 1024) {
-      this.fileSizeError = true;
-      return;
-    } else {
-      this.fileSizeError = false;
-      this.onUpload(imageFor);
-    }
-  }
-
-  private onUpload(imageFor) {
-    const fd = new FormData();
-    fd.append('imageFile', this.selectedFile, this.selectedFile.name);
-    // this.http.post('https://localhost:3443/products/upload', fd)
-    //   .subscribe(res => imageFor === 'FRONT' ? this.imgFront = res : this.imgBack = res);
+    event?.addedFiles.forEach(element => {
+      console.log('element: ', element);
+      // if (element?.size < (4 * 1024 * 1024)) {
+      this.selectedFile.push(element);
+      // }
+    });
   }
 }

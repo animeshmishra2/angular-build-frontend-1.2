@@ -226,4 +226,44 @@ export class StoreWareService {
         }));
   }
 
+  createEmail(req) {
+    return this.http.post<any>(AppSetting.API_ENDPOINT + '/api/create-email-template', req)
+      .pipe(map(data => {
+        return data.data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
+
+  updateEmail(id, req) {
+    return this.http.post<any>(AppSetting.API_ENDPOINT + '/api/update-email-template/' + 'id', req)
+      .pipe(map(data => {
+        return data.data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
+
+  createSMS(req) {
+    return this.http.post<any>(AppSetting.API_ENDPOINT + '/api/create-sms-template', req)
+      .pipe(map(data => {
+        return data.data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
+
+  updateSMS(id, req) {
+    return this.http.post<any>(AppSetting.API_ENDPOINT + '/api/update-sms-template/' + 'id', req)
+      .pipe(map(data => {
+        return data.data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
+
 }

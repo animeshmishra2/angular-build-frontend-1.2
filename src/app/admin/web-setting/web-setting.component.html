@@ -1,0 +1,69 @@
+<!-- <app-header></app-header> -->
+<div class="adm-container">
+	<div fxLayout="column">
+		<div class="padding-20"></div>
+		
+		<div fxFlex>
+			<div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="40px">
+				<mat-card fxFlex="80" fxLayout="column">
+					<div fxFlex fxLayoutAlign="space-between center" class="orderNum">
+						<div fxFlex="40" class="h1-txt"><a appBackButton><mat-icon>arrow_back</mat-icon></a> 
+							Settings
+						</div>
+						<div fxFlex="15" class="info-text" fxLayoutAlign="center center">
+			
+						</div>
+					</div>
+					<div fxLayout="row" fxLayoutGap="50px" style="margin-top: 20px;">
+						<mat-card fxFlex class="center" [ngClass]="bl15" (mouseover)="bl15='mat-elevation-z6'"
+							(mouseout)="bl15='mat-elevation-z2'" [routerLink]="['/ggb-admin/banners-offers']">
+							<img mat-card-image src="assets/icons/invoice.png" alt="Warehouse Reports">
+							<mat-card-content>
+								<h2>
+									Banners
+								</h2>
+							</mat-card-content>
+						</mat-card>
+
+						<mat-card fxFlex class="center" [ngClass]="bl16" (mouseover)="bl16='mat-elevation-z6'"
+							(mouseout)="bl16='mat-elevation-z2'" [routerLink]="['/ggb-admin/coupons-shiping-charges']">
+							<img mat-card-image src="assets/icons/invoice.png" alt="Warehouse Reports">
+							<mat-card-content>
+								<h2>
+									Coupns & Shiping Charges
+								</h2>
+							</mat-card-content>
+						</mat-card>
+                        <mat-card fxFlex class="center" [ngClass]="bl17" (mouseover)="bl17='mat-elevation-z6'"
+							(mouseout)="bl17='mat-elevation-z2'" [routerLink]="['/ggb-admin/deleivery-slots']">
+							<img mat-card-image src="assets/icons/invoice.png" alt="Warehouse Reports">
+							<mat-card-content>
+								<h2>
+									Deleivery slots
+								</h2>
+							</mat-card-content>
+						</mat-card>
+						<mat-card fxFlex class="center" [ngClass]="bl17" (mouseover)="bl17='mat-elevation-z6'"
+							(mouseout)="bl17='mat-elevation-z2'" [routerLink]="['/ggb-admin/email']">
+							<img mat-card-image src="assets/icons/invoice.png" alt="Warehouse Reports">
+							<mat-card-content>
+								<h2>
+									Email Template
+								</h2>
+							</mat-card-content>
+						</mat-card>
+						<mat-card fxFlex class="center" [ngClass]="bl17" (mouseover)="bl17='mat-elevation-z6'"
+							(mouseout)="bl17='mat-elevation-z2'" [routerLink]="['/ggb-admin/sms']">
+							<img mat-card-image src="assets/icons/invoice.png" alt="Warehouse Reports">
+							<mat-card-content>
+								<h2>
+									SMS Template
+								</h2>
+							</mat-card-content>
+						</mat-card>
+					</div>
+				</mat-card>
+			</div>
+		</div>
+	</div>
+</div>

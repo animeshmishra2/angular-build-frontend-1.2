@@ -68,9 +68,18 @@
                             <h2>Received Requests</h2>
                         </mat-card-content>
                     </mat-card>
+                    <mat-card fxFlex class="center" style="margin: 0 10px;" [ngClass]="bl2" 
+                        (mouseover)="bl2 = 'mat-elevation-z6'"
+                        (mouseout)="bl2 = 'mat-elevation-z2'" 
+                        [routerLink]="['transfers']">
+                        <img mat-card-image src="assets/icons/supply-chain.png" alt="Received Requests" />
+                        <mat-card-content>
+                            <h2>Transfers</h2>
+                        </mat-card-content>
+                    </mat-card>
                        
                     </div>
-                    <div fxLayout="column" fxLayoutGap="10px" style="margin-top: 20px;border: 3px solid #acacac;padding: 10px;border-radius: 15px">
+                    <!-- <div fxLayout="column" fxLayoutGap="10px" style="margin-top: 20px;border: 3px solid #acacac;padding: 10px;border-radius: 15px">
                         <h2>Manage transfer</h2>
                         <div style="margin-top: 20px;border: 3px solid #acacac;padding: 10px;border-radius: 15px">
                             <mat-card fxFlex class="center" style="margin: 0 10px;" [ngClass]="bl1" 
@@ -120,7 +129,7 @@
                                 </mat-card-content>
                             </mat-card>
                         </div>
-                    </div>
+                    </div> -->
                 </mat-card>
             </div>
         </div>

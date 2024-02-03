@@ -31,7 +31,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AddEditBannerComponent } from './banners/add-edit-banner/add-edit-banner.component';
-
+import { NgxDropzoneModule } from 'ngx-dropzone'
 
 const routes: Routes = [
   { path: '', component: BannersComponent },
@@ -48,6 +48,7 @@ const routes: Routes = [
   ],
   imports: [
     MatCardModule,
+    NgxDropzoneModule,
     RouterModule.forChild(routes),
     CommonModule,
     DirectiveModule,

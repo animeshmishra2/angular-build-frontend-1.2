@@ -21,6 +21,10 @@ import { WarehouseReportsComponent } from './warehouse-reports/warehouse-reports
 import { GstReportComponent } from './gst-report/gst-report.component';
 import { DeleiverySlotsComponent } from './deleivery-slots/deleivery-slots.component';
 import { ThreshouldPurchaseOrderComponent } from './threshould-purchase-order/threshould-purchase-order.component';
+import { WebSettingComponent } from './web-setting/web-setting.component';
+import { EmailComponent } from './email/email.component';
+import { SmsTemplateComponent } from './sms-template/sms-template.component';
+import { ReportsComponent } from './reports/reports.component';
 
 const routes: Routes = [
   { path: "store-warehouse/:type", component: StoreWarehouseComponent },
@@ -43,7 +47,11 @@ const routes: Routes = [
   { path: 'banners-offers', loadChildren: () => import('./banners-offers/banners-offers.module').then(m => m.BannersOffersModule) },
   { path: 'coupons-shiping-charges', loadChildren: () => import('./coupns-shiping-charges/coupns-shiping-charges.module').then(m => m.CoupnsShipingChargesModule) },
   { path: 'deleivery-slots', component: DeleiverySlotsComponent },
+  { path: 'email', component: EmailComponent },
+  { path: 'sms', component: SmsTemplateComponent },
   { path: 'threshould-purchase-order', component: ThreshouldPurchaseOrderComponent },
+  { path: 'settings', component: WebSettingComponent },
+  { path: 'reports', component: ReportsComponent },
   { path: 'package-by-branch-category', loadChildren: () => import('./package-branch-category/package-branch-category.module').then(m => m.PackageBranchCategoryModule) }
   
 ];

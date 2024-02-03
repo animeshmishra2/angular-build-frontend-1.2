@@ -28,6 +28,7 @@
     "jspdf-autotable": "^3.7.1",
     "luxon": "^3.4.4",
     "moment": "^2.29.4",
+    "ngx-dropzone": "^2.1.2",
     "ngx-material-timepicker": "^13.1.1",
     "ngx-spinner": "^12.0.0",
     "num-words": "^1.2.2",

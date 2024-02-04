@@ -16,7 +16,7 @@ export class CogsReportComponent implements OnInit {
   tableData!: any[];
   totalRecords = 0
   dateRange!: any[] | undefined;
-  stores!: Store[];
+  stores!: any;
   loading: boolean = false
   rows = 10;
   first = 0;
@@ -66,8 +66,8 @@ export class CogsReportComponent implements OnInit {
     private router: Router,
     private excelService: ExcelService) { }
   ngOnInit(): void {
-    this.fetchStoreList()
     this.fetchWarehouseList()
+    this.getStoreOntheBehalfOfWarehouse('1')
     this.getCOGSReport()
   }
   applyFilter(event) {
@@ -105,8 +105,8 @@ export class CogsReportComponent implements OnInit {
             "Category Name": x.selling_price,
             "Sub Category Name": x.sub_category_name,
             "Sub Sub Category Name": x.sub_sub_category_name,
-            "total_quantity": x.selling_margin_rupees,
-            "COGS": x.cogs,
+            "total_quantity": x.quantity,
+            "COGS": x.cogs_value,
             "Purchase Price": x.purchase_price,
           };
         })
@@ -241,9 +241,21 @@ export class CogsReportComponent implements OnInit {
     this.params.field = event.value
 
   }
-  search(value) {
-    this.params.searchTerm = value
-    this.getCOGSReport()
+  search() {
+    if(this.searchTerm){
+      this.params.searchTerm = this.searchTerm
+      this.getCOGSReport()
+    }
+    
   }
-
+  getStoreOntheBehalfOfWarehouse(data) {
+    this.apiService.getStoreOntheBehalfOfWarehouse(data).subscribe(
+      (response) => {
+        this.stores = response;
+      },
+      (error) => {
+        console.error('Error fetching Product Report:', error);
+      }
+    );
+  }
 }

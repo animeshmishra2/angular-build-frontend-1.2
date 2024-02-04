@@ -17,15 +17,112 @@
                     placeholder="Select an Warehouses"></p-dropdown>
             </div>
         </div>
-        <div class="pt-2">
-            <p-dropdown [options]="fieldsArray" class="p-1" optionValue="id"
-            optionLabel="name" [(ngModel)]="params.field"
-            (onClick)="selectFields($event)"
-            placeholder="Select a fields"></p-dropdown>
-            <mat-form-field>
-                <mat-icon matPrefix>search</mat-icon>
-                <input [disabled]="!params.field" [(ngModel)]="searchTerm" matInput type="search" (input)="search($any($event.target).value)" placeholder="search here" class="search-input" style="height: 100%;">
-            </mat-form-field>
+        <div class="pt-2" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center;">
+                <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
+                    (click)="clearAllData(dt1)"></button>
+                <p-dropdown [options]="fieldsArray" class="p-1" optionValue="id" optionLabel="name"
+                    [(ngModel)]="params.field" (onChange)="selectFields($event)"
+                    placeholder="Select a fields"></p-dropdown>
+                <mat-form-field style="margin-top: 15px ">
+                    <mat-icon matPrefix>search</mat-icon>
+                    <input [disabled]="!params.field" [(ngModel)]="searchTerm" matInput type="search"
+                        placeholder="search here" class="search-input" style="height: 100%;">
+                </mat-form-field>
+                <button pButton label="Search" class="p-button-outlined p-button-success" icon="pi pi-search"
+                    (click)="search()" [disabled]="!searchTerm"></button>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <p-calendar [(ngModel)]="dateRange" selectionMode="range"
+                placeholder="Choose your date range" [readonlyInput]="true"
+                [appendTo]="'body'"></p-calendar>
+            <button pButton label="Search" class="p-button-outlined p-button-success"
+                icon="pi pi-search" (click)="filterByDate()" [disabled]="!dateRange"></button>
+                <button mat-raised-button class="success-button" class="resizebtn" (click)="exportExcel()">
+                    <mat-icon>article</mat-icon>
+                    Export Excel
+                </button>
+            </div>
+
+        </div>
+        <div class="pt-1"
+            style="display: flex; align-items: center; flex-direction: row;flex-wrap:wrap; justify-content: center;">
+
+            <mat-card class="example-card">
+                <mat-card-title class="example-header">Total Product</mat-card-title>
+                <mat-card-content class="example-content">
+                    <div style="display: flex;justify-content: center;">
+                        <img src="../../../../../assets/icons/image (2).png" alt="">
+                    </div>
+                    <div class="example-text">
+                        <div class="example-row" style="display: flex;justify-content: center;">
+                            <span class="example-value">{{stats?.total_product}}</span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="example-card ">
+                <mat-card-title class="example-header">Total Vendor</mat-card-title>
+                <mat-card-content class="example-content">
+                    <div style="display: flex;justify-content: center;">
+                        <img src="../../../../../assets/icons/image (2).png" alt="">
+                    </div>
+                    <div class="example-text">
+                        <div class="example-row" style="display: flex;justify-content: center;">
+                            <span class="example-value">{{stats?.total_vendor}}</span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="example-card ">
+                <mat-card-title class="example-header">Total Purchase Stock</mat-card-title>
+                <mat-card-content class="example-content">
+                    <div style="display: flex;justify-content: center;">
+                        <img src="../../../../../assets/icons/image (2).png" alt="">
+                    </div>
+                    <div class="example-text">
+                        <div class="example-row" style="display: flex;justify-content: center;">
+                            <span class="example-value">{{stats?.total_purchase_stock }}</span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="example-card ">
+                <mat-card-title class="example-header">Avg Purchase Stock</mat-card-title>
+                <mat-card-content class="example-content">
+                    <div style="display: flex;justify-content: center;">
+                        <img src="../../../../../assets/icons/image (2).png" alt="">
+                    </div>
+                    <div class="example-text">
+                        <div class="example-row" style="display: flex;justify-content: center;">
+                            <span class="example-value">{{stats?.avg_purchase_stock }}</span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+
+            <mat-card class="example-card ">
+                <mat-card-title class="example-header">Total Stack Amount</mat-card-title>
+                <mat-card-content class="example-content">
+                    <div style="display: flex;justify-content: center;">
+                        <img src="../../../../../assets/icons/image (2).png" alt="">
+                    </div>
+                    <div class="example-text">
+                        <div class="example-row" style="display: flex;justify-content: center;">
+                            <span class="example-value">{{stats?.total_stock_amount | number:'1.2-2'}}</span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+
+        </div>
+        <div class="ml-2" style="display: flex; align-items: center; justify-content: space-between;">
+            <div class="h1-txt p-2">
+                Purchase Report Table
+            </div> 
+
         </div>
         <div class="p-2">
        
@@ -33,96 +130,59 @@
                 styleClass="p-datatable-sm p-datatable-gridlines"        [paginator]="false" [rows]="10" [showCurrentPageReport]="true" class="m-1"
                 [totalRecords]="totalRecords" [first]="first" [loading]="loading"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
-                <ng-template pTemplate="caption" >
-                    <div class="flex justify-content-between">
-                        <div class="flex gap-2">
-                            <div class="flex gap-2">
-                                <button pButton label="Clear" class="p-button-outlined"
-                                    icon="pi pi-filter-slash" (click)="clearAllData(dt1)" ></button>
-                                <p-calendar [(ngModel)]="dateRange" selectionMode="range"
-                                    placeholder="Choose your date range" [readonlyInput]="true"
-                                    [appendTo]="'body'"></p-calendar>
-                                <button pButton label="Search" class="p-button-outlined p-button-success"
-                                    icon="pi pi-search" (click)="filterByDate()" [disabled]="!dateRange"></button>
-                            </div>
-                        </div>
-                        <div class="flex gap-2">
-                            <button mat-raised-button class="success-button" class="resizebtn"
-                                (click)="exportExcel()">
-                                <mat-icon>article</mat-icon>
-                                Export Excel
-                            </button>
-                            <!-- <button mat-raised-button color="error" class="resizebtn"
-                                (click)="exportPdf()">
-                                <mat-icon>picture_as_pdf</mat-icon>
-                                Export PDF
-                            </button> -->
-                        </div>
-                    </div>
-                
-                </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
+                        <th rowspan="2">Barcode</th>
+                        <th rowspan="2">Bill Number</th>
+                        <th rowspan="2">Brand</th>
                         <th rowspan="2">Product Name</th>
                         <th rowspan="2">Vendor Name</th>
                         <th rowspan="2">Category</th>
                         <th rowspan="2">Sub Category</th>
                         <!-- <th rowspan="2">Sub Sub Category</th> -->
-                        <th rowspan="2">Brand</th>
                         <th rowspan="2">HSN</th>
-                        <th rowspan="2">Barcode</th>
-                        <th rowspan="2">MRP(Rs)</th>
-                        <th rowspan="2">Taxable Purchase Price (Rs)</th>
-                        <th rowspan="2">Purchase With Tax</th>
-                        <th rowspan="2">Purchase Margin(%)</th>
+                        <th rowspan="2">Expiry</th>
                         <th rowspan="2">Quantity</th>
+                        <th rowspan="2">MRP</th>
                         <th class="text-center" colspan="6">GST</th>
                         <th class="text-center" colspan="3">Purchase</th>
                     </tr>
                     <tr class="text-center">
-                        <th >CGST Amount</th>
+                        <th>CGST Amount</th>
                         <th>CGST %</th>
                         <th>SGST Amount</th>
                         <th>SGST %</th>
                         <th>IGST Amount</th>
                         <th>IGST %</th>
-                       
-                        <th>Purchase Date</th>
-                        <th>Selling Price</th>
-                        <th>Unit Price</th>
-                        <th>Taxable Paid Amount</th>
+                        <th>Purchase Price</th>
+                        <th>Taxable Amount</th>
                         <th>Amount with tax</th>
                     </tr>
 
                 </ng-template>
                 <ng-template pTemplate="body" let-record>
                     <tr>
+                        <td>{{ record.barcode }}</td>
+                        <td>{{ record.bill_number }}</td>
+                        <td>{{ record.brand_name }}</td>
                         <td>{{ record.name }}</td>
                         <td>{{ record.vendor_name }}</td>
                         <td>{{ record.category_name }}</td>
                         <td>{{ record.sub_category_name }}</td>
                         <!-- <td>{{ record.sub_sub_category_name }}</td> -->
-                        <td>{{ record.brand_name }}</td>
                         <td>{{ record.hsn}}</td>
-                        <td>{{ record.barcode}}</td>
-                        <td>{{ record.mrp | number:'1.2-2'}}</td>
-                        <td>{{ record.unit_purchase_price | number:'1.2-2'}}</td>
-                        <td>{{ (record.unit_purchase_price + (record.sgst_amount + record.cgst_amount)/record.quantity) | number:'1.2-2'}}</td>
-                        <td>{{ (((record.mrp - (record.unit_purchase_price + (record.sgst_amount + record.cgst_amount)/record.quantity)))/record.mrp) * 100  | number:'1.2-2'}}</td>
+                        <td>{{ record.expiry | date}}</td>
                         <td>{{ record.quantity }}</td>
-                        <td>{{record.cgst_amount/record.quantity| number : '1.2-2'}} Rs. x {{record.quantity}} ={{ record.cgst_amount | number:'1.2-2'}}</td>
+                        <td>{{ record.mrp | number:'1.2-2'}}</td>
+                        <td>{{ record.cgst_amount | number:'1.2-2'}}</td>
                         <td>{{ record.cgst | number:'1.2-2'}}</td>
-                        <td>{{record.sgst_amount/record.quantity| number : '1.2-2'}} Rs. x {{record.quantity}} ={{ record.sgst_amount | number:'1.2-2'}}</td>
+                        <td>{{ record.sgst_amount | number:'1.2-2'}}</td>
                         <td>{{ record.sgst | number:'1.2-2'}}</td>
-                        <td>{{record.igst_amount/record.quantity| number : '1.2-2'}} Rs. x {{record.quantity}} ={{ record.igst_amount | number:'1.2-2'}}</td>
-
+                        <td>{{ record.igst_amount | number:'1.2-2'}}</td>
                         <td>{{ record.igst?record.igst:0 | number:'1.2-2'}}</td>
-                       
-                        <td>{{ record.purchase_date | date:'dd/MM/yyyy'}}</td>
-                        <td>{{ record.selling_price | number:'1.2-2'}}</td>
-                        <td>{{ record.unit_purchase_price | number:'1.2-2'}}</td>
-                        <td>{{ record.amount | number:'1.2-2'}}</td>
-                        <td>{{ record.total_amount_with_tax | number:'1.2-2'}}</td>
+                        <td>{{ record.purchase_price| number:'1.2-2'}}</td>
+                        <td>{{ record.taxable_amount | number:'1.2-2'}}</td>
+                        <td>{{ record.amount_with_tax | number:'1.2-2'}}</td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">

@@ -173,6 +173,36 @@ export class ReportApiService {
       })
     );
   }
+  getOrderReport(params:any):Observable<any>{
+    let string =""
+    if(params){
+      string = this.paramGenrator(params)
+    }
+    return this.http
+    .get(`${AppSetting.API_ENDPOINT}/api/order-report?${string}`)
+    .pipe(
+      map((response) => response),
+      catchError((error) => {
+        console.error('Error fetching Order Report:', error);
+        throw error; // Rethrow the error
+      })
+    );
+  }
+  getYearOverYearGrowth(params:any):Observable<any>{
+    let string =""
+    if(params){
+      string = this.paramGenrator(params)
+    }
+    return this.http
+    .get(`${AppSetting.API_ENDPOINT}/api/year-over-year-growth?${string}`)
+    .pipe(
+      map((response) => response),
+      catchError((error) => {
+        console.error('Error fetching Order Report:', error);
+        throw error; // Rethrow the error
+      })
+    );
+  }
   getPerformanceReport():Observable<any>{
     return this.http
     .get(`${AppSetting.API_ENDPOINT}/api/performance-report`)
@@ -199,4 +229,76 @@ export class ReportApiService {
       })
     );
   }
+  getProductReportStateDate(params:any):Observable<any>{
+    let string =""
+    if(params){
+      string = this.paramGenrator(params)
+    }
+    return this.http
+    .get(`${AppSetting.API_ENDPOINT}/api/product-report-state-data?${string}`)
+    .pipe(
+      map((response) => response),
+      catchError((error) => {
+        console.error('Error fetching Sales Report:', error);
+        throw error; // Rethrow the error
+      })
+    );
+  }
+  getInventoryReportStateDate(params:any):Observable<any>{
+    let string =""
+    if(params){
+      string = this.paramGenrator(params)
+    }
+    return this.http
+    .get(`${AppSetting.API_ENDPOINT}/api/inventory-state-data?${string}`)
+    .pipe(
+      map((response) => response),
+      catchError((error) => {
+        console.error('Error fetching Sales Report:', error);
+        throw error; // Rethrow the error
+      })
+    );
+  }
+  getSalesOrderReportStateDate(params:any):Observable<any>{
+    let string =""
+    if(params){
+      string = this.paramGenrator(params)
+    }
+    return this.http
+    .get(`${AppSetting.API_ENDPOINT}/api/sales-order-state-data?${string}`)
+    .pipe(
+      map((response) => response),
+      catchError((error) => {
+        console.error('Error fetching Sales Report:', error);
+        throw error; // Rethrow the error
+      })
+    );
+  }
+  getPurchaseOrderReportStateDate(params:any):Observable<any>{
+    let string =""
+    if(params){
+      string = this.paramGenrator(params)
+    }
+    return this.http
+    .get(`${AppSetting.API_ENDPOINT}/api/purchase-order-state-data?${string}`)
+    .pipe(
+      map((response) => response),
+      catchError((error) => {
+        console.error('Error fetching Sales Report:', error);
+        throw error; // Rethrow the error
+      })
+    );
+  }
+  getStoreOntheBehalfOfWarehouse(data){
+    return this.http
+    .get(`${AppSetting.API_ENDPOINT}/api/get-ware-store/${data}`)
+    .pipe(
+      map((response) => response),
+      catchError((error) => {
+        console.error('Error fetching Sales Report:', error);
+        throw error; // Rethrow the error
+      })
+    );  
+  }
 }
+

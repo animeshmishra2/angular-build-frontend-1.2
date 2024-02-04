@@ -18,6 +18,8 @@ import { OrderDetailsReportComponent } from './report-pages/order-details-report
 import { CogsReportComponent } from './report-pages/cogs-report/cogs-report.component';
 import { PerformanceReportComponent } from './report-pages/performance-report/performance-report.component';
 import { StockReplacementReportComponent } from './report-pages/stock-replacement-report/stock-replacement-report.component';
+import { ProductsOrderDetailsComponent } from './report-pages/products-order-details/products-order-details.component';
+import { InventoryValueReportComponent } from './report-pages/inventory-value-report/inventory-value-report.component';
 
 const routes: Routes = [
   {
@@ -40,6 +42,8 @@ const routes: Routes = [
   { path: "cogs-report", component: CogsReportComponent },
   { path: "performance-report", component: PerformanceReportComponent },
   { path: "replacement-report", component: StockReplacementReportComponent },
+  { path: "products-order-details", component: ProductsOrderDetailsComponent },
+  { path: "inventory-value-report", component: InventoryValueReportComponent },
   { path: '', component: WarehouseReportsComponent },
   
 ];

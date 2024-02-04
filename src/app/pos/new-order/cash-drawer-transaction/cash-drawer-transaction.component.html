@@ -245,10 +245,10 @@
                     </div>
                     <div fxLayout="row" class="margin-top">
                         <div fxFlex fxLayoutAlign="center center">
-                            <div class="number-snap">&#8377;{{data.total.grand | number : "0.2-2"}}</div>
+                            <div class="number-snap">&#8377;{{roundOffTotal | number : "0.2-2"}}</div>
                         </div>
                         <div fxFlex fxLayoutAlign="center center">
-                            <div class="number-snap" [class.high-error]="totalCashIn < data.total.grand">
+                            <div class="number-snap" [class.high-error]="totalCashIn < roundOffTotal">
                                 &#8377;{{totalCashIn | number : "0.2-2"}}</div>
                         </div>
                         <div fxFlex fxLayoutAlign="center center">

@@ -4,7 +4,7 @@
         <div class="flex justify-content-between">
             <div class="h1-txt p-2">
                 <a appBackButton><mat-icon>arrow_back</mat-icon></a>
-                Order Report
+                Inventory Value Report
             </div>
             <div class="flex gap-1 mr-3">
                 <p-dropdown [options]="stores" class="p-1" optionValue="idstore_warehouse"
@@ -18,16 +18,19 @@
             </div> 
         </div>
         <div class="pt-2" style="display: flex; align-items: center;">
-            <p-dropdown [options]="fieldsArray" class="p-1" optionValue="id"
-            optionLabel="name" [(ngModel)]="params.field"
-            (onChange)="selectFields($event)"
-            placeholder="Select a fields"></p-dropdown>
+            <p-dropdown [options]="reportArray" class="p-1" optionValue="id" optionLabel="name"
+                [(ngModel)]="params.type" (onChange)="selectReport($event)"
+                placeholder="Select a Report"></p-dropdown>
+            <p-dropdown  [options]="fieldsArray" class="p-1" optionValue="id"
+                optionLabel="name" [(ngModel)]="params.field" (onChange)="selectFields($event)"
+                placeholder="Select a fields"></p-dropdown>
             <mat-form-field style="margin-top: 15px ">
                 <mat-icon matPrefix>search</mat-icon>
-                <input [disabled]="!params.field" [(ngModel)]="searchTerm" matInput type="search" placeholder="search here" class="search-input" style="height: 100%;">
+                <input  [(ngModel)]="searchTerm" matInput type="search"
+                    placeholder="search here" class="search-input" style="height: 100%;">
             </mat-form-field>
-            <button pButton label="Search" class="p-button-outlined p-button-success"
-            icon="pi pi-search" (click)="search()" [disabled]="!searchTerm"></button>
+            <button pButton label="Search" class="p-button-outlined p-button-success" icon="pi pi-search"
+                (click)="search()" [disabled]="!searchTerm"></button>
         </div>
     
         <div class="p-2">
@@ -63,51 +66,30 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th rowspan="2">Order ID</th>
-                        <th rowspan="2">Customer Name</th>
-                        <th rowspan="2">Store</th>
-                        <th rowspan="2">Quantity</th>
-                        <th rowspan="2">Discount Type</th>
-                        <th rowspan="2">Total Discount</th>
-                        <th class="text-center" colspan="2">GST</th>
-                        <th class="text-center" colspan="2">Profit</th>
-                        <th rowspan="2">Price</th>          
-                        <th rowspan="2">Created Date</th>          
-                        <th rowspan="2">Products Details</th>
-                    </tr>
-                    <tr class="text-center">
-                        <th>CGST %</th>
-                        <th>SGST %</th>
-                        <th>Profit %</th>
-                        <th>Profit(Rs)</th>
+                        <th rowspan="2">Barcode</th>
+                        <th rowspan="2">Product Master ID</th>
+                        <th rowspan="2">Product Name</th>
+                        <th rowspan="2">Remaning Product</th>
+                        <th rowspan="2">Total Quantity</th>
                        
                     </tr>
+                    
                 </ng-template>
                 <ng-template pTemplate="body" let-record>
-                    <tr [ngClass]="{'low-rated':record.billed_in_loss==1}">
-                        <td>{{ record.idcustomer_order }}</td>
-                        <td>{{ record.customer_name}}</td>
-                        <td>{{ record.store_warehouse}}</td>
-                        <td>{{ record.quantity}}</td>
-                        <td>{{ record.discount_type}}</td>
-                        <td>{{ record.total_discount | number:'1.2-2'}}</td>
-                        <td>{{ record.cgst | number:'1.2-2'}}</td>
-                        <td>{{ record.sgst | number:'1.2-2'}}</td>
-                        <td>{{ record.profit_pr | number:'1.2-2' }}</td>
-                        <td>{{ record.profit_rs | number:'1.2-2'}}</td>
-                        <td>{{ record.price| number:'1.2-2'}}</td>
-                        <td>{{ record.created_at | date}}</td>
-                        <td style="text-align: center">
-                            <button pButton type="button" class="p-button-secondary" icon="pi pi-book" (click)="OrderDetails(record)"></button>
-                        </td>
+                    <tr>
+                        <td>{{ record.barcode }}</td>
+                        <td>{{ record.idproduct_master }}</td>
+                        <td>{{ record.name}}</td>
+                        <td>{{ record.remaining_product}}</td>
+                        <td>{{ record.total_quantity}}</td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
                     <tr>
-                        <td class="text-center" colspan="11">No Records Found</td>
+                        <td class="text-center" colspan="4">No Records Found</td>
                     </tr>
                     <tr>
-                        <td class="text-center" colspan="11">Please select Store or Inventory</td>
+                        <td class="text-center" colspan="4">Please select Store or Inventory</td>
                     </tr>
                 </ng-template>
             </p-table>
@@ -122,31 +104,3 @@
         </div>
     </div>
 </div>
-
-<!-- <p-dialog [(visible)]="showOrder" [modal]="true" [style]="{ width: '50vw' }"
-    [draggable]="false" [resizable]="false">
-    <p-table [value]="selectedProducts">
-        <ng-template pTemplate="header">
-            <tr>
-                <th>Order No</th>
-                <th>Purchase Date</th>
-                <th>Customer name</th>
-                <th>Counter Name</th>
-                <th>Biller name</th>
-                <th>Discount Coupon</th>
-                <th>Profit</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-product>
-            <tr>
-                <td>{{ product.Order_No }}</td>
-                <td>{{ product.Date | date:'dd/MM/yyyy'}}</td>
-                <td>{{ product.Customer_name }}</td>
-                <td>{{ product.Counter_Name }}</td>
-                <td>{{ product.Biller_name }}</td>
-                <td>{{ product.Discount_Coupon }}</td>
-                <td>{{ product.Profit_per_bill }}</td>
-            </tr>
-        </ng-template>
-    </p-table>
-</p-dialog> -->

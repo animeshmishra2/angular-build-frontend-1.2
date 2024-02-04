@@ -17,15 +17,17 @@
                     placeholder="Select an Inventory"></p-dropdown>
             </div>
         </div>
-        <div class="pt-2">
+        <div class="pt-2" style="display: flex; align-items: center;">
             <p-dropdown [options]="fieldsArray" class="p-1" optionValue="id"
             optionLabel="name" [(ngModel)]="params.graph_type"
             (onChange)="selectFields($event)"
             placeholder="Select a fields"></p-dropdown>
-            <mat-form-field>
+            <mat-form-field style="margin-top: 15px ">
                 <mat-icon matPrefix>search</mat-icon>
-                <input [disabled]="!params.graph_type" [(ngModel)]="searchTerm" matInput type="search" (input)="search($any($event.target).value)" placeholder="search here" class="search-input" style="height: 100%;">
+                <input [disabled]="!params.field" [(ngModel)]="searchTerm" matInput type="search" placeholder="search here" class="search-input" style="height: 100%;">
             </mat-form-field>
+            <button pButton label="Search" class="p-button-outlined p-button-success"
+            icon="pi pi-search" (click)="search()" [disabled]="!searchTerm"></button>
         </div>
         <!-- <div class="flex justify-content-center align-items-center">
             <p-selectButton styleClass="p-2" [options]="stateOptions" [(ngModel)]="value" optionLabel="label"

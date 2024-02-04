@@ -43,16 +43,24 @@ public exportAsExcelFile(fileName:string,List:any[],sheet:string): void {
     sheet.addRow([`Report Type- ${body.reportName}`])
     sheet.addRow([`Stort/warehouse Name - ${body.warehouseName.name}`])
     sheet.addRow([` `])
-    const header = ['Barcode', 'Product Name', 'Category', 'Sub Category', 'Sub Sub Category', 'Brand','Quantity Left'];
+    const header:any = Object.keys(json[0])
     let heading=sheet.addRow(header);
-    heading.font = { family: 4, size: 10, bold: true };
-    heading.alignment = { horizontal: 'center' }
-    json.forEach(element => {
-    sheet.addRow([element["Barcode"],element['Product Name'],element['Category'],element['Sub Category'],element['Sub Sub Category'],element['Brand'],element['Quantity Left']]);
-    });
+    heading.eachCell((cell, number) => {
+
+      cell.font = { family: 4, size: 12, bold: true };
+      cell.alignment = { horizontal: 'center' }
+    })
     sheet.mergeCells('A1:G1');
     sheet.mergeCells('A2:G2');
-
+    json.forEach((row: any) => {
+      sheet.addRow(Object.values(row))
+    })
+   
+    sheet.columns.forEach((column:any) => {
+      const lengths = column.values.map(v => v.toString().length);
+      const maxLength = Math.max(...lengths.filter(v => typeof v === 'number'));
+      column.width = maxLength;
+    });
 
     workbook.xlsx.writeBuffer().then(data=>{
       let blob = new Blob([data],{
@@ -68,33 +76,46 @@ public exportAsExcelFile(fileName:string,List:any[],sheet:string): void {
     sheet.addRow([`Report Type- ${body.reportName}`])
     sheet.addRow([`Stort/warehouse Name - ${body.warehouseName.name}`])
     sheet.addRow([` `])
-    const header:any = ['Barcode', 'Name', 'Category Name', 'Selling Price', 'Purchase Price', 'Selling Margin',' ','Purchase Margin'];
+    const header:any = ['Barcode','Brand', 'Name', 'Category Name', 'Sub Category Name','HSN', 'Selling Price', 'Purchase Price','MRP','Discount', 'Selling Margin',' ','Purchase Margin',' ','Discount Margin'];
+   
     let heading=sheet.addRow(header);
     heading.font = { family: 4, size: 10, bold: true };
     heading.alignment = { horizontal: 'center' }
     let subHeader:any = [];
-    subHeader[6] = '%age';
-    subHeader[7] = 'Amount';
-    subHeader[8] = '%age';
-    subHeader[9] = 'Amount';
+    subHeader[11] = '%age';
+    subHeader[12] = 'Amount';
+    subHeader[13] = '%age';
+    subHeader[14] = 'Amount';
+    subHeader[15] = '%age';
+    subHeader[16] = 'Amount';
     let subhas =  sheet.addRow(subHeader);
 
     subhas.font = { family: 4, size: 10, bold: true };
     subhas.alignment = { horizontal: 'center' }
     sheet.mergeCells('A1:G1');
     sheet.mergeCells('A2:G2');
-    sheet.mergeCells('F4:G4');
-    sheet.mergeCells('H4:I4');
+    sheet.mergeCells('K4:L4');
+    sheet.mergeCells('M4:N4');
+    sheet.mergeCells('O4:P4');
     sheet.mergeCells('A4:A5');
     sheet.mergeCells('B4:B5');
     sheet.mergeCells('C4:C5');
     sheet.mergeCells('D4:D5');
     sheet.mergeCells('E4:E5');
+    sheet.mergeCells('F4:F5');
+    sheet.mergeCells('G4:G5');
+    sheet.mergeCells('H4:H5');
+    sheet.mergeCells('I4:I5');
+    sheet.mergeCells('J4:J5');
     json.forEach(element => {
-    sheet.addRow([element["Barcode"],element["Name"],element["Category Name"],element["Selling Price"],element["Purchase Price"],element["Selling Margin age"],element["Selling Margin amount"],element["Purchase Margin age"],element["Purchase Margin amount"]]);
+    sheet.addRow([element["Barcode"],element['Brand'],element["Name"],element["Category Name"],element['Sub Category Name'],element['HSN'],element["Selling Price"],element["Purchase Price"],element['MRP'],element['Discount'],element["Selling Margin age"],element["Selling Margin amount"],element["Purchase Margin age"],element["Purchase Margin amount"],element["Discount Margin age"],element['Discount Margin amount']]);
     });
    
-
+    sheet.columns.forEach((column:any) => {
+      const lengths = column.values.map(v => v.toString().length);
+      const maxLength = Math.max(...lengths.filter(v => typeof v === 'number'));
+      column.width = maxLength;
+    });
 
     workbook.xlsx.writeBuffer().then(data=>{
       let blob = new Blob([data],{
@@ -110,42 +131,49 @@ public exportAsExcelFile(fileName:string,List:any[],sheet:string): void {
     sheet.addRow([`Report Type- ${body.reportName}`])
     sheet.addRow([`Stort/warehouse Name - ${body.warehouseName.name}`])
     sheet.addRow([` `])
-    const header:any = ["Product Name","Vendor Name", "Category","Sub Category","Brand","HSN","Barcode","MRP","Quantity","Taxable Purchase Price (Rs)","Purchase Price with Tax","Purchase Margin","GST"," "," "," "," "," ","Purchase"];
+    const header:any = ["Barcode", "Bill Number","Brand","Product Name","Vendor Name", "Category","Sub Category","HSN","Expiry","Quantity","MRP","GST"," "," "," "," "," ","Purchase"];
     let heading=sheet.addRow(header);
     heading.font = { family: 4, size: 10, bold: true };
     heading.alignment = { horizontal: 'center' }
     let subHeader:any = [];
-    subHeader[13] = 'CGST Amount';
-    subHeader[14] = 'CGST %';
-    subHeader[15] = 'SGST Amount';
-    subHeader[16] = 'SGST %';
-    subHeader[17] = 'IGST Amount';
-    subHeader[18] = 'IGST %';
-    subHeader[19] = 'Unit Price';
-    subHeader[20] = 'Taxable Amount';
-    subHeader[21] = 'Amount with tax';
+    subHeader[12] = 'CGST Amount';
+    subHeader[13] = 'CGST %';
+    subHeader[14] = 'SGST Amount';
+    subHeader[15] = 'SGST %';
+    subHeader[16] = 'IGST Amount';
+    subHeader[17] = 'IGST %';
+    subHeader[18] = 'Purchase Price';
+    subHeader[19] = 'Taxable Amount';
+    subHeader[20] = 'Amount with tax';
     
     let subhas =  sheet.addRow(subHeader);
 
     subhas.font = { family: 4, size: 10, bold: true };
     subhas.alignment = { horizontal: 'center' }
-    // sheet.mergeCells('A1:G1');
-    // sheet.mergeCells('A2:G2');
-    // sheet.mergeCells('I4:N4');
-    // sheet.mergeCells('O4:Q4');
-    // sheet.mergeCells('A4:A5');
-    // sheet.mergeCells('B4:B5');
-    // sheet.mergeCells('C4:C5');
-    // sheet.mergeCells('D4:D5');
-    // sheet.mergeCells('E4:E5');
-    // sheet.mergeCells('F4:F5');
-    sheet.mergeCells('S4:U4');
-    sheet.mergeCells('M4:R4');
+    sheet.mergeCells('A1:G1');
+    sheet.mergeCells('A2:G2');
+    sheet.mergeCells('L4:Q4');
+    sheet.mergeCells('R4:T4');
+    sheet.mergeCells('A4:A5');
+    sheet.mergeCells('B4:B5');
+    sheet.mergeCells('C4:C5');
+    sheet.mergeCells('D4:D5');
+    sheet.mergeCells('E4:E5');
+    sheet.mergeCells('F4:F5');
+    sheet.mergeCells('G4:G5');
+    sheet.mergeCells('H4:H5');
+    sheet.mergeCells('I4:I5');
+    sheet.mergeCells('J4:J5');
+    sheet.mergeCells('K4:K5');
     json.forEach(element => {
-    sheet.addRow([element["Product Name"],element["Vendor Name"],element[ "Category"],element["Sub Category"],element["Brand"],element["HSN"],element["Barcode"],element["MRP"],element["Quantity"],element["Taxable Purchase Price (Rs)"],element["Purchase Price with Tax"],element["Purchase Margin (%)"],element["CGST Amount"],element["CGST %"],element["SGST Amount"],element["SGST %"],element["IGST Amount"],element["IGST %"],element["Unit Price"],element["Amount"],element["Amount with tax"]]);
+    sheet.addRow([element["Barcode"],element["Bill Number"],element["Brand"],element["Product Name"],element["Vendor Name"],element[ "Category"],element["Sub Category"],element["HSN"],element["Expiry"],element["Quantity"],element["MRP"],element["CGST Amount"],element["CGST %"],element["SGST Amount"],element["SGST %"],element["IGST Amount"],element["IGST %"],element["Purchase Price"],element["Taxable Amount"],element["Amount with tax"]]);
     });
    
-
+    sheet.columns.forEach((column:any) => {
+      const lengths = column.values.map(v => v.toString().length);
+      const maxLength = Math.max(...lengths.filter(v => typeof v === 'number'));
+      column.width = maxLength;
+    });
 
     workbook.xlsx.writeBuffer().then(data=>{
       let blob = new Blob([data],{
@@ -162,15 +190,15 @@ public exportAsExcelFile(fileName:string,List:any[],sheet:string): void {
     sheet.addRow([`Report Type- ${body.reportName}`])
     sheet.addRow([`Store Name - ${body.warehouseName.name}`])
     sheet.addRow([` `])
-    const header:any = ["Customer Order Id", "Customer Name","Store Name","Payment Mode","Discount Type","Quantity","GST"," ","Amount"," ","Order count"];
+    const header:any = ["Barcode", "Customer Order Id","Customer Name","Store Name","Brand","Category Name","Sub Category Name","Payment Mode","Discount Type","Quantity","MRP","Purchase Price","Selling Price","GST"," ","Amount"," "];
     let heading=sheet.addRow(header);
     heading.font = { family: 4, size: 10, bold: true };
     heading.alignment = { horizontal: 'center' }
     let subHeader:any = [];
-    subHeader[7] = 'CGST';
-    subHeader[8] = 'SGST';
-    subHeader[9] = 'Total Discount';
-    subHeader[10] = 'Total Amount';
+    subHeader[14] = 'CGST';
+    subHeader[15] = 'SGST';
+    subHeader[16] = 'Total Discount';
+    subHeader[17] = 'Total Amount';
     
     let subhas =  sheet.addRow(subHeader);
 
@@ -178,20 +206,30 @@ public exportAsExcelFile(fileName:string,List:any[],sheet:string): void {
     subhas.alignment = { horizontal: 'center' }
     sheet.mergeCells('A1:G1');
     sheet.mergeCells('A2:G2');
-    sheet.mergeCells('G4:H4');
-    sheet.mergeCells('I4:J4');
+    sheet.mergeCells('N4:O4');
+    sheet.mergeCells('P4:Q4');
     sheet.mergeCells('A4:A5');
     sheet.mergeCells('B4:B5');
     sheet.mergeCells('C4:C5');
     sheet.mergeCells('D4:D5');
     sheet.mergeCells('E4:E5');
     sheet.mergeCells('F4:F5');
+    sheet.mergeCells('G4:G5');
+    sheet.mergeCells('H4:H5');
+    sheet.mergeCells('I4:I5');
+    sheet.mergeCells('J4:J5');
     sheet.mergeCells('K4:K5');
+    sheet.mergeCells('L4:L5');
+    sheet.mergeCells('M4:M5');
     json.forEach(element => {
-    sheet.addRow([element["Customer Order Id"],element[ "Customer Name"],element["Store Name"],element["Payment Mode"],element["Discount Type"],element["Quantity"],element["CGST"],element["SGST"],element["Total Discount"],element["Total Amount"],element["Order count"]]);
+    sheet.addRow([element["Barcode"],element["Customer Order Id"],element[ "Customer Name"],element["Store Name"],element["Brand"],element["Category Name"],element["Sub Category Name"],element["Payment Mode"],element["Discount Type"],element["Quantity"],element["MRP"],element['Purchase Price'],element["Selling Price"],element["CGST"],element["SGST"],element["Total Discount"],element["Total Amount"]]);
     });
    
-
+    sheet.columns.forEach((column:any) => {
+      const lengths = column.values.map(v => v.toString().length);
+      const maxLength = Math.max(...lengths.filter(v => typeof v === 'number'));
+      column.width = maxLength;
+    });
 
     workbook.xlsx.writeBuffer().then(data=>{
       let blob = new Blob([data],{
@@ -250,6 +288,233 @@ public exportAsExcelFile(fileName:string,List:any[],sheet:string): void {
     });
    
 
+
+    workbook.xlsx.writeBuffer().then(data=>{
+      let blob = new Blob([data],{
+        type: EXCEL_TYPE
+      })
+      FileSaver.saveAs(blob, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+    })
+   
+  }
+  commanSalseReport(fileName,json,body){
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet('My Sheet');
+  
+    sheet.addRow([`Report Type- ${body.reportName}`])
+    sheet.addRow([`Store Name - ${body.warehouseName.name}`])
+    sheet.addRow([`Type- ${body.report_type}`])
+    sheet.addRow([` `])
+
+    const header:any = Object.keys(json[0])
+    let heading=sheet.addRow(header);
+    heading.eachCell((cell, number) => {
+
+      cell.font = { family: 4, size: 12, bold: true };
+      cell.alignment = { horizontal: 'center' }
+    })
+
+    sheet.mergeCells('A1:G1');
+    sheet.mergeCells('A2:G2');
+    sheet.mergeCells('A3:G3');
+
+    json.forEach((row: any) => {
+      sheet.addRow(Object.values(row))
+    })
+   
+    sheet.columns.forEach((column:any) => {
+      const lengths = column.values.map(v => v.toString().length);
+      const maxLength = Math.max(...lengths.filter(v => typeof v === 'number'));
+      column.width = maxLength;
+    });
+
+    workbook.xlsx.writeBuffer().then(data=>{
+      let blob = new Blob([data],{
+        type: EXCEL_TYPE
+      })
+      FileSaver.saveAs(blob, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+    })
+   
+  }
+  OrderReport(fileName,json,body){
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet('My Sheet');
+  
+    sheet.addRow([`Report Type- ${body.reportName}`])
+    sheet.addRow([`Store Name - ${body.warehouseName.name}`])
+    sheet.addRow([` `])
+    const header:any = ['Order ID', 'Customer Name','Store Name','Quantity','Discount Type','Total Discount','GST',' ','Profit',' ','Price','Created Date','No of Products'];
+    let heading=sheet.addRow(header);
+    heading.eachCell((cell, number) => {
+
+      cell.font = { family: 4, size: 12, bold: true };
+      cell.alignment = { horizontal: 'center' }
+    })
+    let subHeader:any = [];
+    subHeader[7] = 'CGST %';
+    subHeader[8] = 'SGST %';
+    subHeader[9] = 'Profit %';
+    subHeader[10] = 'Profit(Rs)';
+    
+    let subhas =  sheet.addRow(subHeader);
+
+    subhas.eachCell((cell, number) => {
+
+      cell.font = { family: 4, size: 12, bold: true };
+      cell.alignment = { horizontal: 'center' }
+    })
+    sheet.mergeCells('A1:G1');
+    sheet.mergeCells('A2:G2');
+    sheet.mergeCells('G4:H4');
+    sheet.mergeCells('I4:J4');
+    sheet.mergeCells('A4:A5');
+    sheet.mergeCells('B4:B5');
+    sheet.mergeCells('C4:C5');
+    sheet.mergeCells('D4:D5');
+    sheet.mergeCells('E4:E5');
+    sheet.mergeCells('F4:F5');
+    sheet.mergeCells('K4:K5');
+    sheet.mergeCells('L4:L5');
+    sheet.mergeCells('M4:M5');
+    json.forEach((row: any) => {
+      let temrow =sheet.addRow([row["Order ID"],row["Customer Name"],row["Store Name"],row["Quantity"],row["Discount Type"],row["Total Discount"],row["CGST"],row["SGST"],row["Profit"],row["Profit(Rs)"],row["Price"],row["Created Date"],row["No of Products"]])
+   if(row['isLoss']==1){
+    temrow.fill = {
+      type: "pattern",
+      pattern: "solid",
+      fgColor: {
+        argb: "FFFF7D7D"
+      },
+      bgColor: {
+        argb: "FF000000"
+      }
+    }
+   }
+   
+    })
+    sheet.columns.forEach((column:any) => {
+      const lengths = column.values.map(v => v.toString().length);
+      const maxLength = Math.max(...lengths.filter(v => typeof v === 'number'));
+      column.width = maxLength;
+    });
+
+
+    workbook.xlsx.writeBuffer().then(data=>{
+      let blob = new Blob([data],{
+        type: EXCEL_TYPE
+      })
+      FileSaver.saveAs(blob, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+    })
+   
+  }
+  yearOverYeraReport(fileName,json,body){
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet('My Sheet');
+  
+    sheet.addRow([`Report Type- ${body.reportName}`])
+    sheet.addRow([`Store Name - ${body.warehouseName.name}`])
+    sheet.addRow([`Type- ${body.report_type}-${body.year}`])
+    sheet.addRow([` `])
+
+    const header:any = Object.keys(json[0])
+    let heading=sheet.addRow(header);
+    heading.eachCell((cell, number) => {
+
+      cell.font = { family: 4, size: 12, bold: true };
+      cell.alignment = { horizontal: 'center' }
+    })
+
+    sheet.mergeCells('A1:G1');
+    sheet.mergeCells('A2:G2');
+    sheet.mergeCells('A3:G3');
+
+    json.forEach((row: any) => {
+      sheet.addRow(Object.values(row))
+    })
+   
+    sheet.columns.forEach((column:any) => {
+      const lengths = column.values.map(v => v.toString().length);
+      const maxLength = Math.max(...lengths.filter(v => typeof v === 'number'));
+      column.width = maxLength;
+    });
+
+    workbook.xlsx.writeBuffer().then(data=>{
+      let blob = new Blob([data],{
+        type: EXCEL_TYPE
+      })
+      FileSaver.saveAs(blob, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+    })
+   
+  }
+  gstR1Report(fileName,json,body){
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet('My Sheet');
+  
+    sheet.addRow([`Report Type- ${body.reportName}`])
+    sheet.addRow([`Store Name - ${body.warehouseName.name}`])
+    sheet.addRow([`Type- ${body.reportType}`])
+    sheet.addRow([` `])
+
+    const header:any = Object.keys(json[0])
+    let heading=sheet.addRow(header);
+    heading.eachCell((cell, number) => {
+
+      cell.font = { family: 4, size: 12, bold: true };
+      cell.alignment = { horizontal: 'center' }
+    })
+
+    sheet.mergeCells('A1:G1');
+    sheet.mergeCells('A2:G2');
+    sheet.mergeCells('A3:G3');
+
+    json.forEach((row: any) => {
+      sheet.addRow(Object.values(row))
+    })
+   
+    sheet.columns.forEach((column:any) => {
+      const lengths = column.values.map(v => v.toString().length);
+      const maxLength = Math.max(...lengths.filter(v => typeof v === 'number'));
+      column.width = maxLength;
+    });
+
+    workbook.xlsx.writeBuffer().then(data=>{
+      let blob = new Blob([data],{
+        type: EXCEL_TYPE
+      })
+      FileSaver.saveAs(blob, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+    })
+   
+  }
+  gstR2Report(fileName,json,body){
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet('My Sheet');
+  
+    sheet.addRow([`Report Type- ${body.reportName}`])
+    sheet.addRow([`Store Name - ${body.warehouseName.name}`])
+    sheet.addRow([`Type- ${body.reportType}`])
+    sheet.addRow([` `])
+
+    const header:any = Object.keys(json[0])
+    let heading=sheet.addRow(header);
+    heading.eachCell((cell, number) => {
+
+      cell.font = { family: 4, size: 12, bold: true };
+      cell.alignment = { horizontal: 'center' }
+    })
+
+    sheet.mergeCells('A1:G1');
+    sheet.mergeCells('A2:G2');
+    sheet.mergeCells('A3:G3');
+
+    json.forEach((row: any) => {
+      sheet.addRow(Object.values(row))
+    })
+   
+    sheet.columns.forEach((column:any) => {
+      const lengths = column.values.map(v => v.toString().length);
+      const maxLength = Math.max(...lengths.filter(v => typeof v === 'number'));
+      column.width = maxLength;
+    });
 
     workbook.xlsx.writeBuffer().then(data=>{
       let blob = new Blob([data],{

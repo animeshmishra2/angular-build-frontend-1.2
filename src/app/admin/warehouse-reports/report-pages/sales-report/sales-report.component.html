@@ -7,69 +7,134 @@
                 Sales Report
             </div>
             <div class="flex gap-1 mr-3">
-                <p-dropdown [options]="stores" class="p-1" optionValue="idstore_warehouse"
-                    optionLabel="name" [(ngModel)]="selectedStore"
-                    (onChange)="filterByStore($event)"
+                <p-dropdown [options]="stores" class="p-1" optionValue="idstore_warehouse" optionLabel="name"
+                    [(ngModel)]="selectedStore" (onChange)="filterByStore($event)"
                     placeholder="Select a Store"></p-dropdown>
-                <!-- <p-dropdown [options]="warehouses" class="p-1" optionValue="idstore_warehouse"
-                    optionLabel="name" [(ngModel)]="selectedWarehouse"
-                    (onChange)="filterBywarehouse($event)"
-                    placeholder="Select an Warehouses"></p-dropdown> -->
-            </div> 
+                <p-dropdown [options]="warehouses" class="p-1" optionValue="idstore_warehouse" optionLabel="name"
+                    [(ngModel)]="selectedWarehouse" (onChange)="filterBywarehouse($event)"
+                    placeholder="Select an Warehouses"></p-dropdown>
+            </div>
         </div>
-        <div class="pt-2">
-            <p-dropdown [options]="fieldsArray" class="p-1" optionValue="id"
-            optionLabel="name" [(ngModel)]="params.field"
-            (onChange)="selectFields($event)"
-            placeholder="Select a fields"></p-dropdown>
-            <mat-form-field>
-                <mat-icon matPrefix>search</mat-icon>
-                <input [disabled]="!params.field" [(ngModel)]="searchTerm" matInput type="search" (input)="search($any($event.target).value)" placeholder="search here" class="search-input" style="height: 100%;">
-            </mat-form-field>
+        <div class="pt-2" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center;">
+                <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
+                    (click)="clearAllData()"></button>
+                    <p-dropdown [options]="reportArray" class="p-1" optionValue="id" optionLabel="name"
+                    [(ngModel)]="params.report_type" (onChange)="selectReport($event)"
+                    placeholder="Select a Report"></p-dropdown>
+                <p-dropdown [options]="fieldsArray" class="p-1" optionValue="id" optionLabel="name"
+                    [(ngModel)]="params.field" (onChange)="selectFields($event)"
+                    placeholder="Select a field"></p-dropdown>
+                <mat-form-field style="margin-top: 15px ">
+                    <mat-icon matPrefix>search</mat-icon>
+                    <input [disabled]="!params.field" [(ngModel)]="searchTerm" matInput type="search"
+                        placeholder="search here" class="search-input" style="height: 100%;">
+                </mat-form-field>
+                <button pButton label="Search" class="p-button-outlined p-button-success" icon="pi pi-search"
+                    (click)="search()" [disabled]="!searchTerm"></button>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <p-calendar [(ngModel)]="dateRange" selectionMode="range" placeholder="Choose your date range"
+                    [readonlyInput]="true" [appendTo]="'body'"></p-calendar>
+                <button pButton label="Search" class="p-button-outlined p-button-success" icon="pi pi-search"
+                    (click)="filterByDate()" [disabled]="!dateRange"></button>
+                <button mat-raised-button class="success-button" class="resizebtn" (click)="exportExcel()">
+                    <mat-icon>article</mat-icon>
+                    Export Excel
+                </button>
+            </div>
+
         </div>
-    
-        <div class="p-2">
-       
-            <p-table #dt1 [value]="tableData" responsiveLayout="scroll"
-                styleClass="p-datatable-sm p-datatable-gridlines"        [paginator]="false" [rows]="10" [showCurrentPageReport]="true" class="m-1"
-                [totalRecords]="totalRecords" [first]="first" [loading]="loading"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
-                <ng-template pTemplate="caption" >
-                    <div class="flex justify-content-between">
-                        <div class="flex gap-2">
-                            <button pButton label="Clear" class="p-button-outlined"
-                                icon="pi pi-filter-slash" (click)="clearAllData(dt1)" ></button>
-                            <p-calendar [(ngModel)]="dateRange" selectionMode="range"
-                                placeholder="Choose your date range" [readonlyInput]="true"
-                                [appendTo]="'body'"></p-calendar>
-                            <button pButton label="Search" class="p-button-outlined p-button-success"
-                                icon="pi pi-search" (click)="filterByDate()" [disabled]="!dateRange"></button>
-                        </div>
-                        <div class="flex gap-2">
-                            <button mat-raised-button class="success-button" class="resizebtn"
-                                (click)="exportExcel()">
-                                <mat-icon>article</mat-icon>
-                                Export Excel
-                            </button>
-                            <!-- <button mat-raised-button color="error" class="resizebtn"
-                                (click)="exportPdf()">
-                                <mat-icon>picture_as_pdf</mat-icon>
-                                Export PDF
-                            </button> -->
+        <div class="pt-1" style="display: flex; align-items: center; flex-direction: row;flex-wrap:wrap; justify-content: center;">
+
+            <mat-card class="example-card">
+                <mat-card-title class="example-header">Total Products</mat-card-title>
+                <mat-card-content class="example-content">
+                    <div style="display: flex;justify-content: center;">
+                        <img src="../../../../../assets/icons/image (2).png" alt="">
+                    </div>
+                    <div class="example-text">
+                        <div class="example-row" style="display: flex;justify-content: center;">
+                            <span class="example-value">{{stats?.total_product | number:'1.0'}}</span>
                         </div>
                     </div>
-                </ng-template>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="example-card ">
+                <mat-card-title class="example-header">Total Orders</mat-card-title>
+                <mat-card-content class="example-content">
+                    <div style="display: flex;justify-content: center;">
+                        <img src="../../../../../assets/icons/image (2).png" alt="">
+                    </div>
+                    <div class="example-text">
+                        <div class="example-row" style="display: flex;justify-content: center;">
+                            <span class="example-value">{{stats?.total_order| number:'1.0'}}</span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="example-card ">
+                <mat-card-title class="example-header">Total Salled Quantity</mat-card-title>
+                <mat-card-content class="example-content">
+                    <div style="display: flex;justify-content: center;">
+                        <img src="../../../../../assets/icons/image (2).png" alt="">
+                    </div>
+                    <div class="example-text">
+                        <div class="example-row" style="display: flex;justify-content: center;">
+                            <span class="example-value">{{stats?.total_selled_quantiy | number:'1.0'}}</span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+
+            <mat-card class="example-card ">
+                <mat-card-title class="example-header">Total Salled Amount</mat-card-title>
+                <mat-card-content class="example-content">
+                    <div style="display: flex;justify-content: center;">
+                        <img src="../../../../../assets/icons/image (2).png" alt="">
+                    </div>
+                    <div class="example-text">
+                        <div class="example-row" style="display: flex;justify-content: center;">
+                            <span class="example-value">{{stats?.total_selled_quantiy_amount| number:'1.2-2'}}</span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+
+
+        </div>
+        <div class="ml-2" style="display: flex; align-items: center; justify-content: space-between;">
+            <div class="h1-txt p-2">
+                Sales Report Table
+            </div>
+
+        </div>
+
+        <div class="p-2" *ngIf="params.report_type=='artical_wise'">
+
+            <p-table #dt1 [value]="tableData" responsiveLayout="scroll"
+                styleClass="p-datatable-sm p-datatable-gridlines" [paginator]="false" [rows]="10"
+                [showCurrentPageReport]="true" class="m-1" [totalRecords]="totalRecords" [first]="first"
+                [loading]="loading" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
                 <ng-template pTemplate="header">
                     <tr>
+                        <th rowspan="2">Barcode</th>
                         <th rowspan="2">Customer Order Id</th>
                         <th rowspan="2">Customer Name</th>
                         <th rowspan="2">Store Name</th>
+                        <th rowspan="2">Brand</th>
+                        <th rowspan="2">Category Name</th>
+                        <th rowspan="2">Sub Category Name</th>
                         <th rowspan="2">Payment Mode</th>
                         <th rowspan="2">Discount Type</th>
                         <th rowspan="2">Quantity</th>
+                        <th rowspan="2">MRP</th>
+                        <th rowspan="2">Purchase Price</th>
+                        <th rowspan="2">Selling Price</th>
                         <th class="text-center" colspan="2">GST</th>
                         <th class="text-center" colspan="2">Amount</th>
-                        <th rowspan="2">Order Details</th>
                     </tr>
                     <tr class="text-center">
                         <th>CGST</th>
@@ -80,19 +145,24 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-record>
                     <tr>
+                        <td>{{ record.barcode }}</td>
                         <td>{{ record.idcustomer_order }}</td>
-                        <td>{{ record.name}}</td>
+                        <td>{{ record.customer_name}}</td>
                         <td>{{ record.store}}</td>
+                        <td>{{ record.brand_name}}</td>
+                        <td>{{ record.category_name}}</td>
+                        <td>{{ record.sub_category_name}}</td>
                         <td>{{ record.pay_mode}}</td>
                         <td>{{ record.discount_type}}</td>
-                        <td>{{ record.total_quantity }}</td>
-                        <td>{{ record.total_cgst | number:'1.2-2'  }}</td>
+                        <td>{{ record.quantity }}</td>
+                        <td>{{ record.mrp }}</td>
+                        <td>{{ record.purchase_price  | number:'1.2-2' }}</td>
+                        <td>{{ record.selling_price  | number:'1.2-2' }}</td>
+                        <td>{{ record.total_cgst | number:'1.2-2' }}</td>
                         <td>{{ record.total_sgst | number:'1.2-2'}}</td>
-                        <td>{{ record.total_discount | number:'1.2-2'}}</td>
+                        <td>{{ record.discount | number:'1.2-2'}}</td>
                         <td>{{ record.total_price | number:'1.2-2'}}</td>
-                       <td style="text-align: center">
-                            <button pButton type="button" class="p-button-secondary" icon="pi pi-book" (click)="OrderDetails(record)"></button>
-                        </td>
+                  
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
@@ -104,14 +174,167 @@
                     </tr>
                 </ng-template>
             </p-table>
-            <p-paginator
-      
-            [first]="first"
-            [rows]="10" [showCurrentPageReport]="true"
-            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-            [totalRecords]="totalRecords"
-            (onPageChange)="paginate($event)"
-          ></p-paginator>
+            <p-paginator [first]="first" [rows]="10" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [totalRecords]="totalRecords" (onPageChange)="paginate($event)"></p-paginator>
+        </div>
+        <div class="p-2" *ngIf="params.report_type=='inventory_status'">
+
+            <p-table #dt1 [value]="tableData" responsiveLayout="scroll"
+                styleClass="p-datatable-sm p-datatable-gridlines" [paginator]="false" [rows]="10"
+                [showCurrentPageReport]="true" class="m-1" [totalRecords]="totalRecords" [first]="first"
+                [loading]="loading" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th rowspan="1">Barcode</th>
+                        <th rowspan="1">Product Name</th>
+                        <th rowspan="1">Brand</th>
+                        <th rowspan="1">Category Name</th>
+                        <th rowspan="1">Sub Category Name</th>
+                        <th rowspan="1">Stock Quantity</th>
+                        <th rowspan="1">Stock Value</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-record>
+                    <tr>
+                        <td>{{ record.barcode}}</td>
+                        <td>{{ record.name}}</td>
+                        <td>{{ record.brand_name}}</td>
+                        <td>{{ record.category_name}}</td>
+                        <td>{{ record.sub_category_name}}</td>
+                        <td>{{ record.stock_quantity | number:'1.2-2' }}</td>
+                        <td>{{ record.stock_value | number:'1.2-2' }}</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td class="text-center" colspan="11">No Records Found</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center" colspan="11">Please select Store or Inventory</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <p-paginator [first]="first" [rows]="10" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [totalRecords]="totalRecords" (onPageChange)="paginate($event)"></p-paginator>
+        </div>
+        <div class="p-2" *ngIf="params.report_type=='top_selling'">
+
+            <p-table #dt1 [value]="tableData" responsiveLayout="scroll"
+                styleClass="p-datatable-sm p-datatable-gridlines" [paginator]="false" [rows]="10"
+                [showCurrentPageReport]="true" class="m-1" [totalRecords]="totalRecords" [first]="first"
+                [loading]="loading" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th rowspan="1">Rank</th>
+                        <th rowspan="1">Barcode</th>
+                        <th rowspan="1">Product Name</th>
+                        <th rowspan="1">Brand</th>
+                        <th rowspan="1">Category Name</th>
+                        <th rowspan="1">Sub Category Name</th>
+                        <th rowspan="1">Units Sold</th>
+                        <th rowspan="1">Revenue</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-record>
+                    <tr>
+                        <td>{{ record.rank}}</td>
+                        <td>{{ record.barcode}}</td>
+                        <td>{{ record.name}}</td>
+                        <td>{{ record.brand_name}}</td>
+                        <td>{{ record.category_name}}</td>
+                        <td>{{ record.sub_category_name}}</td>
+                        <td>{{ record.units_sold | number:'1.2-2' }}</td>
+                        <td>{{ record.revenue | number:'1.2-2' }}</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td class="text-center" colspan="11">No Records Found</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center" colspan="11">Please select Store or Inventory</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <p-paginator [first]="first" [rows]="10" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [totalRecords]="totalRecords" (onPageChange)="paginate($event)"></p-paginator>
+        </div>
+        <div class="p-2" *ngIf="params.report_type=='category_wise'">
+
+            <p-table #dt1 [value]="tableData" responsiveLayout="scroll"
+                styleClass="p-datatable-sm p-datatable-gridlines" [paginator]="false" [rows]="10"
+                [showCurrentPageReport]="true" class="m-1" [totalRecords]="totalRecords" [first]="first"
+                [loading]="loading" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th rowspan="1">Product Name</th>
+                        <th rowspan="1">Units Sold</th>
+                        <th rowspan="1">Revenue</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-record>
+                    <tr>
+                        <td>{{ record.name}}</td>
+                        <td>{{ record.units_sold}}</td>
+                        <td>{{ record.revenue | number:'1.2-2' }}</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td class="text-center" colspan="11">No Records Found</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center" colspan="11">Please select Store or Inventory</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <p-paginator [first]="first" [rows]="10" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [totalRecords]="totalRecords" (onPageChange)="paginate($event)"></p-paginator>
+        </div>
+        <div class="p-2" *ngIf="params.report_type=='product_wise'">
+
+            <p-table #dt1 [value]="tableData" responsiveLayout="scroll"
+                styleClass="p-datatable-sm p-datatable-gridlines" [paginator]="false" [rows]="10"
+                [showCurrentPageReport]="true" class="m-1" [totalRecords]="totalRecords" [first]="first"
+                [loading]="loading" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th rowspan="1">Barcode</th>
+                        <th rowspan="1">Product Name</th>
+                        <th rowspan="1">Brand</th>
+                        <th rowspan="1">Category Name</th>
+                        <th rowspan="1">Sub Category Name</th>
+                        <th rowspan="1">Units Sold</th>
+                        <th rowspan="1">Revenue</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-record>
+                    <tr>
+                        <td>{{ record.barcode}}</td>
+                        <td>{{ record.name}}</td>
+                        <td>{{ record.brand_name}}</td>
+                        <td>{{ record.category_name}}</td>
+                        <td>{{ record.sub_category_name}}</td>
+                        <td>{{ record.units_sold }}</td>
+                        <td>{{ record.revenue | number:'1.2-2' }}</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td class="text-center" colspan="11">No Records Found</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center" colspan="11">Please select Store or Inventory</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <p-paginator [first]="first" [rows]="10" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [totalRecords]="totalRecords" (onPageChange)="paginate($event)"></p-paginator>
         </div>
     </div>
 </div>

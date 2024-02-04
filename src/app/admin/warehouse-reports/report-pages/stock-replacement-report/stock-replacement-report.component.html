@@ -4,7 +4,7 @@
         <div class="flex justify-content-between">
             <div class="h1-txt p-2">
                 <a appBackButton><mat-icon>arrow_back</mat-icon></a>
-                Stock Replacement Report
+                Stock Report
             </div>
             <div class="flex gap-1 mr-3">
                 <p-dropdown [options]="stores" class="p-1" optionValue="idstore_warehouse"
@@ -17,15 +17,20 @@
                     placeholder="Select an Warehouses"></p-dropdown>
             </div> 
         </div>
-        <div class="pt-2">
-            <p-dropdown [options]="fieldsArray" class="p-1" optionValue="id"
-            optionLabel="name" [(ngModel)]="params.field"
-            (onChange)="selectFields($event)"
-            placeholder="Select a fields"></p-dropdown>
-            <mat-form-field>
+        <div class="pt-2" style="display: flex; align-items: center;">
+            <p-dropdown [options]="reportArray" class="p-1" optionValue="id" optionLabel="name"
+                [(ngModel)]="params.type" (onChange)="selectReport($event)"
+                placeholder="Select a Report"></p-dropdown>
+            <p-dropdown  [options]="fieldsArray" class="p-1" optionValue="id"
+                optionLabel="name" [(ngModel)]="params.field" (onChange)="selectFields($event)"
+                placeholder="Select a fields"></p-dropdown>
+            <mat-form-field style="margin-top: 15px ">
                 <mat-icon matPrefix>search</mat-icon>
-                <input [disabled]="!params.field" [(ngModel)]="searchTerm" matInput type="search" (input)="search($any($event.target).value)" placeholder="search here" class="search-input" style="height: 100%;">
+                <input  [(ngModel)]="searchTerm" matInput type="search"
+                    placeholder="search here" class="search-input" style="height: 100%;">
             </mat-form-field>
+            <button pButton label="Search" class="p-button-outlined p-button-success" icon="pi pi-search"
+                (click)="search()" [disabled]="!searchTerm"></button>
         </div>
     
         <div class="p-2">
@@ -61,6 +66,7 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
+                        <th rowspan="2">Barcode</th>
                         <th rowspan="2">Product Master ID</th>
                         <th rowspan="2">Product Name</th>
                         <th rowspan="2">Remaning Product</th>
@@ -71,6 +77,7 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-record>
                     <tr>
+                        <td>{{ record.barcode }}</td>
                         <td>{{ record.idproduct_master }}</td>
                         <td>{{ record.name}}</td>
                         <td>{{ record.remaining_product}}</td>

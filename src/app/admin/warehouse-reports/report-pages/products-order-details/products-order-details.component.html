@@ -4,7 +4,7 @@
         <div class="flex justify-content-between">
             <div class="h1-txt p-2">
                 <a appBackButton><mat-icon>arrow_back</mat-icon></a>
-                Order Details Report
+                Products Order Details
             </div>
         </div>
         <div class="p-2">
@@ -15,23 +15,33 @@
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
                 <ng-template pTemplate="header">
                     <tr>
+                        <th rowspan="1">Inventory ID</th>
                         <th rowspan="1">Product Name</th>
+                        <th rowspan="1">HSN Code</th>
                         <th rowspan="1">Quantity</th>
+                        <th rowspan="1">Package Name</th>
                         <th rowspan="1">CGST</th>
                         <th rowspan="1">SGST</th>
+                        <th rowspan="1">profit %</th>
+                        <th rowspan="1">profit(Rs)</th>
                         <th rowspan="1">Discount</th>
                         <th rowspan="1">Price</th>
                     
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-record>
-                    <tr>
-                        <td>{{ record.name }}</td>
-                        <td>{{ record.quantity | number:'1.2-2'}}</td>
-                        <td>{{ record.total_cgst | number:'1.2-2'}}</td>
-                        <td>{{ record.total_sgst | number:'1.2-2'}}</td>
+                    <tr [ngClass]="{'low-rated':record.billed_in_loss==1}">
+                        <td>{{ record.idinventory}}</td>
+                        <td>{{ record.product_name}}</td>
+                        <td>{{ record.HSN_code}}</td>
+                        <td>{{ record.quantity }}</td>
+                        <td>{{ record.package_name}}</td>
+                        <td>{{ record.cgst | number:'1.2-2'}}</td>
+                        <td>{{ record.sgst | number:'1.2-2'}}</td>
+                        <td>{{ record.profit_pr | number:'1.2-2'}}</td>
+                        <td>{{ record.profit_rs | number:'1.2-2'}}</td>
                         <td>{{ record.discount | number:'1.2-2'}}</td>
-                        <td>{{ record.total_price | number:'1.2-2'}}</td>
+                        <td>{{ record.price | number:'1.2-2'}}</td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">

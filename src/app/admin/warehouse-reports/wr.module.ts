@@ -51,6 +51,8 @@ import { OrderDetailsReportComponent } from './report-pages/order-details-report
 import { CogsReportComponent } from './report-pages/cogs-report/cogs-report.component';
 import { PerformanceReportComponent } from './report-pages/performance-report/performance-report.component';
 import { StockReplacementReportComponent } from './report-pages/stock-replacement-report/stock-replacement-report.component';
+import { ProductsOrderDetailsComponent } from './report-pages/products-order-details/products-order-details.component';
+import { InventoryValueReportComponent } from './report-pages/inventory-value-report/inventory-value-report.component';
 
 @NgModule({
   declarations: [
@@ -73,6 +75,8 @@ import { StockReplacementReportComponent } from './report-pages/stock-replacemen
     CogsReportComponent,
     PerformanceReportComponent,
     StockReplacementReportComponent,
+    ProductsOrderDetailsComponent,
+    InventoryValueReportComponent,
   ],
   imports: [
     CommonModule,

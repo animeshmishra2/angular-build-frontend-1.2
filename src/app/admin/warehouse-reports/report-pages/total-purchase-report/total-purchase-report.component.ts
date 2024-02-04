@@ -24,8 +24,10 @@ export class TotalPurchaseReportComponent implements OnInit {
     field: '',
     first:0,
     searchTerm: '',
-    rows:10
+    rows:10,
+    idstore_warehouse: 1
   }
+  stats: any;
   from_date: any;
   to_date: any;
   todayDate = new Date()
@@ -38,6 +40,14 @@ export class TotalPurchaseReportComponent implements OnInit {
     {
       id: "brand",
       name: "Brand"
+    },
+    {
+      name: "Bill No",
+      id: "bill_no"
+    },
+    {
+      id: "barcode",
+      name: "Barcode"
     },
     {
       id: "vendor",
@@ -56,9 +66,14 @@ export class TotalPurchaseReportComponent implements OnInit {
       id: "product"
     },
     {
-      name: "Barcode",
-      id: "barcode"
+      name: "Expiry",
+      id: "expiry"
+    },
+    {
+      name: "HSN",
+      id: "hsn"
     }
+    
   ]
   constructor(private apiService: ReportApiService,
     private spinner: NgxSpinnerService,
@@ -77,10 +92,11 @@ export class TotalPurchaseReportComponent implements OnInit {
     excelParams.first = 0
     excelParams.rows = this.totalRecords
     this.loading = true
+    this.getPurchaseOrderReportStateDate()
     this.apiService.getPurchaseOrderReport(excelParams).subscribe(
       (response) => {
         let temp = response.data;
-        delete temp.gross_totald
+        delete temp['gross_total'];
         let tableData: any = []
         if (Object.values(temp) && Object.values(temp).length > 0) {
 
@@ -93,29 +109,26 @@ export class TotalPurchaseReportComponent implements OnInit {
 
         const exceldata = tableData.map(x => {
           return {
+            "Barcode": x.barcode,
+            "Bill Number": x.bill_number,
+            "Brand": x.brand_name,
             "Product Name": x.name,
             "Vendor Name": x.vendor_name,
             "Category": x.category_name,
             "Sub Category": x.sub_category_name,
-            "Brand": x.brand_name,
             "HSN": x.hsn,
-            "Barcode": x.barcode,
-            "MRP": x.mrp,
-            "Taxable Purchase Price (Rs)": x.unit_purchase_price,
-            "Purchase Price with Tax": (x.unit_purchase_price + (x.cgst_amount + x.sgst_amount)/x.quantity),
-            "Purchase Margin (%)": (((x.mrp -((x.unit_purchase_price + (x.cgst_amount + x.sgst_amount)/x.quantity))))/x.mrp) * 100 ,
+            "Expiry": x.expiry,
             "Quantity": x.quantity,
+            "MRP": x.mrp,
             "CGST Amount":x.cgst_amount?x.cgst_amount:0,
             "CGST %": x.cgst_amount?x.cgst_amount:0,
             "SGST Amount": x.sgst_amount?x.sgst_amount:0,
             "SGST %": x.sgst?x.sgst:0,
             "IGST Amount": x.igst_amount?x.igst_amount:0,
             "IGST %": x.igst?x.igst:0,
-            "Selling Price": x.selling_price,
-            "Unit Price": x.unit_purchase_price,
-            "Amount": x.amount,
-            "Amount with tax": x.total_amount_with_tax
-
+            "Purchase Price": x.purchase_price,
+            "Taxable Amount": x.taxable_amount,
+            "Amount with tax": x.amount_with_tax
           }
         })
         let body: any = {
@@ -153,6 +166,7 @@ export class TotalPurchaseReportComponent implements OnInit {
     event.clear()
     this.dateRange = undefined
     this.selectedWarehouse = 1
+    this.searchTerm = undefined
     this.selectedStore = undefined
     this.params = {
       field: '',
@@ -167,10 +181,11 @@ export class TotalPurchaseReportComponent implements OnInit {
     this.params.first = (event.first ? event.first : 0)
     this.params.rows = (event.first ? event.first : 0) + (event.rows ? event.rows : 10)
     this.loading = true
+    this.getPurchaseOrderReportStateDate()
     this.apiService.getPurchaseOrderReport(this.params).subscribe(
       (response) => {
         let temp = response.data;
-        delete temp.gross_totald
+        delete temp['gross_total'];
         if (Object.values(temp) && Object.values(temp).length > 0) {
 
           this.tableData = Object.values(temp);
@@ -188,6 +203,7 @@ export class TotalPurchaseReportComponent implements OnInit {
   }
   getPurchaseOrderReport() {
     this.loading = true
+    this.getPurchaseOrderReportStateDate()
     this.apiService.getPurchaseOrderReport(this.params).subscribe(
       (response) => {
         let temp = response.data;
@@ -222,12 +238,12 @@ export class TotalPurchaseReportComponent implements OnInit {
       this.params.start_date = tempdate[0]
       this.params.end_date = tempdate[1]
     }
-
+this.getPurchaseOrderReportStateDate()
     this.loading = true
     this.apiService.getPurchaseOrderReport(this.params).subscribe(
       (response) => {
         let temp = response.data;
-        delete temp.gross_totald
+        delete temp['gross_total'];
         if (Object.values(temp) && Object.values(temp).length > 0) {
 
           this.tableData = Object.values(temp);
@@ -298,13 +314,32 @@ export class TotalPurchaseReportComponent implements OnInit {
   }
   selectFields(event) {
     this.params.field = event.value
+    this.searchTerm = undefined
 
   }
-  search(value) {
-    if (value) {
-      this.params.searchTerm = value
+  search() {
+  
+    if (this.searchTerm) {
+      this.params.searchTerm = this.searchTerm
       this.getPurchaseOrderReport()
     }
 
+  }
+  getPurchaseOrderReportStateDate(): void {
+    let tempStats = JSON.parse(JSON.stringify(this.params))
+    delete tempStats?.first
+    delete tempStats?.rows
+    this.apiService.getPurchaseOrderReportStateDate(tempStats).subscribe(
+      (response) => {
+        this.stats = response?.data
+
+        // this.stats =  Object.entries(response);;
+        // this.spinner.hide();
+      },
+      (error) => {
+        console.error('Error fetching Store List:', error);
+        // this.spinner.hide();
+      }
+    );
   }
 }

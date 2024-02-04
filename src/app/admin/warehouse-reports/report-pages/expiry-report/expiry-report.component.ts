@@ -26,11 +26,11 @@ export class ExpiryReportComponent implements OnInit {
   totalRecords = 0
   pieOptions: any;
   expiryList: any;
-  stores!: Store[];
+  stores!: any;
   dateRange!: any[] | undefined;
-  warehouses!: Warehouse[];
+  warehouses!: any;
   selectedStore?: any = 2;
-  selectedWarehouse?: any;
+  selectedWarehouse?: any=1;
   searchTerm: any = ""
   // stateOptions: any[] = [
   //   { label: 'Product Line Wise', value: 'productLine' },
@@ -77,7 +77,7 @@ export class ExpiryReportComponent implements OnInit {
 
   async ngOnInit() {
     this.fetchWarehouseList();
-    this.fetchStoreList();
+    this.getStoreOntheBehalfOfWarehouse('1')
     await this.getExpiryList();
   }
 
@@ -381,19 +381,20 @@ export class ExpiryReportComponent implements OnInit {
       first: 0,
       rows: 50,
       graph_type: this.value,
-      field: "brand"
+      field: "brand",
+      store_id:2
     }
+    this.searchTerm= undefined
     this.dateRange = undefined
     this.getExpiryList();
   }
   filterByStore(event) {
     this.params.store_id = event.value
-    this.selectedWarehouse = undefined
     this.getExpiryList()
   }
   filterBywarehouse(event) {
     this.params.store_id = event.value
-    this.selectedStore = undefined
+    this.getStoreOntheBehalfOfWarehouse(event?.value?.toString())
     this.getExpiryList()
   }
   selectFields(event) {
@@ -402,8 +403,21 @@ export class ExpiryReportComponent implements OnInit {
     this.params.field = objfield?.field
     this.getExpiryList()
   }
-  search(value) {
-    this.params.searchTerm = value
-    this.getExpiryList()
+  search() {
+    if(this.searchTerm){
+      this.params.searchTerm = this.searchTerm
+      this.getExpiryList()
+    }
+ 
+  }
+  getStoreOntheBehalfOfWarehouse(data) {
+    this.apiService.getStoreOntheBehalfOfWarehouse(data).subscribe(
+      (response) => {
+        this.stores = response;
+      },
+      (error) => {
+        console.error('Error fetching Product Report:', error);
+      }
+    );
   }
 }

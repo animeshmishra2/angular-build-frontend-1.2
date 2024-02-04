@@ -3,16 +3,15 @@ import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ExcelService } from 'src/app/shared/_service/exports/excel.service';
 import { ReportApiService } from 'src/app/shared/_service/report-apis/report-api.service';
-import { Store, Warehouse } from '../inventory-report/inventory-report.component';
+import { Warehouse } from '../inventory-report/inventory-report.component';
 
 @Component({
-  selector: 'app-stock-replacement-report',
-  templateUrl: './stock-replacement-report.component.html',
-  styleUrls: ['./stock-replacement-report.component.scss']
+  selector: 'app-inventory-value-report',
+  templateUrl: './inventory-value-report.component.html',
+  styleUrls: ['./inventory-value-report.component.scss']
 })
-export class StockReplacementReportComponent implements OnInit {
+export class InventoryValueReportComponent implements OnInit {
 
-  
   tableData!: any[];
   totalRecords = 0
   dateRange!: any[] | undefined;
@@ -281,4 +280,5 @@ this.getStockReplacementReport()
     this.getStockReplacementReport()
 
   }
+
 }

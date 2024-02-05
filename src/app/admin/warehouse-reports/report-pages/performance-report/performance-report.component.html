@@ -1,0 +1,148 @@
+<app-header></app-header>
+<div class="wh-reports-container">
+  <div class="main-card">
+    <div class="flex justify-content-between">
+      <div class="h1-txt p-2">
+        <a appBackButton><mat-icon>arrow_back</mat-icon></a>
+        Performance Report
+      </div>
+      <div class="flex gap-1 mr-3">
+        <p-dropdown [options]="stores" class="p-1" optionValue="idstore_warehouse" optionLabel="name"
+          [(ngModel)]="selectedStore" (onChange)="filterByStore($event)" placeholder="Select a Store"></p-dropdown>
+        <p-dropdown [options]="warehouses" class="p-1" optionValue="idstore_warehouse" optionLabel="name"
+          [(ngModel)]="selectedWarehouse" (onChange)="filterBywarehouse($event)"
+          placeholder="Select an Warehouses"></p-dropdown>
+      </div>
+
+    </div>
+    <div style="display: flex;justify-content: space-around;">
+      <mat-card class="user-profile-card" *ngIf="bestVendor" style="width: 80rem; padding: 2rem; text-align: center ;">
+        <div style="justify-content: center; display: flex;">
+          <div mat-card-avatar class="example-header-image"></div>
+        </div>
+        <mat-card-header style="justify-content: center ;" class="mt-2">
+          <mat-card-title>Best Seller</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>Name: {{bestVendor?.name}}</p>
+          <p>Purchase Price: {{bestVendor?.purchase_price}}</p>
+          <p>COGS: {{bestVendor?.cogs}}</p>
+          <p>Inventory Turnover Ratio: {{bestVendor?.inventory_turnover_ratio}}</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="user-profile-card" *ngIf="worstVendor" style="width: 80rem; padding: 2rem; text-align: center ;">
+        <div style="justify-content: center; display: flex;">
+          <div mat-card-avatar class="example-header-image"></div>
+        </div>
+        <mat-card-header style="justify-content: center ;" class="mt-2">
+
+          <mat-card-title>Worst Seller</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>Name: {{worstVendor?.name}}</p>
+          <p>Purchase Price: {{worstVendor?.purchase_price}}</p>
+          <p>COGS: {{worstVendor?.cogs}}</p>
+          <p>Inventory Turnover Ratio: {{worstVendor?.inventory_turnover_ratio}}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="flex" style="justify-content: center !important;">
+      <div class="h1-txt p-2">
+        
+        Year Over Year Report
+      </div>
+
+
+    </div>
+    <div class="pt-2">
+      <p-dropdown [options]="fieldsArray" class="p-1" optionValue="id" optionLabel="name" [(ngModel)]="params.field"
+        (onChange)="selectFields($event)" placeholder="Select a fields"></p-dropdown>
+      <mat-form-field>
+        <mat-icon matPrefix>search</mat-icon>
+        <input [disabled]="!params.field" [(ngModel)]="searchTerm" matInput type="search"
+          (input)="search($any($event.target).value)" placeholder="search here" class="search-input"
+          style="height: 100%;">
+      </mat-form-field>
+    </div>
+
+    <div class="p-2">
+
+      <p-table #dt1 [value]="tableData" responsiveLayout="scroll" styleClass="p-datatable-sm p-datatable-gridlines"
+        [paginator]="false" [rows]="10" [showCurrentPageReport]="true" class="m-1" [totalRecords]="totalRecords"
+        [first]="first" [loading]="loading"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+        <ng-template pTemplate="caption">
+          <div class="flex justify-content-between">
+            <div class="flex gap-2">
+              <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
+                (click)="clearAllData(dt1)"></button>
+                <mat-form-field appearance="fill" class="p-0">
+                  <input matInput [matDatepicker]="dp" placeholder="Month and Year" [formControl]="date" [max]="currentDate" >
+                  <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                  <mat-datepicker #dp
+                                  startView="multi-year"
+                                  (yearSelected)="chosenYearHandler($event, dp)"
+                                 
+                                  panelClass="example-month-picker">
+                  </mat-datepicker>
+                </mat-form-field>
+              <!-- <button pButton label="Search" class="p-button-outlined p-button-success" icon="pi pi-search"
+                (click)="filterByDate()" [disabled]="!dateRange"></button> -->
+            </div>
+            <div class="flex gap-2">
+              <button mat-raised-button class="success-button" class="resizebtn" (click)="exportExcel()">
+                <mat-icon>article</mat-icon>
+                Export Excel
+              </button>
+              <!-- <button mat-raised-button color="error" class="resizebtn"
+                          (click)="exportPdf()">
+                          <mat-icon>picture_as_pdf</mat-icon>
+                          Export PDF
+                      </button> -->
+            </div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th rowspan="2">Barcode</th>
+            <th rowspan="2">Brand Name</th>
+            <th rowspan="2">Product Name</th>
+            <th rowspan="2">Category Name</th>
+            <th rowspan="2">Sub Category Name</th>
+            <th rowspan="2">Sub Sub Category Name</th>
+            <th rowspan="2">Purchase Price</th>
+            <th rowspan="2">Growth</th>
+          </tr>
+
+        </ng-template>
+        <ng-template pTemplate="body" let-record>
+          <tr [ngClass]="{'low-rated':record.billed_in_loss==1}">
+            <td>{{ record.barcode }}</td>
+            <td>{{ record.brand_name}}</td>
+            <td>{{ record.name}}</td>
+            <td>{{ record.category_name}}</td>
+            <td>{{ record.sub_category_name}}</td>
+            <td>{{ record.sub_sub_category_name}}</td>
+            <td>{{ record.purchase_price| number:'1.2-2'}}</td>
+            <td>{{ record.growth | number:'1.2-2'}}</td>
+
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td class="text-center" colspan="11">No Records Found</td>
+          </tr>
+          <tr>
+            <td class="text-center" colspan="11">Please select Store or Inventory</td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <p-paginator [first]="first" [rows]="10" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [totalRecords]="totalRecords"
+        (onPageChange)="paginate($event)"></p-paginator>
+    </div>
+
+
+  </div>
+</div>

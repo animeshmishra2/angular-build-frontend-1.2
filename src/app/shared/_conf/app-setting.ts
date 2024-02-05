@@ -5,7 +5,7 @@ export class AppSetting {
     // public static UI_SUBPATH = "";
 
     // Server setting
-    public static API_ENDPOINT = "https://www.allwinmedico.in/ggb-api/public";
+    public static API_ENDPOINT = "https://allwinmedico.in/ggb-api/public";
     public static UI_SUBPATH = "/";
     
 

@@ -10,15 +10,19 @@ import { map, catchError } from 'rxjs/operators';
 export class ReportApiService {
   constructor(private http: HttpClient) {}
 
-  getProductReport(): Observable<any> {
+  getProductReport(params?,body?): Observable<any> {
+    let string =""
+    if(params){
+      string = this.paramGenrator(params)
+    }
     const requestBody = {
-      idcategory: 1,
-      idsub_category: 1,
-      idsub_sub_category: 1,
-      idbrand: 1,
+      // idcategory: 1,
+      // idsub_category: 1,
+      // idsub_sub_category: 1,
+      // idbrand: 1,
     };
     return this.http
-      .post(`${AppSetting.API_ENDPOINT}/api/product-report`, requestBody)
+      .get(`${AppSetting.API_ENDPOINT}/api/product-report?${string}`)
       .pipe(
         map((response) => response),
         catchError((error) => {
@@ -28,12 +32,13 @@ export class ReportApiService {
       );
   }
 
-  getInventoryReport(id: number): Observable<any> {
-    const requestBody = {
-      idstore_warehouse: id,
-    };
+  getInventoryReport(params): Observable<any> {
+  let string =""
+  if(params){
+    string = this.paramGenrator(params)
+  }
     return this.http
-      .post(`${AppSetting.API_ENDPOINT}/api/inventory-report`, requestBody)
+      .get(`${AppSetting.API_ENDPOINT}/api/inventory-report?${string}`)
       .pipe(
         map((response) => response),
         catchError((error) => {
@@ -43,12 +48,13 @@ export class ReportApiService {
       );
   }
 
-  getInventoryReportByDate(id: number,dateRange: Date[]): Observable<any> {
-    const requestBody = {
-      idstore_warehouse: id,
-    };
+  getInventoryReportByDate(params:any): Observable<any> {
+    let string =""
+    if(params){
+      string = this.paramGenrator(params)
+    }
     return this.http
-      .post(`${AppSetting.API_ENDPOINT}/api/inventory-report?fromDate=${dateRange[0]}&toDate=${dateRange[1]}`, requestBody)
+      .get(`${AppSetting.API_ENDPOINT}/api/inventory-report?${string}`)
       .pipe(
         map((response) => response),
         catchError((error) => {
@@ -69,6 +75,17 @@ export class ReportApiService {
         })
       );
   }
+  getStoreList(): Observable<any> {
+    return this.http
+      .get(`${AppSetting.API_ENDPOINT}/api/get-store-list`)
+      .pipe(
+        map((response) => response),
+        catchError((error) => {
+          console.error('Error fetching Warehouse Report:', error);
+          throw error; // Rethrow the error
+        })
+      );
+  }
 
   getOrderReportData(): Observable<any> {
     return this.http
@@ -81,4 +98,207 @@ export class ReportApiService {
         })
       );
   }
+
+  private paramGenrator(param){
+    
+    const params:any = [];
+
+    for (const key in param) {
+      if(key && param[key]){
+
+        params.push(`${encodeURIComponent(key)}=${encodeURIComponent(param[key])}`);
+      }
+    }
+  
+    return params.join('&');
+  }
+
+  getExpiryReport(params:any):Observable<any>{
+    // let string =""
+    // if(params){
+    //   string = this.paramGenrator(params)
+    // }
+    return this.http
+    .post(`${AppSetting.API_ENDPOINT}/api/expried-and-expiring-report`,params)
+    .pipe(
+      map((response) => response),
+      catchError((error) => {
+        console.error('Error fetching expried and expiring Report:', error);
+        throw error; // Rethrow the error
+      })
+    );
+  }
+  getPurchaseOrderReport(params:any):Observable<any>{
+    let string =""
+    if(params){
+      string = this.paramGenrator(params)
+    }
+    return this.http
+    .get(`${AppSetting.API_ENDPOINT}/api/purchase-order-report?${string}`)
+    .pipe(
+      map((response) => response),
+      catchError((error) => {
+        console.error('Error fetching Purchase Report:', error);
+        throw error; // Rethrow the error
+      })
+    );
+  }
+  getSalesReport(params:any):Observable<any>{
+    let string =""
+    if(params){
+      string = this.paramGenrator(params)
+    }
+    return this.http
+    .get(`${AppSetting.API_ENDPOINT}/api/sales-report?${string}`)
+    .pipe(
+      map((response) => response),
+      catchError((error) => {
+        console.error('Error fetching Sales Report:', error);
+        throw error; // Rethrow the error
+      })
+    );
+  }
+  getCOGSReport(params:any):Observable<any>{
+    let string =""
+    if(params){
+      string = this.paramGenrator(params)
+    }
+    return this.http
+    .get(`${AppSetting.API_ENDPOINT}/api/cogs-report?${string}`)
+    .pipe(
+      map((response) => response),
+      catchError((error) => {
+        console.error('Error fetching Sales Report:', error);
+        throw error; // Rethrow the error
+      })
+    );
+  }
+  getOrderReport(params:any):Observable<any>{
+    let string =""
+    if(params){
+      string = this.paramGenrator(params)
+    }
+    return this.http
+    .get(`${AppSetting.API_ENDPOINT}/api/order-report?${string}`)
+    .pipe(
+      map((response) => response),
+      catchError((error) => {
+        console.error('Error fetching Order Report:', error);
+        throw error; // Rethrow the error
+      })
+    );
+  }
+  getYearOverYearGrowth(params:any):Observable<any>{
+    let string =""
+    if(params){
+      string = this.paramGenrator(params)
+    }
+    return this.http
+    .get(`${AppSetting.API_ENDPOINT}/api/year-over-year-growth?${string}`)
+    .pipe(
+      map((response) => response),
+      catchError((error) => {
+        console.error('Error fetching Order Report:', error);
+        throw error; // Rethrow the error
+      })
+    );
+  }
+  getPerformanceReport():Observable<any>{
+    return this.http
+    .get(`${AppSetting.API_ENDPOINT}/api/performance-report`)
+    .pipe(
+      map((response) => response),
+      catchError((error) => {
+        console.error('Error fetching Sales Report:', error);
+        throw error; // Rethrow the error
+      })
+    );
+  }
+  getStockReplacementReport(params:any):Observable<any>{
+    let string =""
+    if(params){
+      string = this.paramGenrator(params)
+    }
+    return this.http
+    .get(`${AppSetting.API_ENDPOINT}/api/stock-levels-report?${string}`)
+    .pipe(
+      map((response) => response),
+      catchError((error) => {
+        console.error('Error fetching Sales Report:', error);
+        throw error; // Rethrow the error
+      })
+    );
+  }
+  getProductReportStateDate(params:any):Observable<any>{
+    let string =""
+    if(params){
+      string = this.paramGenrator(params)
+    }
+    return this.http
+    .get(`${AppSetting.API_ENDPOINT}/api/product-report-state-data?${string}`)
+    .pipe(
+      map((response) => response),
+      catchError((error) => {
+        console.error('Error fetching Sales Report:', error);
+        throw error; // Rethrow the error
+      })
+    );
+  }
+  getInventoryReportStateDate(params:any):Observable<any>{
+    let string =""
+    if(params){
+      string = this.paramGenrator(params)
+    }
+    return this.http
+    .get(`${AppSetting.API_ENDPOINT}/api/inventory-state-data?${string}`)
+    .pipe(
+      map((response) => response),
+      catchError((error) => {
+        console.error('Error fetching Sales Report:', error);
+        throw error; // Rethrow the error
+      })
+    );
+  }
+  getSalesOrderReportStateDate(params:any):Observable<any>{
+    let string =""
+    if(params){
+      string = this.paramGenrator(params)
+    }
+    return this.http
+    .get(`${AppSetting.API_ENDPOINT}/api/sales-order-state-data?${string}`)
+    .pipe(
+      map((response) => response),
+      catchError((error) => {
+        console.error('Error fetching Sales Report:', error);
+        throw error; // Rethrow the error
+      })
+    );
+  }
+  getPurchaseOrderReportStateDate(params:any):Observable<any>{
+    let string =""
+    if(params){
+      string = this.paramGenrator(params)
+    }
+    return this.http
+    .get(`${AppSetting.API_ENDPOINT}/api/purchase-order-state-data?${string}`)
+    .pipe(
+      map((response) => response),
+      catchError((error) => {
+        console.error('Error fetching Sales Report:', error);
+        throw error; // Rethrow the error
+      })
+    );
+  }
+  getStoreOntheBehalfOfWarehouse(data){
+    return this.http
+    .get(`${AppSetting.API_ENDPOINT}/api/get-ware-store/${data}`)
+    .pipe(
+      map((response) => response),
+      catchError((error) => {
+        console.error('Error fetching Sales Report:', error);
+        throw error; // Rethrow the error
+      })
+    );  
+  }
 }
+

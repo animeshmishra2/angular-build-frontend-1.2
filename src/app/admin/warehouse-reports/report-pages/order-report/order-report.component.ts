@@ -1,17 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { MenuItem } from 'primeng/api';
+import { ExcelService } from 'src/app/shared/_service/exports/excel.service';
 import { ReportApiService } from 'src/app/shared/_service/report-apis/report-api.service';
-
-export interface Product {
-  Order_No: number;
-  Date: string;
-  Counter_Name: number;
-  Customer_name: string;
-  Biller_name: string;
-  Discount_Coupon: string;
-  Profit_per_bill: number;
-}
+import { Store, Warehouse } from '../inventory-report/inventory-report.component';
 
 @Component({
   selector: 'app-order-report',
@@ -19,98 +11,263 @@ export interface Product {
   styleUrls: ['./order-report.component.scss'],
 })
 export class OrderReportComponent implements OnInit {
-  dateRange!: Date[]
-  products: Product[] = [
-    {
-      Order_No: 3147483644,
-      Date: '2023-11-07T14:14:38.000000Z',
-      Counter_Name: 13,
-      Customer_name: 'John Doe',
-      Biller_name: 'Test User',
-      Discount_Coupon: 'CDA',
-      Profit_per_bill: 218,
-    },
-    {
-      Order_No: 2247483644,
-      Date: '2023-12-07T14:14:38.000000Z',
-      Counter_Name: 14,
-      Customer_name: 'Peter Hemavan',
-      Biller_name: 'Test User',
-      Discount_Coupon: 'CDA',
-      Profit_per_bill: 128,
-    },
-    {
-      Order_No: 2147483644,
-      Date: '2023-12-03T14:14:38.000000Z',
-      Counter_Name: 12,
-      Customer_name: 'Thomas Smith',
-      Biller_name: 'Test User',
-      Discount_Coupon: 'CDA',
-      Profit_per_bill: 348,
-    },
-  ];
-  tableData?: any
+ 
 
-  actionMenuItems: MenuItem[];
-  selectedProduct?: Product;
-  selectedProducts: Product[];
-  showOrder: boolean = false;
-
-  constructor(private apiService: ReportApiService, private spinner: NgxSpinnerService){}
-async ngOnInit() {
-    this.actionMenuItems = [
-      {
-        label: 'View Bill',
-        icon: 'pi pi-eye',
-        command: (event) => {
-          this.viewBill(event);
-        },
-      },
-      {
-        label: 'Print Bill',
-        icon: 'pi pi-print',
-        command: () => {
-          this.printBill();
-        },
-      },
-    ];
+  tableData!: any[];
+  totalRecords = 0
+  dateRange!: any[] | undefined;
+  stores!: any;
+  loading: boolean = false
+  rows = 10;
+  first = 0;
+  warehouses!: Warehouse[];
+  selectedStore?: any =2;
+  selectedWarehouse?:any=1;
+  params: any = {
+    field: '',
+    searchTerm: '',
+    idstore_warehouse:2,
+    rows:10,
+    first:0
   }
+  searchTerm: any
+  from_date: any;
+  to_date: any;
+  idstore_warehouse: any;
+  todayDate = new Date()
+  fpicker: any;
+  tpicker: any;
+  selectedRecords: any
+  exportColumns: any = [];
+  fieldsArray = [
+    {
+      id: "bill_no",
+      name: "Bill NO."
+    },
+    {
+      id: "customer_name",
+      name: "Customer Name"
+    },
+    {
+      id: "store_name",
+      name: "Store Name"
+    },
+    // {
+    //   id: "category",
+    //   name: "Category"
+    // },
+    // {
+    //   id: "sub_category",
+    //   name: "Sub Category"
+    // }
+  ]
+  constructor(private apiService: ReportApiService,
+    private spinner: NgxSpinnerService,
+    private router: Router,
+    private excelService: ExcelService) { }
+  ngOnInit(): void {
+    this.fetchWarehouseList()
+    this.getStoreOntheBehalfOfWarehouse('1')
+    this.getOrderReport()
+  }
+  applyFilter(event) {
+    console.log(event)
+  }
+  fetchStoreList(): void {
 
-  fetchProductReport(): void {
-    this.spinner.show();
-    this.apiService.getProductReport().subscribe(
+    this.apiService.getStoreList().subscribe(
       (response) => {
-        this.tableData = response.orders_list
+        this.stores = response;
+
+      },
+      (error) => {
+        console.error('Error fetching Store List:', error);
+
+      }
+    );
+  }
+  tableFilter() { }
+  async exportExcel() {
+
+    let tempobject = JSON.parse(JSON.stringify( this.params));
+    tempobject.first = 0;
+    tempobject.rows = this.totalRecords
+    this.spinner.show();
+    this.apiService.getOrderReport(tempobject).subscribe(
+      (response) => {
+        let tableData = response.orders_list
+
+        const excelData = tableData.map((x) => {
+
+          return {
+            "Order ID": x.idcustomer_order.toString(),
+            "Customer Name": x.customer_name,
+            "Store Name": x.store_warehouse,
+            "Quantity": x.quantity,
+            "Discount Type": x.discount_type,
+            "Total Discount": x.total_discount,
+            "CGST": x.cgst,
+            "SGST": x.sgst,
+            "Profit": x.profit_pr,
+            "Profit(Rs)": x.profit_rs,
+            "Price": x.price,
+            "Created Date": x.created_at,
+            "No of Products": x.products.length,
+            "isLoss":x.billed_in_loss
+          };
+        })
+      
+        let body:any = {
+          reportName: 'Order Report'
+        }
+        if(this.selectedStore){
+          body.warehouseName= this.stores.find(x=> {
+            if(x.idstore_warehouse== this.selectedStore){
+              return x.name
+            }
+            return
+          })
+        }else{
+          if(this.selectedWarehouse){
+            body.warehouseName= this.warehouses.find(x=> {
+              if(x.idstore_warehouse== this.selectedWarehouse){
+                return x.name
+              }
+              return
+          })
+        }
+        }
+        console.log(body)
+        this.excelService.OrderReport('Order Report', excelData,body)
         this.spinner.hide();
       },
       (error) => {
         console.error('Error fetching Product Report:', error);
+
         this.spinner.hide();
       }
     );
   }
-
-  passEvent(product) {
-    this.selectedProduct = undefined;
-    this.selectedProduct = product;
-    this.selectedProducts = [product]
-    console.log(this.selectedProduct);
+  exportPdf() { }
+  clearAllData(event) {
+    this.params = {
+      field: '',
+      searchTerm: '',
+      idstore_warehouse:2,
+      rows:10,
+      first:0
+    }
+    this.dateRange = undefined
+    this.getOrderReport()
   }
-
-  viewBill(product) {
-    this.showOrder = true;
+  fetchWarehouseList(): void {
+    // this.spinner.show();
+    this.apiService.getWarehouseList().subscribe(
+      (response) => {
+        this.warehouses = response;
+        // this.spinner.hide();
+      },
+      (error) => {
+        console.error('Error fetching Warehouse List:', error);
+        // this.spinner.hide();
+      }
+    );
   }
-
-  printBill() {}
-
-  calculateTotalQuantity(): number {
-    // Implement the logic to calculate the total quantity
-    return this.products.reduce((total, product) => total + (product.Profit_per_bill || 0), 0);
+  paginate(event) {
+    console.log(event)
+    this.params.first = (event.first ? event.first : 0)
+    this.params.rows = (event.first ? event.first : 0) + (event.rows ? event.rows : 10)
+    this.loading = true
+    this.apiService.getOrderReport(this.params).subscribe(
+      (response) => {
+        this.tableData = response.orders_list;
+        this.totalRecords = response.total
+        this.loading = false
+      },
+      (error) => {
+        console.error('Error fetching Product Report:', error);
+        this.loading = false
+      }
+    );
   }
+  getOrderReport() {
+    this.loading = true
+    this.apiService.getOrderReport(this.params).subscribe(
+      (response) => {
+        this.tableData = response.orders_list;
+        this.totalRecords = response.total
+        this.loading = false
+      },
+      (error) => {
+        console.error('Error fetching Product Report:', error);
+        this.loading = false
+      }
+    );
+  }
+  filterByStore(event) {
+    this.params.idstore_warehouse = event.value
 
-  filterByDate(){
-    let test = this.products.filter((product: any)=>{product.Date > this.dateRange[0] && product.Date < this.dateRange[1]})
-    console.log(test);
+    this.getOrderReport()
+  }
+  filterBywarehouse(event) {
+    this.params.idstore_warehouse = event.value
+    this.selectedStore=undefined
+    this.getStoreOntheBehalfOfWarehouse(event.value)
+    this.getOrderReport()
+  }
+  filterByDate() {
+    if (!this.dateRange) {
+      return
+    } else {
+      let tempdate:any = []
+      for (const [index, iterator] of this.dateRange.entries()) {
+        tempdate[index] = this.formatDate(iterator)
+      }
+      this.params.start_date = tempdate[0]
+      this.params.end_date = tempdate[1]
+      this.getOrderReport()
+    }
+  }
+  formatDate(date) {
+    var d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
 
+    if (month.length < 2)
+      month = '0' + month;
+    if (day.length < 2)
+      day = '0' + day;
+    if (date == null || d.toString() == "Invalid Date") {
+      return null
+    }
+
+    return [year, month, day].join('-');
+  }
+  selectFields(event) {
+    this.params.field = event.value
+
+  }
+  search() {
+    if(this.searchTerm){
+      this.params.searchTerm = this.searchTerm
+      this.getOrderReport()
+    }
+    
+  }
+  getStoreOntheBehalfOfWarehouse(data) {
+    this.apiService.getStoreOntheBehalfOfWarehouse(data).subscribe(
+      (response) => {
+        this.stores = response;
+      },
+      (error) => {
+        console.error('Error fetching Product Report:', error);
+      }
+    );
+  }
+  OrderDetails(data){
+    this.router.navigate(['/ggb-admin/wh-reports/products-order-details'], {
+      queryParams: { data: btoa(JSON.stringify(data)) }
+  })
   }
 }

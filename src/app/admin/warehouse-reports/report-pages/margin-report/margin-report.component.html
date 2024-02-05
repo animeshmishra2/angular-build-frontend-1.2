@@ -6,56 +6,232 @@
                 <a appBackButton><mat-icon>arrow_back</mat-icon></a>
                 Margin Report
             </div>
+            <div class="flex gap-1 mr-3">
+                <p-dropdown [options]="stores" class="p-1" optionValue="idstore_warehouse" optionLabel="name"
+                    [(ngModel)]="selectedStore" (onChange)="filterByStore($event)"
+                    placeholder="Select a Store"></p-dropdown>
+                <p-dropdown [options]="warehouses" class="p-1" optionValue="idstore_warehouse" optionLabel="name"
+                    [(ngModel)]="selectedWarehouse" (onChange)="filterBywarehouse($event)"
+                    placeholder="Select an Warehouses"></p-dropdown>
+            </div>
         </div>
-        <div class="p-2">
-            <p-table [value]="tableData" responsiveLayout="scroll"
-                styleClass="p-datatable-sm p-datatable-gridlines" [paginator]="true" [rows]="10"
+        <div class="pt-2" style="display: flex; align-items: center; justify-content: space-between;flex-wrap: wrap;">
+            <div style="display: flex; align-items: center;">
+                <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
+                    (click)="clearAllData(dt1)"></button>
+                <p-dropdown [options]="fieldsArray" class="p-1" optionValue="id" optionLabel="name"
+                    [(ngModel)]="params.field" (onChange)="selectFields($event)"
+                    placeholder="Select a fields"></p-dropdown>
+                <mat-form-field style="margin-top: 15px ">
+                    <mat-icon matPrefix>search</mat-icon>
+                    <input [disabled]="!params.field" [(ngModel)]="searchTerm" matInput type="search"
+                        placeholder="search here" class="search-input" style="height: 100%;">
+                </mat-form-field>
+                <button pButton label="Search" class="p-button-outlined p-button-success" icon="pi pi-search"
+                    (click)="search()" [disabled]="!searchTerm"></button>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <p-calendar [(ngModel)]="dateRange" selectionMode="range"
+                placeholder="Choose your date range" [readonlyInput]="true"
+                [appendTo]="'body'"></p-calendar>
+            <button pButton label="Search" class="p-button-outlined p-button-success"
+                icon="pi pi-search" (click)="filterByDate()" [disabled]="!dateRange"></button>
+                <button mat-raised-button class="success-button" class="resizebtn" (click)="exportExcel()">
+                    <mat-icon>article</mat-icon>
+                    Export Excel
+                </button>
+            </div>
+
+        </div>
+        <div class="pt-1"
+            style="display: flex; align-items: center; flex-direction: row;flex-wrap:wrap; justify-content: center;">
+
+            <mat-card class="example-card">
+                <mat-card-title class="example-header">Total Product</mat-card-title>
+                <mat-card-content class="example-content">
+                    <div style="display: flex;justify-content: center;">
+                        <img src="../../../../../assets/icons/image (2).png" alt="">
+                    </div>
+                    <div class="example-text">
+                        <div class="example-row" style="display: flex;justify-content: center;">
+                            <span class="example-value">{{stats?.total_product}}</span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="example-card ">
+                <mat-card-title class="example-header">Avg Selling Margin(Rs)</mat-card-title>
+                <mat-card-content class="example-content">
+                    <div style="display: flex;justify-content: center;">
+                        <img src="../../../../../assets/icons/image (2).png" alt="">
+                    </div>
+                    <div class="example-text">
+                        <div class="example-row" style="display: flex;justify-content: center;">
+                            <span class="example-value">{{stats?.avg_selling_margin}}</span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="example-card ">
+                <mat-card-title class="example-header">Avg Selling Margin(%)</mat-card-title>
+                <mat-card-content class="example-content">
+                    <div style="display: flex;justify-content: center;">
+                        <img src="../../../../../assets/icons/image (2).png" alt="">
+                    </div>
+                    <div class="example-text">
+                        <div class="example-row" style="display: flex;justify-content: center;">
+                            <span class="example-value">{{stats?.avg_selling_margin_pr}}</span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+
+            <mat-card class="example-card ">
+                <mat-card-title class="example-header">Avg Purchase Margin(%)</mat-card-title>
+                <mat-card-content class="example-content">
+                    <div style="display: flex;justify-content: center;">
+                        <img src="../../../../../assets/icons/image (2).png" alt="">
+                    </div>
+                    <div class="example-text">
+                        <div class="example-row" style="display: flex;justify-content: center;">
+                            <span class="example-value">{{stats?.avg_purchase_margin_pr}}</span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="example-card ">
+                <mat-card-title class="example-header">Avg Purchase Margin(Rs)</mat-card-title>
+                <mat-card-content class="example-content">
+                    <div style="display: flex;justify-content: center;">
+                        <img src="../../../../../assets/icons/image (2).png" alt="">
+                    </div>
+                    <div class="example-text">
+                        <div class="example-row" style="display: flex;justify-content: center;">
+                            <span class="example-value">{{stats?.avg_purchase_margin}}</span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="example-card ">
+                <mat-card-title class="example-header">Avg Discount Margin(Rs)</mat-card-title>
+                <mat-card-content class="example-content">
+                    <div style="display: flex;justify-content: center;">
+                        <img src="../../../../../assets/icons/image (2).png" alt="">
+                    </div>
+                    <div class="example-text">
+                        <div class="example-row" style="display: flex;justify-content: center;">
+                            <span class="example-value">{{stats?.avg_discount_margin}}</span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="example-card ">
+                <mat-card-title class="example-header">Avg Discount Margin(%)</mat-card-title>
+                <mat-card-content class="example-content">
+                    <div style="display: flex;justify-content: center;">
+                        <img src="../../../../../assets/icons/image (2).png" alt="">
+                    </div>
+                    <div class="example-text">
+                        <div class="example-row" style="display: flex;justify-content: center;">
+                            <span class="example-value">{{stats?.avg_discount_margin_pr}}</span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+
+
+        </div>
+        <div class="ml-2" style="display: flex; align-items: center; justify-content: space-between;">
+            <div class="h1-txt p-2">
+                Margin Report Table
+            </div> 
+
+        </div>
+
+        <div class="p-2 m-2">
+
+            <p-table #dt1 [value]="tableData" responsiveLayout="scroll"
+                styleClass="p-datatable-sm p-datatable-gridlines" [paginator]="false" [rows]="10"
                 [showCurrentPageReport]="true" class="m-1" [tableStyle]="{ 'min-width': '50rem' }"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-                [rowsPerPageOptions]="[10, 50, 100]">
+                [totalRecords]="totalRecords" [first]="first" [loading]="loading"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+                <!-- <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between">
+                        <div class="flex gap-2">
+
+                         
+                        </div>
+                        <div class="flex gap-2">
+                  
+                            <!-- <button mat-raised-button color="error" class="resizebtn"
+                                (click)="exportPdf()">
+                                <mat-icon>picture_as_pdf</mat-icon>
+                                Export PDF
+                            </button> 
+                        </div>
+                    </div>
+
+                </ng-template> -->
                 <ng-template pTemplate="header">
                     <tr>
                         <th rowspan="2">Barcode</th>
-                        <th rowspan="2">Name</th>
+                        <th rowspan="2">Brand</th>
+                        <th rowspan="2">Product Name</th>
                         <th rowspan="2">Category Name</th>
+                        <th rowspan="2">Sub Category Name</th>
+                        <th rowspan="2">hsn</th>
                         <th rowspan="2">Selling Price</th>
                         <th rowspan="2">Purchase Price</th>
+                        <th rowspan="2">MRP</th>
+                        <th rowspan="2">Discount</th>
                         <th class="text-center" colspan="2">Selling Margin</th>
                         <th class="text-center" colspan="2">Purchase Margin</th>
+                        <th class="text-center" colspan="2">Discount Margin</th>
                     </tr>
                     <tr class="text-center">
                         <th>%age</th>
                         <th>Amount</th>
                         <th>%age</th>
                         <th>Amount</th>
-                    </tr>
-                    <tr class="column-filter">
-                        <th><p-columnFilter type="text" field="barcode"></p-columnFilter></th>
-                        <th><p-columnFilter type="text" field="name"></p-columnFilter></th>
-                        <th><p-columnFilter type="text" field="category_name"></p-columnFilter></th>
-                        <th><p-columnFilter type="text" field="selling_price"></p-columnFilter></th>
-                        <th><p-columnFilter type="text" field="purchase_price"></p-columnFilter></th>
-                        <th><p-columnFilter type="text" field="selling_margin_percentage"></p-columnFilter></th>
-                        <th><p-columnFilter type="text" field="selling_margin_rupees"></p-columnFilter></th>
-                        <th><p-columnFilter type="text" field="purchase_margin_percentage"></p-columnFilter></th>
-                        <th><p-columnFilter type="text" field="purchase_margin_rupees"></p-columnFilter>
-                        </th>
+                        <th>%age</th>
+                        <th>Amount</th>
+
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-record>
                     <tr>
                         <td>{{ record.barcode }}</td>
+                        <td>{{ record.brand_name}}</td>
                         <td>{{ record.name }}</td>
                         <td>{{ record.category_name }}</td>
-                        <td>{{ record.selling_price }}</td>
-                        <td>{{ record.purchase_price }}</td>
-                        <td>{{ record.selling_margin_percentage }}</td>
+                        <td>{{ record.sub_category_name }}</td>
+                        <td>{{ record.hsn }}</td>
+                        <td>{{ record.selling_price | number:'1.2-2' }}</td>
+                        <td>{{ record.purchase_price | number:'1.2-2'}}</td>
+                        <td>{{ record.mrp | number:'1.2-2'}}</td>
+                        <td>{{ record.discount | number:'1.2-2'}}</td>
+                        <td>{{ record.selling_margin_percentage | number:'1.2-2'}}</td>
                         <td>{{ record.selling_margin_rupees | number:'1.2-2' }}</td>
-                        <td>{{ record.purchase_margin_percentage }}</td>
+                        <td>{{ record.purchase_margin_percentage | number:'1.2-2' }}</td>
                         <td>{{ record.purchase_margin_rupees | number:'1.2-2'}}</td>
+                        <td>{{ record.discount_pr | number:'1.2-2'}}</td>
+                        <td>{{ record.discount_amount | number:'1.2-2'}}</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td class="text-center" colspan="8">No Records Found</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center" colspan="8">Please select Store or Inventory</td>
                     </tr>
                 </ng-template>
             </p-table>
+            <p-paginator [first]="first" [rows]="10" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [totalRecords]="totalRecords" (onPageChange)="paginate($event)"></p-paginator>
         </div>
     </div>
 </div>

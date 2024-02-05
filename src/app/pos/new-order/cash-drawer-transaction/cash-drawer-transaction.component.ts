@@ -21,6 +21,7 @@ export class CashDrawerTransactionComponent implements OnInit {
   submitted = false;
   isFromOpenCounter = true;
   alreadyOpenCounter;
+  roundOffTotal = 0;
   mainForm = new FormGroup({
     n1: new FormControl(),
     n2: new FormControl(),
@@ -66,7 +67,7 @@ export class CashDrawerTransactionComponent implements OnInit {
     this.currentUser = this.authenticationService.currentUserValue;
     console.log(this.currentUser);
     console.log(data);
-
+    this.roundOffTotal = Math.round(this.data.total.grand);
     //get counter details
   }
 
@@ -157,8 +158,8 @@ export class CashDrawerTransactionComponent implements OnInit {
       this.mainForm.get('n500')!.value * 500 +
       this.mainForm.get('n2000')!.value * 2000;
 
-    this.totalCashOut = this.totalCashIn - this.data.total.grand;
-    this.totalCashActRet = this.totalCashIn - this.data.total.grand;
+    this.totalCashOut = this.totalCashIn - this.roundOffTotal;
+    this.totalCashActRet = this.totalCashIn - this.roundOffTotal;
     console.log(this.totalCashOut);
 
     if (this.totalCashOut == 0) {
@@ -168,7 +169,7 @@ export class CashDrawerTransactionComponent implements OnInit {
 
     }
     else if (this.totalCashOut > 0) {
-      let remainsAmount = this.totalCashIn - this.data.total.grand;
+      let remainsAmount = this.totalCashIn - this.roundOffTotal;
       let retAr = { 2000: 0, 500: 0, 200: 0, 100: 0, 50: 0, 20: 0, 10: 0, 5: 0, 2: 0, 1: 0 };
       let calcCountDet = JSON.parse(JSON.stringify(this.counterDet));
       let denom = -1;

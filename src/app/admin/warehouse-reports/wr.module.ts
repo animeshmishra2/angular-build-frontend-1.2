@@ -45,6 +45,14 @@ import { TransferReportComponent } from './report-pages/transfer-report/transfer
 import { TotalPendencyComponent } from './report-pages/total-pendency/total-pendency.component';
 import { DiscountReportComponent } from './report-pages/discount-report/discount-report.component';
 import { GstReportService } from '../gst-report/gst-report.service';
+import {PaginatorModule} from 'primeng/paginator';
+import { SalesReportComponent } from './report-pages/sales-report/sales-report.component';
+import { OrderDetailsReportComponent } from './report-pages/order-details-report/order-details-report.component';
+import { CogsReportComponent } from './report-pages/cogs-report/cogs-report.component';
+import { PerformanceReportComponent } from './report-pages/performance-report/performance-report.component';
+import { StockReplacementReportComponent } from './report-pages/stock-replacement-report/stock-replacement-report.component';
+import { ProductsOrderDetailsComponent } from './report-pages/products-order-details/products-order-details.component';
+import { InventoryValueReportComponent } from './report-pages/inventory-value-report/inventory-value-report.component';
 
 @NgModule({
   declarations: [
@@ -62,10 +70,18 @@ import { GstReportService } from '../gst-report/gst-report.service';
     TransferReportComponent,
     TotalPendencyComponent,
     DiscountReportComponent,
+    SalesReportComponent,
+    OrderDetailsReportComponent,
+    CogsReportComponent,
+    PerformanceReportComponent,
+    StockReplacementReportComponent,
+    ProductsOrderDetailsComponent,
+    InventoryValueReportComponent,
   ],
   imports: [
     CommonModule,
     SharedGlobalModule,
+    PaginatorModule,
     FlexLayoutModule,
     DirectiveModule,
     WRRoutingModule,

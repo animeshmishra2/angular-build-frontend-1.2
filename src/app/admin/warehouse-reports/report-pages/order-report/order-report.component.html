@@ -1,80 +1,129 @@
 <app-header></app-header>
 <div class="wh-reports-container">
     <div class="main-card">
-        <div class="h1-txt p-2">
-            <a appBackButton><mat-icon>arrow_back</mat-icon></a>
-            Order Report
+        <div class="flex justify-content-between">
+            <div class="h1-txt p-2">
+                <a appBackButton><mat-icon>arrow_back</mat-icon></a>
+                Order Report
+            </div>
+            <div class="flex gap-1 mr-3">
+                <p-dropdown [options]="stores" class="p-1" optionValue="idstore_warehouse"
+                    optionLabel="name" [(ngModel)]="selectedStore"
+                    (onChange)="filterByStore($event)"
+                    placeholder="Select a Store"></p-dropdown>
+                <p-dropdown [options]="warehouses" class="p-1" optionValue="idstore_warehouse"
+                    optionLabel="name" [(ngModel)]="selectedWarehouse"
+                    (onChange)="filterBywarehouse($event)"
+                    placeholder="Select an Warehouses"></p-dropdown>
+            </div> 
         </div>
+        <div class="pt-2" style="display: flex; align-items: center;">
+            <p-dropdown [options]="fieldsArray" class="p-1" optionValue="id"
+            optionLabel="name" [(ngModel)]="params.field"
+            (onChange)="selectFields($event)"
+            placeholder="Select a fields"></p-dropdown>
+            <mat-form-field style="margin-top: 15px ">
+                <mat-icon matPrefix>search</mat-icon>
+                <input [disabled]="!params.field" [(ngModel)]="searchTerm" matInput type="search" placeholder="search here" class="search-input" style="height: 100%;">
+            </mat-form-field>
+            <button pButton label="Search" class="p-button-outlined p-button-success"
+            icon="pi pi-search" (click)="search()" [disabled]="!searchTerm"></button>
+        </div>
+    
         <div class="p-2">
-            <p-table #dt1 class="p-2" [value]="tableData" [tableStyle]="{ 'min-width': '50rem' }"
-                styleClass="p-datatable-sm">
-                <ng-template pTemplate="caption">
-                    <div class="flex gap-2">
-                        <button pButton label="Clear" class="p-button-outlined"
-                            icon="pi pi-filter-slash" (click)="dt1.clear()"></button>
-                        <p-calendar [(ngModel)]="dateRange" selectionMode="range"
-                            placeholder="Choose your date range" [readonlyInput]="true"
-                            [appendTo]="'body'"></p-calendar>
-                        <button pButton label="Search" class="p-button-outlined p-button-success"
-                            icon="pi pi-search" (click)="filterByDate()"></button>
+       
+            <p-table #dt1 [value]="tableData" responsiveLayout="scroll"
+                styleClass="p-datatable-sm p-datatable-gridlines"        [paginator]="false" [rows]="10" [showCurrentPageReport]="true" class="m-1"
+                [totalRecords]="totalRecords" [first]="first" [loading]="loading"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+                <ng-template pTemplate="caption" >
+                    <div class="flex justify-content-between">
+                        <div class="flex gap-2">
+                            <button pButton label="Clear" class="p-button-outlined"
+                                icon="pi pi-filter-slash" (click)="clearAllData(dt1)" ></button>
+                            <p-calendar [(ngModel)]="dateRange" selectionMode="range"
+                                placeholder="Choose your date range" [readonlyInput]="true"
+                                [appendTo]="'body'"></p-calendar>
+                            <button pButton label="Search" class="p-button-outlined p-button-success"
+                                icon="pi pi-search" (click)="filterByDate()" [disabled]="!dateRange"></button>
+                        </div>
+                        <div class="flex gap-2">
+                            <button mat-raised-button class="success-button" class="resizebtn"
+                                (click)="exportExcel()">
+                                <mat-icon>article</mat-icon>
+                                Export Excel
+                            </button>
+                            <!-- <button mat-raised-button color="error" class="resizebtn"
+                                (click)="exportPdf()">
+                                <mat-icon>picture_as_pdf</mat-icon>
+                                Export PDF
+                            </button> -->
+                        </div>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th>Order No</th>
-                        <th>Purchase Date</th>
-                        <th>Customer name</th>
-                        <th>Counter Name</th>
-                        <th>Biller name</th>
-                        <th>Discount Coupon</th>
-                        <th>Profit</th>
-                        <th>Action</th>
+                        <th rowspan="2">Order ID</th>
+                        <th rowspan="2">Customer Name</th>
+                        <th rowspan="2">Store</th>
+                        <th rowspan="2">Quantity</th>
+                        <th rowspan="2">Discount Type</th>
+                        <th rowspan="2">Total Discount</th>
+                        <th class="text-center" colspan="2">GST</th>
+                        <th class="text-center" colspan="2">Profit</th>
+                        <th rowspan="2">Price</th>          
+                        <th rowspan="2">Created Date</th>          
+                        <th rowspan="2">Products Details</th>
                     </tr>
-                    <tr>
-                        <th><p-columnFilter type="text" field="Order_No"></p-columnFilter></th>
-                        <th><p-columnFilter type="text" field="Date"></p-columnFilter></th>
-                        <th><p-columnFilter type="text" field="Customer_name"></p-columnFilter></th>
-                        <th><p-columnFilter type="text" field="Counter_Name"></p-columnFilter></th>
-                        <th><p-columnFilter type="text" field="Biller_name"></p-columnFilter></th>
-                        <th><p-columnFilter type="text" field="Discount_Coupon"></p-columnFilter>
-                        </th>
-                        <th><p-columnFilter type="text" field="Profit_per_bill"></p-columnFilter>
-                        </th>
+                    <tr class="text-center">
+                        <th>CGST %</th>
+                        <th>SGST %</th>
+                        <th>Profit %</th>
+                        <th>Profit(Rs)</th>
+                       
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-product let-i="rowIndex">
-                    <p-menu #menu [model]="actionMenuItems" [popup]="true" [appendTo]="'body'"
-                        [baseZIndex]="10000"></p-menu>
-                    <tr *ngIf="i === 0">
-                        <td><b>Total</b></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td><b>{{ calculateTotalQuantity() }}</b></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>{{ product.Order_No }}</td>
-                        <td>{{ product.Date | date:'dd/MM/yyyy'}}</td>
-                        <td>{{ product.Customer_name }}</td>
-                        <td>{{ product.Counter_Name }}</td>
-                        <td>{{ product.Biller_name }}</td>
-                        <td>{{ product.Discount_Coupon }}</td>
-                        <td>{{ product.Profit_per_bill }}</td>
-                        <td><button pButton type="button" icon="pi pi-ellipsis-v"
-                                (click)="menu.toggle($event);passEvent(product)"
-                                class="p-button-outlined p-button-rounded p-button-sm"></button>
+                <ng-template pTemplate="body" let-record>
+                    <tr [ngClass]="{'low-rated':record.billed_in_loss==1}">
+                        <td>{{ record.idcustomer_order }}</td>
+                        <td>{{ record.customer_name}}</td>
+                        <td>{{ record.store_warehouse}}</td>
+                        <td>{{ record.quantity}}</td>
+                        <td>{{ record.discount_type}}</td>
+                        <td>{{ record.total_discount | number:'1.2-2'}}</td>
+                        <td>{{ record.cgst | number:'1.2-2'}}</td>
+                        <td>{{ record.sgst | number:'1.2-2'}}</td>
+                        <td>{{ record.profit_pr | number:'1.2-2' }}</td>
+                        <td>{{ record.profit_rs | number:'1.2-2'}}</td>
+                        <td>{{ record.price| number:'1.2-2'}}</td>
+                        <td>{{ record.created_at | date}}</td>
+                        <td style="text-align: center">
+                            <button pButton type="button" class="p-button-secondary" icon="pi pi-book" (click)="OrderDetails(record)"></button>
                         </td>
                     </tr>
                 </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td class="text-center" colspan="11">No Records Found</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center" colspan="11">Please select Store or Inventory</td>
+                    </tr>
+                </ng-template>
             </p-table>
+            <p-paginator
+      
+            [first]="first"
+            [rows]="10" [showCurrentPageReport]="true"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            [totalRecords]="totalRecords"
+            (onPageChange)="paginate($event)"
+          ></p-paginator>
         </div>
     </div>
 </div>
 
-<p-dialog [(visible)]="showOrder" [modal]="true" [style]="{ width: '50vw' }"
+<!-- <p-dialog [(visible)]="showOrder" [modal]="true" [style]="{ width: '50vw' }"
     [draggable]="false" [resizable]="false">
     <p-table [value]="selectedProducts">
         <ng-template pTemplate="header">
@@ -100,4 +149,4 @@
             </tr>
         </ng-template>
     </p-table>
-</p-dialog>
+</p-dialog> -->

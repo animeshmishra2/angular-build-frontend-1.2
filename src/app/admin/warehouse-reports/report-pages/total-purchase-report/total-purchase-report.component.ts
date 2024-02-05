@@ -109,24 +109,26 @@ export class TotalPurchaseReportComponent implements OnInit {
 
         const exceldata = tableData.map(x => {
           return {
-            "Barcode": x.barcode,
-            "Bill Number": x.bill_number,
-            "Brand": x.brand_name,
             "Product Name": x.name,
             "Vendor Name": x.vendor_name,
             "Category": x.category_name,
             "Sub Category": x.sub_category_name,
+            "Brand": x.brand_name,
             "HSN": x.hsn,
-            "Expiry": x.expiry,
-            "Quantity": x.quantity,
+            "Barcode": x.barcode,
             "MRP": x.mrp,
+            "Taxable Purchase Price (Rs)": x.unit_purchase_price,
+            "Purchase Price with Tax": (x.unit_purchase_price + (x.cgst_amount + x.sgst_amount)/x.quantity),
+            "Purchase Margin (%)": (((x.mrp -((x.unit_purchase_price + (x.cgst_amount + x.sgst_amount)/x.quantity))))/x.mrp) * 100 ,
+            "Quantity": x.quantity,
             "CGST Amount":x.cgst_amount?x.cgst_amount:0,
             "CGST %": x.cgst_amount?x.cgst_amount:0,
             "SGST Amount": x.sgst_amount?x.sgst_amount:0,
             "SGST %": x.sgst?x.sgst:0,
             "IGST Amount": x.igst_amount?x.igst_amount:0,
             "IGST %": x.igst?x.igst:0,
-            "Purchase Price": x.purchase_price,
+            "Selling Price": x.selling_price,
+            "Unit Price": x.unit_purchase_price,
             "Taxable Amount": x.taxable_amount,
             "Amount with tax": x.amount_with_tax
           }
@@ -201,6 +203,17 @@ export class TotalPurchaseReportComponent implements OnInit {
       }
     );
   }
+
+  formatAmount(amount: number): string {
+    if (amount >= 1e6) {
+      return (amount / 1e5).toFixed(2) +' '+'Lakh'; // Millions
+    } else if (amount >= 1e3) {
+      return (amount / 1e3).toFixed(2) +' '+'Thousand'; // Thousands
+    } else {
+      return amount.toFixed(2); // Less than 1000
+    }
+  }
+
   getPurchaseOrderReport() {
     this.loading = true
     this.getPurchaseOrderReportStateDate()

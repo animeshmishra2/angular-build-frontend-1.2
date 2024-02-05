@@ -110,7 +110,7 @@
                     </div>
                     <div class="example-text">
                         <div class="example-row" style="display: flex;justify-content: center;">
-                            <span class="example-value">{{stats?.total_stock_amount | number:'1.2-2'}}</span>
+                            <span class="example-value">{{ formatAmount(stats?.total_stock_amount) }}</span>
                         </div>
                     </div>
                 </mat-card-content>
@@ -132,57 +132,68 @@
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th rowspan="2">Barcode</th>
-                        <th rowspan="2">Bill Number</th>
-                        <th rowspan="2">Brand</th>
+                        <th rowspan="2">Bill No</th>
                         <th rowspan="2">Product Name</th>
                         <th rowspan="2">Vendor Name</th>
                         <th rowspan="2">Category</th>
                         <th rowspan="2">Sub Category</th>
                         <!-- <th rowspan="2">Sub Sub Category</th> -->
+                        <th rowspan="2">Brand</th>
                         <th rowspan="2">HSN</th>
-                        <th rowspan="2">Expiry</th>
-                        <th rowspan="2">Quantity</th>
-                        <th rowspan="2">MRP</th>
+                        <th rowspan="2">Barcode</th>
+                        <th rowspan="2">MRP(Rs)</th>
+                        <th class="text-center" colspan="6">Purchase</th>
                         <th class="text-center" colspan="6">GST</th>
-                        <th class="text-center" colspan="3">Purchase</th>
+                        <th class="text-center" colspan="3">Gross Total</th>
                     </tr>
                     <tr class="text-center">
-                        <th>CGST Amount</th>
+                        <th >Purchase Date</th>
+                        <th >Selling Price (Rs)</th>
+                        <th >Taxable Purchase unit Price (Rs)</th>
+                        <th >Unit Purchase With Tax (Rs)</th>
+                        <th >Purchase Margin(%)</th>
+                        <th >Quantity</th>
+                        <th >CGST Amount (Rs)</th>
                         <th>CGST %</th>
-                        <th>SGST Amount</th>
+                        <th>SGST Amount (Rs)</th>
                         <th>SGST %</th>
-                        <th>IGST Amount</th>
+                        <th>IGST Amount (Rs)</th>
                         <th>IGST %</th>
-                        <th>Purchase Price</th>
-                        <th>Taxable Amount</th>
-                        <th>Amount with tax</th>
+                        <th>Total taxable purchase Amount (Rs)</th>
+                        <th>Total purchase amount with tax (Rs)</th>
+                        <th>Total retail amount with tax (Rs)</th>
                     </tr>
+
 
                 </ng-template>
                 <ng-template pTemplate="body" let-record>
                     <tr>
-                        <td>{{ record.barcode }}</td>
-                        <td>{{ record.bill_number }}</td>
-                        <td>{{ record.brand_name }}</td>
+                        <td>{{ record.bill_number}}</td>
                         <td>{{ record.name }}</td>
                         <td>{{ record.vendor_name }}</td>
                         <td>{{ record.category_name }}</td>
                         <td>{{ record.sub_category_name }}</td>
                         <!-- <td>{{ record.sub_sub_category_name }}</td> -->
+                        <td>{{ record.brand_name }}</td>
                         <td>{{ record.hsn}}</td>
-                        <td>{{ record.expiry | date}}</td>
-                        <td>{{ record.quantity }}</td>
+                        <td>{{ record.barcode}}</td>
                         <td>{{ record.mrp | number:'1.2-2'}}</td>
-                        <td>{{ record.cgst_amount | number:'1.2-2'}}</td>
+                        <td>{{ record.purchase_date | date:'dd/MM/yyyy'}}</td>
+                        <td>{{ record.selling_price | number:'1.2-2'}}</td>
+                        <td>{{ record.unit_purchase_price | number:'1.2-2'}}</td>
+                        <td>{{ (record.unit_purchase_price + (record.sgst_amount + record.cgst_amount)/record.quantity) | number:'1.2-2'}}</td>
+                        <td>{{ (((record.mrp - (record.unit_purchase_price + (record.sgst_amount + record.cgst_amount)/record.quantity)))/record.mrp) * 100  | number:'1.2-2'}}</td>
+                        <td>{{ record.quantity }}</td>
+                        <td>{{record.cgst_amount/record.quantity| number : '1.2-2'}} Rs. x {{record.quantity}} ={{ record.cgst_amount | number:'1.2-2'}}</td>
                         <td>{{ record.cgst | number:'1.2-2'}}</td>
-                        <td>{{ record.sgst_amount | number:'1.2-2'}}</td>
+                        <td>{{record.sgst_amount/record.quantity| number : '1.2-2'}} Rs. x {{record.quantity}} ={{ record.sgst_amount | number:'1.2-2'}}</td>
                         <td>{{ record.sgst | number:'1.2-2'}}</td>
-                        <td>{{ record.igst_amount | number:'1.2-2'}}</td>
+                        <td>{{record.igst_amount/record.quantity| number : '1.2-2'}} Rs. x {{record.quantity}} ={{ record.igst_amount | number:'1.2-2'}}</td>
+
                         <td>{{ record.igst?record.igst:0 | number:'1.2-2'}}</td>
-                        <td>{{ record.purchase_price| number:'1.2-2'}}</td>
                         <td>{{ record.taxable_amount | number:'1.2-2'}}</td>
                         <td>{{ record.amount_with_tax | number:'1.2-2'}}</td>
+                        <td>{{ (record.selling_price * record.quantity) | number:'1.2-2'}}</td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">

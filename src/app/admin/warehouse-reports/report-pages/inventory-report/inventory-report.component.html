@@ -20,9 +20,14 @@
             <div style="display: flex; align-items: center;">
                 <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
                     (click)="clearAllData(dt1)"></button>
+                    <p-dropdown [options]="addField" class="p-1" optionValue="type" optionLabel="name"
+                    [(ngModel)]="type"
+                    (onChange)="addFillter()"
+                    placeholder="Filter"></p-dropdown>
                 <p-dropdown [options]="fieldsArray" class="p-1" optionValue="id" optionLabel="name"
                     [(ngModel)]="params.field" (onChange)="selectFields($event)"
                     placeholder="Select a field"></p-dropdown>
+                   
                 <mat-form-field style="margin-top: 15px ">
                     <mat-icon matPrefix>search</mat-icon>
                     <input [disabled]="!params.field" [(ngModel)]="searchTerm" matInput type="search"
@@ -32,8 +37,8 @@
                     (click)="search()" [disabled]="!searchTerm"></button>
             </div>
             <div style="display: flex; align-items: center;">
-                <p-calendar [(ngModel)]="dateRange" selectionMode="range" placeholder="Choose your date range"
-                    [readonlyInput]="true" [appendTo]="'body'"></p-calendar>
+               <p-calendar [(ngModel)]="dateRange" selectionMode="range" placeholder="Choose your date range"
+            [readonlyInput]="true" [appendTo]="'body'" dateFormat="yy-mm-dd"></p-calendar>
                 <button pButton label="Search" class="p-button-outlined p-button-success" icon="pi pi-search"
                     (click)="filterByDate()" [disabled]="!dateRange"></button>
                 <button mat-raised-button class="success-button" class="resizebtn" (click)="exportExcel()">
@@ -47,62 +52,83 @@
             style="display: flex; align-items: center; flex-direction: row;flex-wrap:wrap; justify-content: center;">
 
             <mat-card class="example-card">
-                <mat-card-title class="example-header">Total Products</mat-card-title>
+                <mat-card-title class="example-header">Total Articals</mat-card-title>
                 <mat-card-content class="example-content">
                     <div style="display: flex;justify-content: center;">
                         <img src="../../../../../assets/icons/image (2).png" alt="">
                     </div>
                     <div class="example-text">
                         <div class="example-row" style="display: flex;justify-content: center;">
-                            <span class="example-value">{{stats?.total_product }}</span>
+                            <span class="example-value">{{stats?.total_artical }}</span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="example-card">
+                <mat-card-title class="example-header">Total Quantity</mat-card-title>
+                <mat-card-content class="example-content">
+                    <div style="display: flex;justify-content: center;">
+                        <img src="../../../../../assets/icons/image (2).png" alt="">
+                    </div>
+                    <div class="example-text">
+                        <div class="example-row" style="display: flex;justify-content: center;">
+                            <span class="example-value">{{stats?.total_quantity }}</span>
                         </div>
                     </div>
                 </mat-card-content>
             </mat-card>
             <mat-card class="example-card ">
-                <mat-card-title class="example-header">Total Purchases Cost</mat-card-title>
+                <mat-card-title class="example-header">Total Inventory Cost<br>(With Tax)</mat-card-title>
                 <mat-card-content class="example-content">
                     <div style="display: flex;justify-content: center;">
                         <img src="../../../../../assets/icons/image (2).png" alt="">
                     </div>
                     <div class="example-text">
                         <div class="example-row" style="display: flex;justify-content: center;">
-                            <span class="example-value">{{stats?.total_purchse_cost | number:'1.2-2'}}</span>
+                            <span class="example-value">{{formatAmount(stats?.total_inventory_cost_with_tax )}}</span>
                         </div>
                     </div>
                 </mat-card-content>
             </mat-card>
             <mat-card class="example-card ">
-                <mat-card-title class="example-header">Total Sales Cost</mat-card-title>
+                <mat-card-title class="example-header">Total Inventory Cost<br>(Without Tax)</mat-card-title>
                 <mat-card-content class="example-content">
                     <div style="display: flex;justify-content: center;">
                         <img src="../../../../../assets/icons/image (2).png" alt="">
                     </div>
                     <div class="example-text">
                         <div class="example-row" style="display: flex;justify-content: center;">
-                            <span class="example-value">{{stats?.toal_sales_cost | number:'1.2-2'}}</span>
+                            <span class="example-value">{{formatAmount(stats?.total_inventory_cost_without_tax )}}</span>
                         </div>
                     </div>
                 </mat-card-content>
             </mat-card>
-
-
             <mat-card class="example-card ">
-                <mat-card-title class="example-header">Total Stock</mat-card-title>
+                <mat-card-title class="example-header">Total retail Cost <br> (With tax)</mat-card-title>
                 <mat-card-content class="example-content">
                     <div style="display: flex;justify-content: center;">
                         <img src="../../../../../assets/icons/image (2).png" alt="">
                     </div>
                     <div class="example-text">
                         <div class="example-row" style="display: flex;justify-content: center;">
-                            <span class="example-value">{{stats?.total_stock}}</span>
+                            <span class="example-value">{{formatAmount(stats?.total_ratail_cost_with_tax )}}</span>
                         </div>
                     </div>
                 </mat-card-content>
             </mat-card>
-
-
-
+            <mat-card class="example-card ">
+                <mat-card-title class="example-header">Total retail Cost <br> (Without tax)</mat-card-title>
+                <mat-card-content class="example-content">
+                    <div style="display: flex;justify-content: center;">
+                        <img src="../../../../../assets/icons/image (2).png" alt="">
+                    </div>
+                    <div class="example-text">
+                        <div class="example-row" style="display: flex;justify-content: center;">
+                            <span class="example-value">{{formatAmount(stats?.total_ratail_cost_without_tax )}}</span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
         </div>
         <div class="ml-2" style="display: flex; align-items: center; justify-content: space-between;">
             <div class="h1-txt p-2">
@@ -123,15 +149,17 @@
                         <th>Category</th>
                         <th>Sub Category</th>
                         <th>HSN</th>
-                        <th>Expiry</th>
-                        <th>MRP</th>
-                        <th>Quantity Left</th>
-                        <th>Purchase Price</th>
-                        <th>Purchase Cost</th>
-                        <th>Selling Price</th>
-                        <th>Selling Cost</th>
-
-
+                        <th>Unit MRP (Rs)</th>
+                        <th>Unit Purchase Price</th>
+                        <th>Unit Selling Price</th>
+                        <th>Purchase Price (with GST)</th>
+                        <th>Selling Price (with GST)</th>
+                        <th>Total Quantity Left</th>
+                        <th>Threshold quantity</th>
+                        <th>Total purchase cost(with GST)</th>
+                        <th>Total purchase cost(without GST)</th>
+                        <th>Total retail cost(with GST)</th>
+                        <th>Total retail cost(without GST)</th>
                     </tr>
                 </ng-template>
 
@@ -143,15 +171,17 @@
                         <td>{{ record.category_name }}</td>
                         <td>{{ record.sub_category_name }}</td>
                         <td>{{ record.hsn }}</td>
-                        <td>{{ record.expiry | date }}</td>
                         <td>{{ record.mrp | number:'1.2-2'}}</td>
-                        <td>{{ record.total_quantity | number:'1.2-2'}}</td>
                         <td>{{ record.purchase_price | number:'1.2-2'}}</td>
-                        <td>{{ record.purchase_cost | number:'1.2-2'}}</td>
                         <td>{{ record.selling_price | number:'1.2-2'}}</td>
-                        <td>{{ record.sales_cost | number:'1.2-2'}}</td>
-
-
+                        <td>{{ record.purchase_price_with_gst | number:'1.2-2'}}</td>
+                        <td>{{ record.selling_price_with_gst | number:'1.2-2'}}</td>
+                        <td>{{ record.total_quantity_left | number:'1.2-2'}}</td>
+                        <td>{{ record.threshold_quantity ?? 0 | number:'1.2-2'}}</td>
+                        <td>{{ record.purchase_cost_with_gst | number:'1.2-2'}}</td>
+                        <td>{{ record.purchase_cost_without_gst | number:'1.2-2'}}</td>
+                        <td>{{ record.ratai_cost_with_gst | number:'1.2-2'}}</td>
+                        <td>{{ record.ratai_cost_without_gst | number:'1.2-2'}}</td>
                     </tr>
                 </ng-template>
 

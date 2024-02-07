@@ -4,7 +4,7 @@
     }
   }
   .example-card {
-    width: 320px;
+    width: 200px;
     margin: 20px;
     display: flex;
     height: 170px;
@@ -16,7 +16,7 @@
     // background-color: #008CBA;
     color: black;
     font-weight: 500;
-    // padding: 10px;
+    font-size: 17px;
     text-align: center;
   }
    
@@ -34,7 +34,7 @@
   }
    
   .example-text {
-    font-size: 14px;
+    font-size: 12px;
   }
    
   .example-label {
@@ -44,7 +44,7 @@
   }
    
 .example-value{
-  font-size: large;
+  font-size: medium;
   font-weight: bold;
 }
    

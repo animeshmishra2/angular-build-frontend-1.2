@@ -114,12 +114,12 @@ export class ReportApiService {
   }
 
   getExpiryReport(params:any):Observable<any>{
-    // let string =""
-    // if(params){
-    //   string = this.paramGenrator(params)
-    // }
+    let string =""
+    if(params){
+      string = this.paramGenrator(params)
+    }
     return this.http
-    .post(`${AppSetting.API_ENDPOINT}/api/expried-and-expiring-report`,params)
+    .post(`${AppSetting.API_ENDPOINT}/api/expried-and-expiring-report`,string)
     .pipe(
       map((response) => response),
       catchError((error) => {

@@ -47,7 +47,18 @@ export class InventoryReportComponent implements OnInit {
   searchTerm: any;
   selectedfield: any
   stats: any
+  type:any
   // brand,category,sub_category and barcode
+  addField =[
+    {
+      type:"critical_products",
+      name :"Critical products"
+    },
+    {
+      type:"replenishment_products",
+      name :"Replenishment products"
+    }
+  ]
   fieldsArray = [
     {
       id: "product",
@@ -75,6 +86,7 @@ export class InventoryReportComponent implements OnInit {
     rows: 10,
     searchTerm: "",
     field: "",
+    type:"",
     idstore_warehouse:1
   }
   lat: number;
@@ -243,11 +255,13 @@ export class InventoryReportComponent implements OnInit {
     this.selectedWarehouse = 1
     this.selectedStore = undefined
     this.searchTerm = ""
+    this.type = ""
     this.params = {
       first: 0,
       rows: 10,
       searchTerm: "",
       field: "",
+      type:"",
       idstore_warehouse:1
     }
     this.fetchInventoryReport();
@@ -290,6 +304,28 @@ export class InventoryReportComponent implements OnInit {
   selectFields(event) {
     this.params.field = event.value
 
+  }
+  addFillter() {
+    if(this.type){
+      this.params.type  = this.type
+      console.log(this.params.type);
+      this.loading = true
+      this.getInventoryReportStateDate()
+      this.apiService.getInventoryReport(this.params).subscribe(
+        (response) => {
+          this.tableData = response.data;
+          this.totalRecords = response.total
+  
+          this.loading = false
+        },
+        (error) => {
+          console.error('Error fetching Product Report:', error);
+  
+          this.loading = false
+        }
+      );
+    }
+    
   }
   search() {
     if(this.searchTerm){
@@ -336,6 +372,36 @@ export class InventoryReportComponent implements OnInit {
         console.error('Error fetching Product Report:', error);
       }
     );
+  }
+  formatAmount(amount: number): string {
+    if (amount >= 1e6) {
+      const millions = Math.floor(amount / 1e5);
+      const remainder = amount % 1e5;
+      const thousands = Math.floor(remainder / 1e3);
+      const hundreds = remainder % 1e3;
+      
+      let formattedAmount = '';
+      if (millions > 0) {
+        formattedAmount += millions + ' Lakh ';
+      }
+      if (thousands > 0) {
+        formattedAmount += thousands + ' Thousand ';
+      }
+      if (hundreds > 0) {
+        formattedAmount += hundreds.toFixed(0) + ' Rupee';
+      }
+      return formattedAmount.trim();
+    } else if (amount >= 1e3) {
+      const thousands = Math.floor(amount / 1e3);
+      const hundreds = amount % 1e3;
+      let formattedAmount = thousands + ' Thousand ';
+      if (hundreds > 0) {
+        formattedAmount += hundreds.toFixed(0) + ' Rupee';
+      }
+      return formattedAmount;
+    } else {
+      return amount.toFixed(0) + ' Rupee';
+    }
   }
   filterByStore(event) {
     this.params.idstore_warehouse = event.value

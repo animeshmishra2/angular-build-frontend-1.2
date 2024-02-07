@@ -60,27 +60,27 @@
                 </mat-card-content>
             </mat-card>
             <mat-card class="example-card ">
-                <mat-card-title class="example-header">Avg Selling Margin(Rs)</mat-card-title>
+                <mat-card-title class="example-header">Avg purchase margin with tax (Rs)</mat-card-title>
                 <mat-card-content class="example-content">
                     <div style="display: flex;justify-content: center;">
                         <img src="../../../../../assets/icons/image (2).png" alt="">
                     </div>
                     <div class="example-text">
                         <div class="example-row" style="display: flex;justify-content: center;">
-                            <span class="example-value">{{stats?.avg_selling_margin}}</span>
+                            <span class="example-value">{{stats?.avg_purchase_margin_with_tax}}</span>
                         </div>
                     </div>
                 </mat-card-content>
             </mat-card>
             <mat-card class="example-card ">
-                <mat-card-title class="example-header">Avg Selling Margin(%)</mat-card-title>
+                <mat-card-title class="example-header">Avg purchase margin without tax (Rs)</mat-card-title>
                 <mat-card-content class="example-content">
                     <div style="display: flex;justify-content: center;">
                         <img src="../../../../../assets/icons/image (2).png" alt="">
                     </div>
                     <div class="example-text">
                         <div class="example-row" style="display: flex;justify-content: center;">
-                            <span class="example-value">{{stats?.avg_selling_margin_pr}}</span>
+                            <span class="example-value">{{stats?.avg_purchase_margin_without_tax}}</span>
                         </div>
                     </div>
                 </mat-card-content>
@@ -88,60 +88,187 @@
 
 
             <mat-card class="example-card ">
-                <mat-card-title class="example-header">Avg Purchase Margin(%)</mat-card-title>
+                <mat-card-title class="example-header">Avg profit margin with tax(Rs)</mat-card-title>
                 <mat-card-content class="example-content">
                     <div style="display: flex;justify-content: center;">
                         <img src="../../../../../assets/icons/image (2).png" alt="">
                     </div>
                     <div class="example-text">
                         <div class="example-row" style="display: flex;justify-content: center;">
-                            <span class="example-value">{{stats?.avg_purchase_margin_pr}}</span>
+                            <span class="example-value">{{stats?.avg_profit_margin_with_tax}}</span>
                         </div>
                     </div>
                 </mat-card-content>
             </mat-card>
             <mat-card class="example-card ">
-                <mat-card-title class="example-header">Avg Purchase Margin(Rs)</mat-card-title>
+                <mat-card-title class="example-header">Avg profit margin without tax(Rs)</mat-card-title>
                 <mat-card-content class="example-content">
                     <div style="display: flex;justify-content: center;">
                         <img src="../../../../../assets/icons/image (2).png" alt="">
                     </div>
                     <div class="example-text">
                         <div class="example-row" style="display: flex;justify-content: center;">
-                            <span class="example-value">{{stats?.avg_purchase_margin}}</span>
+                            <span class="example-value">{{stats?.avg_profit_margin_without_tax}}</span>
                         </div>
                     </div>
                 </mat-card-content>
             </mat-card>
             <mat-card class="example-card ">
-                <mat-card-title class="example-header">Avg Discount Margin(Rs)</mat-card-title>
+                <mat-card-title class="example-header">Avg discount margin with tax(Rs)</mat-card-title>
                 <mat-card-content class="example-content">
                     <div style="display: flex;justify-content: center;">
                         <img src="../../../../../assets/icons/image (2).png" alt="">
                     </div>
                     <div class="example-text">
                         <div class="example-row" style="display: flex;justify-content: center;">
-                            <span class="example-value">{{stats?.avg_discount_margin}}</span>
+                            <span class="example-value">{{stats?.avg_discount_margin_with_tax}}</span>
                         </div>
                     </div>
                 </mat-card-content>
             </mat-card>
             <mat-card class="example-card ">
-                <mat-card-title class="example-header">Avg Discount Margin(%)</mat-card-title>
+                <mat-card-title class="example-header">Avg discount margin without tax(Rs)</mat-card-title>
                 <mat-card-content class="example-content">
                     <div style="display: flex;justify-content: center;">
                         <img src="../../../../../assets/icons/image (2).png" alt="">
                     </div>
                     <div class="example-text">
                         <div class="example-row" style="display: flex;justify-content: center;">
-                            <span class="example-value">{{stats?.avg_discount_margin_pr}}</span>
+                            <span class="example-value">{{stats?.avg_discount_margin_without_tax}}</span>
                         </div>
                     </div>
                 </mat-card-content>
             </mat-card>
-
-
-
+            <mat-card class="example-card ">
+                <mat-card-title class="example-header">Average Purchase Margin With Tax(%)</mat-card-title>
+                <mat-card-content class="example-content">
+                    <div style="display: flex;justify-content: center;">
+                        <img src="../../../../../assets/icons/image (2).png" alt="">
+                    </div>
+                    <div class="example-text">
+                        <div class="example-row" style="display: flex;justify-content: center;">
+                            <span class="example-value">{{stats?.avg_purchase_margin_with_tax_pr}}</span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="example-card ">
+                <mat-card-title class="example-header">Average Purchase Margin Without Tax(%)</mat-card-title>
+                <mat-card-content class="example-content">
+                    <div style="display: flex;justify-content: center;">
+                        <img src="../../../../../assets/icons/image (2).png" alt="">
+                    </div>
+                    <div class="example-text">
+                        <div class="example-row" style="display: flex;justify-content: center;">
+                            <span class="example-value">{{stats?.avg_purchase_margin_without_tax_pr}}</span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="example-card ">
+                <mat-card-title class="example-header">Average Profit Margin With Tax(%)</mat-card-title>
+                <mat-card-content class="example-content">
+                    <div style="display: flex;justify-content: center;">
+                        <img src="../../../../../assets/icons/image (2).png" alt="">
+                    </div>
+                    <div class="example-text">
+                        <div class="example-row" style="display: flex;justify-content: center;">
+                            <span class="example-value">{{stats?.avg_profit_margin_with_tax_pr}}</span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="example-card ">
+                <mat-card-title class="example-header">Average Profit Margin Without Tax(%)</mat-card-title>
+                <mat-card-content class="example-content">
+                    <div style="display: flex;justify-content: center;">
+                        <img src="../../../../../assets/icons/image (2).png" alt="">
+                    </div>
+                    <div class="example-text">
+                        <div class="example-row" style="display: flex;justify-content: center;">
+                            <span class="example-value">{{stats?.avg_profit_margin_without_tax_pr}}</span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="example-card ">
+                <mat-card-title class="example-header">Average Discount Margin With Tax(%)</mat-card-title>
+                <mat-card-content class="example-content">
+                    <div style="display: flex;justify-content: center;">
+                        <img src="../../../../../assets/icons/image (2).png" alt="">
+                    </div>
+                    <div class="example-text">
+                        <div class="example-row" style="display: flex;justify-content: center;">
+                            <span class="example-value">{{stats?.avg_discount_margin_with_tax_pr}}</span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="example-card ">
+                <mat-card-title class="example-header">Average Discount Margin Without Tax(%)</mat-card-title>
+                <mat-card-content class="example-content">
+                    <div style="display: flex;justify-content: center;">
+                        <img src="../../../../../assets/icons/image (2).png" alt="">
+                    </div>
+                    <div class="example-text">
+                        <div class="example-row" style="display: flex;justify-content: center;">
+                            <span class="example-value">{{stats?.avg_discount_margin_without_tax_pr}}</span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="example-card ">
+                <mat-card-title class="example-header">Average Selling Cost Without Tax(Rs)</mat-card-title>
+                <mat-card-content class="example-content">
+                    <div style="display: flex;justify-content: center;">
+                        <img src="../../../../../assets/icons/image (2).png" alt="">
+                    </div> 
+                    <div class="example-text">
+                        <div class="example-row" style="display: flex;justify-content: center;">
+                            <span class="example-value">{{stats?.avg_selling_cost_without_tax}}</span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="example-card ">
+                <mat-card-title class="example-header">Average Selling Cost With Tax(Rs)</mat-card-title>
+                <mat-card-content class="example-content">
+                    <div style="display: flex;justify-content: center;">
+                        <img src="../../../../../assets/icons/image (2).png" alt="">
+                    </div> 
+                    <div class="example-text">
+                        <div class="example-row" style="display: flex;justify-content: center;">
+                            <span class="example-value">{{stats?.avg_selling_cost_with_tax}}</span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="example-card ">
+                <mat-card-title class="example-header">Average Purchase Cost Without Tax(Rs)</mat-card-title>
+                <mat-card-content class="example-content">
+                    <div style="display: flex;justify-content: center;">
+                        <img src="../../../../../assets/icons/image (2).png" alt="">
+                    </div> 
+                    <div class="example-text">
+                        <div class="example-row" style="display: flex;justify-content: center;">
+                            <span class="example-value">{{stats?.avg_purchase_cost_without_tax}}</span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="example-card ">
+                <mat-card-title class="example-header">Average Purchase Cost With Tax(Rs)</mat-card-title>
+                <mat-card-content class="example-content">
+                    <div style="display: flex;justify-content: center;">
+                        <img src="../../../../../assets/icons/image (2).png" alt="">
+                    </div> 
+                    <div class="example-text">
+                        <div class="example-row" style="display: flex;justify-content: center;">
+                            <span class="example-value">{{stats?.avg_purchase_cost_with_tax}}</span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
         </div>
         <div class="ml-2" style="display: flex; align-items: center; justify-content: space-between;">
             <div class="h1-txt p-2">

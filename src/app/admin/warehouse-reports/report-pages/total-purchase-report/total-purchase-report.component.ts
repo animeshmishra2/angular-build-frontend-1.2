@@ -206,11 +206,32 @@ export class TotalPurchaseReportComponent implements OnInit {
 
   formatAmount(amount: number): string {
     if (amount >= 1e6) {
-      return (amount / 1e5).toFixed(2) +' '+'Lakh'; // Millions
+      const millions = Math.floor(amount / 1e5);
+      const remainder = amount % 1e5;
+      const thousands = Math.floor(remainder / 1e3);
+      const hundreds = remainder % 1e3;
+      
+      let formattedAmount = '';
+      if (millions > 0) {
+        formattedAmount += millions + ' Lakh ';
+      }
+      if (thousands > 0) {
+        formattedAmount += thousands + ' Thousand ';
+      }
+      if (hundreds > 0) {
+        formattedAmount += hundreds.toFixed(0) + ' Rupee';
+      }
+      return formattedAmount.trim();
     } else if (amount >= 1e3) {
-      return (amount / 1e3).toFixed(2) +' '+'Thousand'; // Thousands
+      const thousands = Math.floor(amount / 1e3);
+      const hundreds = amount % 1e3;
+      let formattedAmount = thousands + ' Thousand ';
+      if (hundreds > 0) {
+        formattedAmount += hundreds.toFixed(0) + ' Rupee';
+      }
+      return formattedAmount;
     } else {
-      return amount.toFixed(2); // Less than 1000
+      return amount.toFixed(0) + ' Rupee';
     }
   }
 

@@ -170,6 +170,7 @@ export class ExpiryReportComponent implements OnInit {
       async (response: any) => {
         this.spinner.hide();
         this.expiryList = response.data;
+        console.log(this.expiryList);
         this.totalRecords = response.total
         this.piaData[0] = this.expiryList.total_expried_amount
         this.piaData[1] = this.expiryList.total_xpiring_in_30_days_amount

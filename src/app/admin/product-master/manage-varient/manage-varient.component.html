@@ -1,0 +1,100 @@
+<div fxFlex="100" class="inner-card mat-elevation-z1" fxLayout="column">
+	<div fxFlex="10" class="h1-txt">
+		Manage Product Master
+	</div>
+	<div class="title-name">
+		{{row?.name}}
+		<button mat-raised-button color="primary" (click)="addVarient()">
+			Add Varient
+		</button>
+	</div>
+	<form fxLayout="column" [formGroup]="orderForm" fxFlex="100" class="form-manage">
+		<div formArrayName="items" *ngFor="let item of orderForm.get('items')['controls']; let i = index;" style="display: flex; align-items: flex-start;">
+			<mat-checkbox [checked]="activeVarient == i" (change)="makeActive($event, i)">
+			</mat-checkbox>
+			<div fxLayout="column" fxLayoutGap="40px" [formGroupName]="i" class="manage-varient" [ngClass]="{'active' : activeVarient == i}">
+				<div fxFlex fxLayout="row" fxLayoutGap="10px">
+					<mat-form-field fxFlex>
+						<mat-label>Name</mat-label>
+						<input matInput placeholder="Enter name" formControlName="name" autocomplete="off" required>
+						<mat-error *ngIf="!item.controls['name'].valid && item.controls['name'].touched">
+							Enter a valid name.
+						</mat-error>
+					</mat-form-field>
+					<mat-form-field fxFlex>
+						<mat-label>Barcode</mat-label>
+						<input matInput placeholder="Enter Barcode" formControlName="barcode" autocomplete="off" required>
+						<mat-error *ngIf="!item.controls['barcode'].valid && item.controls['barcode'].touched">
+							Enter a valid barcode.
+						</mat-error>
+					</mat-form-field>
+					<mat-form-field fxFlex>
+						<mat-label>Description</mat-label>
+						<input matInput placeholder="Enter Description" formControlName="description" autocomplete="off" required>
+						<mat-error *ngIf="!item.controls['description'].valid && item.controls['description'].touched">
+							Enter a valid Description.
+						</mat-error>
+					</mat-form-field>
+					<mat-form-field fxFlex>
+						<mat-label>HSN</mat-label>
+						<input matInput placeholder="Enter HSN" formControlName="hsn" autocomplete="off" required>
+						<mat-error *ngIf="!item.controls['hsn'].valid && item.controls['hsn'].touched">
+							Enter a valid HSN.
+						</mat-error>
+					</mat-form-field>
+				</div>
+				<div fxFlex fxLayout="row" fxLayoutGap="10px" style="align-items: center;">
+					
+					
+					<div *ngIf="i != 0">
+						<mat-label style="margin: 0 10px;">Is Same Attribute</mat-label>
+						<mat-checkbox formControlName="isSame" (change)="onChecked($event, item, i)">
+						</mat-checkbox>
+					</div>
+
+					<mat-form-field fxFlex>
+						<mat-label>Select Attribute Type</mat-label>
+						<mat-select formControlName="attributeValue1">
+							<mat-option value="color">Color</mat-option>
+							<mat-option value="size">Size</mat-option>
+							<mat-option value="memory">Memory</mat-option>
+						</mat-select>
+						<mat-error *ngIf="!item.controls['attributeValue1'].valid && item.controls['attributeValue1'].touched">
+							Enter a valid Attribute Type.
+						</mat-error>
+					</mat-form-field>
+					
+					<mat-form-field fxFlex>
+						<mat-label>Attribute Value</mat-label>
+						<mat-select formControlName="attributeValue2">
+							<mat-option value="black">Black</mat-option>
+							<mat-option value="6">6</mat-option>
+							<mat-option value="3gb">3 GB</mat-option>
+						</mat-select>
+						<mat-error *ngIf="!item.controls['attributeValue2'].valid && item.controls['attributeValue2'].touched">
+							Enter a valid Attribute Value.
+						</mat-error>
+					</mat-form-field>
+
+					<mat-form-field fxFlex>
+						<mat-label>Status</mat-label>
+						<mat-select formControlName="status">
+							<mat-option value="1">Active</mat-option>
+							<mat-option value="0">Inactive</mat-option>
+						</mat-select>
+						<mat-error *ngIf="!item.controls['status'].valid && item.controls['status'].touched">
+							Enter a valid Status.
+						</mat-error>
+					</mat-form-field>
+
+					<button mat-raised-button color="primary" type="submit" [disabled]="item?.invalid" (click)="manageVariant(i)">
+						{{item?.id ? "Update" : "Save"}}
+					</button>
+				</div>
+			</div>
+		</div>
+		<div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center" style="margin: 15px 0px;">
+			<button mat-raised-button type="button" (click)="cancel()">Cancel</button>
+		</div>
+	</form>
+</div>

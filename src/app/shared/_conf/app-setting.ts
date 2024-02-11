@@ -67,6 +67,8 @@ export class AppSetting {
       "getThresholdProduct":"/api/inventory-threshold-products",
       "getonlineOrders" : "/api/online-order-data",
       "getupdateDiscount" : "/api/discount/update-package",
+      "manageVariant" : "/api/product-variant",
+      "getProductVariant" : "/api/product-variant",
     }
     public static PKGMASTER = {
         'Product': 1,

@@ -12,6 +12,8 @@ import { ApiHttpService } from 'src/app/shared/_service/api-http.service';
 import { AuthenticationService } from 'src/app/shared/_service/authentication.service';
 import { CartService } from 'src/app/shared/_service/cart.service';
 import { EditProductMasterComponent } from './edit-product-master/edit-product-master.component';
+import { ManageVarientComponent } from './manage-varient/manage-varient.component';
+
 
 @Component({
   selector: 'app-product-master',
@@ -39,7 +41,7 @@ export class ProductMasterComponent implements OnInit {
     public router: Router,
     public cartServ: CartService,
     public dialog: MatDialog,
-    public apiServ:ApiHttpService
+    public apiServ: ApiHttpService
   ) { }
   ngOnInit(): void {
     this.currentUser = this.authenticationService.currentUserValue;
@@ -63,14 +65,14 @@ export class ProductMasterComponent implements OnInit {
   getProducts(barcode) {
     this.loading = true;
     let url = AppSetting.ENDPOINTS.getProductMaster + `/${barcode}`;
-    if(this.isExactSearch && barcode != '1'){
-      url += '/'+1;
+    if (this.isExactSearch && barcode != '1') {
+      url += '/' + 1;
     }
     this.apiServ.get(url).subscribe(
       (data) => {
         this.products = data;
         console.log(this.products);
-        
+
         this.dataSource = new MatTableDataSource(this.products);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -81,7 +83,21 @@ export class ProductMasterComponent implements OnInit {
       }
     );
   }
-  
+
+  manageVarient(row: any) {
+    const dialogRef = this.dialog.open(ManageVarientComponent, {
+      width: '80%',
+      data: { data: row }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.manual == false) {
+        this.getProducts(1);
+        this.alertService.openSnackBar("Sucessfully Updated ", "OK");
+      }
+    });
+  }
+
   editItem(row) {
     const dialogRef = this.dialog.open(EditProductMasterComponent, {
       width: '80%',

@@ -66,6 +66,8 @@ import { DeleiverySlotsComponent } from './deleivery-slots/deleivery-slots.compo
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { AddEditThresoldPurchaseOrderComponent } from './threshould-purchase-order/add-edit-thresold-purchase-order/add-edit-thresold-purchase-order.component';
 import { PackageBranchCategoryModule } from './package-branch-category/package-branch-category.module';
+import { ManageVarientComponent } from './product-master/manage-varient/manage-varient.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -101,7 +103,8 @@ import { PackageBranchCategoryModule } from './package-branch-category/package-b
     DeleiverySlotsComponent,
     ThreshouldPurchaseOrderComponent,
     AddEditSlotsComponent,
-    AddEditThresoldPurchaseOrderComponent
+    AddEditThresoldPurchaseOrderComponent,
+    ManageVarientComponent
   ],
   imports: [
     DirectiveModule,
@@ -136,6 +139,7 @@ import { PackageBranchCategoryModule } from './package-branch-category/package-b
     MatStepperModule,
     MatAutocompleteModule,
     MatTooltipModule,
+    MatCheckboxModule,
     NgxMaterialTimepickerModule,
     PackageBranchCategoryModule
   ],

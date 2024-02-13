@@ -82,7 +82,7 @@
                 <div *ngFor="let attribute of attributeValues.controls; let i=index" [formGroupName]="i">
                   <mat-form-field fxFlex>
                     <mat-label>Attribute Type</mat-label>
-                    <mat-select formControlName="attributeName" [disabled]="true"> 
+                    <mat-select formControlName="attributeName"> 
 						<mat-option *ngFor="let store of attributeName" [value]="store.idattribute">{{store?.name}}</mat-option>
 					</mat-select>
                     <mat-error *ngIf="orderForm.get('attributeValues')?.hasError('required') && orderForm.get('attributeValues')?.touched">
@@ -91,7 +91,7 @@
                   </mat-form-field>
                   <mat-form-field fxFlex>
                     <mat-label>Attribute Value</mat-label>
-                    <mat-select formControlName="attributeValue" [disabled]="true">
+                    <mat-select formControlName="attributeValue">
 						<mat-option *ngFor="let store of attributeList" [value]="store.idattribute_value">{{store?.value}}</mat-option>
 					</mat-select>
                     <mat-error *ngIf="orderForm.get('attributeValues')?.hasError('required') && orderForm.get('attributeValues')?.touched">

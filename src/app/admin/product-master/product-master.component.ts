@@ -85,17 +85,18 @@ export class ProductMasterComponent implements OnInit {
   }
 
   manageVarient(row: any) {
-    const dialogRef = this.dialog.open(ManageVarientComponent, {
-      width: '80%',
-      data: { data: row }
-    });
+    this.router.navigate(['/ggb-admin/variant-all'], { state: { data: row } });
+    // const dialogRef = this.dialog.open(ManageVarientComponent, {
+    //   width: '80%',
+    //   data: { data: row }
+    // });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result && result.manual == false) {
-        this.getProducts(1);
-        this.alertService.openSnackBar("Sucessfully Updated ", "OK");
-      }
-    });
+    // dialogRef.afterClosed().subscribe(result => {
+    //   if (result && result.manual == false) {
+    //     this.getProducts(1);
+    //     this.alertService.openSnackBar("Sucessfully Updated ", "OK");
+    //   }
+    // });
   }
 
   editItem(row) {

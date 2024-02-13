@@ -1,0 +1,36 @@
+<div fxFlex="100" class="inner-card mat-elevation-z1" fxLayout="column">
+	<div fxFlex="10" class="h1-txt">
+		{{(row?.idattribute) ? "Update" : "Add New"}} Attribute
+	</div>
+	<div class="margin-top-25"></div>
+	<form fxLayout="column" [formGroup]="lForm" (ngSubmit)="onSubmit()" fxFlex="100">
+		<div fxLayout="column" fxLayoutGap="40px">
+			<div fxFlex fxLayout="row" fxLayoutGap="10px">
+                <mat-form-field fxFlex>
+					<mat-label>Attribute Value</mat-label>
+					<input matInput placeholder="Enter Name" formControlName="name" autocomplete="off" required>
+					<mat-error *ngIf="!lForm.controls['name'].valid && lForm.controls['name'].touched">
+						Enter a Attribute value.
+					</mat-error>
+				</mat-form-field>
+				<mat-form-field fxFlex>
+					<mat-label>Status</mat-label>
+					<mat-select formControlName="status">
+						<mat-option [value]="0">Active</mat-option>
+						<mat-option [value]="1">In Active</mat-option>
+					</mat-select>
+					<mat-error *ngIf="!lForm.controls['status'].valid && lForm.controls['status'].touched">
+						Please select Option.
+					</mat-error>
+				</mat-form-field>
+			</div>
+			
+		</div>
+		<div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
+			<button [disabled]="loading || lForm.invalid" mat-raised-button color="primary" type="submit">
+				{{(row?.idattribute) ? "Update" : "Add New"}} Attribute
+			</button>
+			<button mat-raised-button type="button" (click)="cancel()">Cancel</button>
+		</div>
+	</form>
+</div>

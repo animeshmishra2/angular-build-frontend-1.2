@@ -226,4 +226,43 @@ export class StoreWareService {
         }));
   }
 
+  createAttribute(req) {
+    return this.http.post<any>(AppSetting.API_ENDPOINT + '/api/attribute', req)
+      .pipe(map(data => {
+        return data.data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
+
+  updateAttribute(id, req) {
+    return this.http.put<any>(AppSetting.API_ENDPOINT + '/api/attribute/' + id, req)
+      .pipe(map(data => {
+        return data.data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
+
+  createAttributeValue(req) {
+    return this.http.post<any>(AppSetting.API_ENDPOINT + '/api/attribute-value', req)
+      .pipe(map(data => {
+        return data.data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
+
+  updateAttributeValue(id, req) {
+    return this.http.put<any>(AppSetting.API_ENDPOINT + '/api/attribute-value/' + id, req)
+      .pipe(map(data => {
+        return data.data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
 }

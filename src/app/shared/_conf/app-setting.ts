@@ -68,7 +68,14 @@ export class AppSetting {
       "getonlineOrders" : "/api/online-order-data",
       "getupdateDiscount" : "/api/discount/update-package",
       "manageVariant" : "/api/product-variant",
+      "saveProductsVariant" : "/api/save-product-variants",
+      "saveMultipleProductsVariant" : "/api/save-multiple-product-variant-attributes",
+      "getAttributeValue" : "/api/attribute-value",
+      "getAttributeName" : "/api/attribute",
+      "getAttributebyId" : "/api/get-attribute-values/",
       "getProductVariant" : "/api/product-variant",
+      "getProductvariants" : "/api/get-product-variants",
+      "disableVariant" : "/api/product-variant-detail/",
     }
     public static PKGMASTER = {
         'Product': 1,

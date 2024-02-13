@@ -1,0 +1,47 @@
+<app-header></app-header>
+<div class="wh-reports-container">
+	<div fxLayout="column">
+		<div class="padding-20"></div>
+		<div fxLayout="row" fxFlex>
+			<h1 fxFlex>
+                
+			</h1>
+		</div>
+		<div fxFlex>
+            <!-- <a appBackButton><mat-icon>arrow_back</mat-icon></a>  -->
+			<div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="40px">
+				<mat-card fxFlex="40" fxLayout="column">
+					<div fxLayout="row" fxLayoutGap="50px">
+						<mat-card fxFlex class="center" [ngClass]="bl1" (mouseover)="bl1='mat-elevation-z6'"
+							(mouseout)="bl1='mat-elevation-z2'" [routerLink]="['/ggb-admin/attribute-name-list']">
+							<img mat-card-image src="assets/icons/inventory-report.png" alt="Inventory Report">
+							<mat-card-content>
+								<h2>
+									Attribute List
+								</h2>
+							</mat-card-content>
+						</mat-card>
+						<mat-card fxFlex class="center" [ngClass]="bl2" (mouseover)="bl2='mat-elevation-z6'"
+							(mouseout)="bl2='mat-elevation-z2'" [routerLink]="['/ggb-admin/attribute-value-list']">
+							<img mat-card-image src="assets/icons/warehouse.png" alt="Expiry Report">
+							<mat-card-content>
+								<h2>
+									Attribute Value
+								</h2>
+							</mat-card-content>
+						</mat-card>
+                        <mat-card fxFlex class="center" [ngClass]="bl2" (mouseover)="bl2='mat-elevation-z6'"
+							(mouseout)="bl2='mat-elevation-z2'" [routerLink]="['/ggb-admin/product-master']">
+							<img mat-card-image src="assets/icons/warehouse.png" alt="Expiry Report">
+							<mat-card-content>
+								<h2>
+									Product Master List
+								</h2>
+							</mat-card-content>
+						</mat-card>
+					</div>
+				</mat-card>
+			</div>
+		</div>
+	</div>
+</div>

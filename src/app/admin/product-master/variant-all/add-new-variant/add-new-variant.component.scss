@@ -1,0 +1,25 @@
+.title-name {
+    margin: 0px 0px 20px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.form-manage {
+    max-height: 60vh !important;
+    overflow-y: auto;
+}
+.manage-varient {
+    border: 1px solid;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 15px;
+    width: 100%;
+    &.active {
+        border: 3px solid;
+    }
+}
+.grid-flex {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 10px;
+}

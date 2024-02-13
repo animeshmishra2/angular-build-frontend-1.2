@@ -1,0 +1,114 @@
+<app-header></app-header>
+<div class="adm-container">
+  <div class="main-card">
+    <div fxLayout="row" fxLayoutGap="20px" class="outline-div" fxLayoutAlign="space-around start">
+      <div fxFlex="100" fxLayout="column">
+        <div fxFlex fxLayoutAlign="space-between center" class="orderNum">
+          <div fxFlex="40" class="h1-txt">
+            <a appBackButton><mat-icon>arrow_back</mat-icon></a> 
+           All Variants
+          </div>
+          <div fxFlex="15" class="info-text" fxLayoutAlign="center center">
+            <button mat-raised-button color="primary" (click)="editItem()">
+              <mat-icon>add_circle_outline</mat-icon>
+              Add New
+            </button>
+          </div>
+        </div>
+        <div fxFlex fxLayout="row">
+          <div fxFlex="98" fxLayout="column" class="leftCol">
+            <!-- <div fxFlex="row">
+              <mat-form-field appearance="standard" fxFlex>
+                <mat-label>Search products by barcode</mat-label>
+                <input matInput placeholder="Scan or Enter Barcode" spellcheck="false" autocomplete="off"
+                  onfocus="this.value=''" [ngModel]="search" (ngModelChange)="doSearch($event)" />
+              </mat-form-field>
+              <div fxFlex="12" fxLayoutAlign="center center">
+                <mat-slide-toggle [(ngModel)]="isExactSearch">Exact Match</mat-slide-toggle>
+              </div>
+            </div> -->
+            
+
+            <div class="mat-elevation-z8" fxFlex>
+              <table mat-table [dataSource]="dataSource" matSort>
+                <ng-container matColumnDef="name">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Name
+                  </th>
+                  <td mat-cell *matCellDef="let row" [title]="row.name">{{ (row.name.length > 34) ? row.name.substring(0,34) + '..' : row.name }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="barcode">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Barcode
+                  </th>
+                  <td mat-cell *matCellDef="let row">{{ row.barcode }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="hsn">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    HSN
+                  </th>
+                  <td mat-cell *matCellDef="let row">{{ row.hsn }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="attribute">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Attribute
+                  </th>
+                  <td mat-cell *matCellDef="let row">
+                    <span *ngFor="let attribute of row?.attributes">{{ attribute?.attribute_name +' : '+ attribute?.attribute_values }}<br></span>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="created">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Created At
+                  </th>
+                  <td mat-cell *matCellDef="let row">{{ row?.created_at | date }}</td>
+                </ng-container>
+               
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>Action</th>
+                    <td mat-cell *matCellDef="let row">
+                      <button
+                        mat-mini-fab
+                        color="primary"
+                        aria-label="Edit"
+                        (click)="editVariant(row)"
+                      >
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                      &nbsp;
+                      <!-- <button
+                      mat-mini-fab
+                        color="primary"
+                        aria-label="Manage Product Master"
+                        (click)="Disable(row)"
+                      >
+                        <mat-icon>countertops</mat-icon>
+                      </button> -->
+                      <button mat-mini-fab color="primary" aria-label="Manage Product Master" (click)="Disable(row)">
+                        <mat-icon>stop</mat-icon>
+                      </button>
+                      
+                    </td>
+                  </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                <!-- Row shown when there is no matching data. -->
+                <tr class="mat-row" *matNoDataRow>
+                  <td class="mat-cell" colspan="4">
+                    No data matching the filter
+                  </td>
+                </tr>
+              </table>
+              <mat-paginator [pageSizeOptions]="[5, 10,50,100,200]" aria-label="Select page of results">
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

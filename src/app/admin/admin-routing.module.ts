@@ -21,6 +21,10 @@ import { WarehouseReportsComponent } from './warehouse-reports/warehouse-reports
 import { GstReportComponent } from './gst-report/gst-report.component';
 import { DeleiverySlotsComponent } from './deleivery-slots/deleivery-slots.component';
 import { ThreshouldPurchaseOrderComponent } from './threshould-purchase-order/threshould-purchase-order.component';
+import { ProductHomeComponent } from './product-master/product-home/product-home.component';
+import { AttributeListComponent } from './product-master/attribute-list/attribute-list.component';
+import { AttributeValueListComponent } from './product-master/attribute-value-list/attribute-value-list.component';
+import { VariantAllComponent } from './product-master/variant-all/variant-all.component';
 
 const routes: Routes = [
   { path: "store-warehouse/:type", component: StoreWarehouseComponent },
@@ -38,6 +42,10 @@ const routes: Routes = [
   { path: 'sub-sub-category', component: SubSubCategoryComponent },
   { path: 'wh-reports', loadChildren: () => import('./warehouse-reports/wr.module').then(m => m.WRModule) },
   { path: 'product-master', component: ProductMasterComponent },
+  { path: 'variant-all', component: VariantAllComponent },
+  { path: 'product-master-home', component: ProductHomeComponent },
+  { path: 'attribute-name-list', component: AttributeListComponent },
+  { path: 'attribute-value-list', component: AttributeValueListComponent },
   { path: 'create-package/:id/:counter', component: CreateComponent },
   { path: '', component: AdminHomeComponent },
   { path: 'banners-offers', loadChildren: () => import('./banners-offers/banners-offers.module').then(m => m.BannersOffersModule) },

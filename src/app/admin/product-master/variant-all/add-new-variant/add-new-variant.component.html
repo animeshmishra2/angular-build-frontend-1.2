@@ -1,0 +1,119 @@
+<div fxFlex="100" class="inner-card mat-elevation-z1" fxLayout="column">
+	<div fxFlex="10" class="h1-txt">
+		Add New Variant
+	</div>
+	<!-- <div class="title-name">
+		{{row?.name}}
+		<button mat-raised-button color="primary" (click)="addVarient()">
+			Add Varient
+		</button>
+	</div> -->
+	<form fxLayout="column" [formGroup]="orderForm" fxFlex="100" class="form-manage">
+		<div fxLayout="column" fxLayoutGap="40px" class="manage-varient w-auto">
+            <div fxFlex fxLayout="row" fxLayoutGap="10px" style="align-items: center;">
+				
+				<!-- <mat-form-field fxFlex>
+					<mat-label>Select Attribute Type</mat-label>
+                    <mat-select formControlName="attributeName" [multiple]="true">
+						<mat-option *ngFor="let store of attributeName" [value]="store.idattribute">{{store?.name}}</mat-option>
+					</mat-select>
+					<mat-error *ngIf="!orderForm.controls['attributeName'].valid && orderForm.controls['attributeName'].touched">
+						Enter a valid Attribute Type.
+					</mat-error>
+				</mat-form-field>
+				
+				<mat-form-field fxFlex>
+					<mat-label>Attribute Value</mat-label>
+                    <mat-select formControlName="attributeValue2" [multiple]="true">
+						<mat-option *ngFor="let store of attributeList" [value]="store.idattribute_value">{{store?.value}}</mat-option>
+					</mat-select>
+					<mat-error *ngIf="!orderForm.controls['attributeValue2'].valid && orderForm.controls['attributeValue2'].touched">
+						Enter a valid Attribute Value.
+					</mat-error>
+				</mat-form-field> -->
+
+				<mat-form-field fxFlex>
+					<mat-label>Status</mat-label>
+					<mat-select formControlName="status">
+						<mat-option [value] = 1>Active</mat-option>
+						<mat-option [value] = 0>Inactive</mat-option>
+					</mat-select>
+					<mat-error *ngIf="!orderForm.controls['status'].valid && orderForm.controls['status'].touched">
+						Enter a valid Status.
+					</mat-error>
+				</mat-form-field>
+
+
+			</div>
+			<div fxFlex fxLayout="row" fxLayoutGap="10px">
+				<mat-form-field fxFlex>
+					<mat-label>Name</mat-label>
+					<input matInput placeholder="Enter name" formControlName="name" autocomplete="off" required>
+					<mat-error *ngIf="!orderForm.controls['name'].valid && orderForm.controls['name'].touched">
+						Enter a valid name.
+					</mat-error>
+				</mat-form-field>
+				<mat-form-field fxFlex>
+					<mat-label>Barcode</mat-label>
+					<input matInput placeholder="Enter Barcode" formControlName="barcode" autocomplete="off" required>
+					<mat-error *ngIf="!orderForm.controls['barcode'].valid && orderForm.controls['barcode'].touched">
+						Enter a valid barcode.
+					</mat-error>
+				</mat-form-field>
+			</div>
+			<div fxFlex fxLayout="row" fxLayoutGap="10px" style="align-items: center;">
+                <mat-form-field fxFlex>
+					<mat-label>Description</mat-label>
+					<input matInput placeholder="Enter Description" formControlName="description" autocomplete="off" required>
+					<mat-error *ngIf="!orderForm.controls['description'].valid && orderForm.controls['description'].touched">
+						Enter a valid Description.
+					</mat-error>
+				</mat-form-field>
+				<mat-form-field fxFlex>
+					<mat-label>HSN</mat-label>
+					<input matInput placeholder="Enter HSN" formControlName="hsn" autocomplete="off" required>
+					<mat-error *ngIf="!orderForm.controls['hsn'].valid && orderForm.controls['hsn'].touched">
+						Enter a valid HSN.
+					</mat-error>
+				</mat-form-field>
+            </div>
+			
+            <div formArrayName="attributeValues" class="grid-flex"><!--fxFlex fxLayout="row" fxLayoutGap="10px" style="align-items: center;"-->
+                <div *ngFor="let attribute of attributeValues.controls; let i=index" [formGroupName]="i">
+                  <mat-form-field fxFlex>
+                    <mat-label>Attribute Type</mat-label>
+                    <mat-select formControlName="attributeName">
+						<mat-option *ngFor="let store of attributeName" [value]="store.idattribute">{{store?.name}}</mat-option>
+					</mat-select>
+                    <mat-error *ngIf="orderForm.get('attributeValues')?.hasError('required') && orderForm.get('attributeValues')?.touched">
+                        Please add at least one attribute type and value.
+                      </mat-error>
+                  </mat-form-field>
+                  <mat-form-field fxFlex>
+                    <mat-label>Attribute Value</mat-label>
+                    <mat-select formControlName="attributeValue">
+						<mat-option *ngFor="let store of attributeList" [value]="store.idattribute_value">{{store?.value}}</mat-option>
+					</mat-select>
+                    <mat-error *ngIf="orderForm.get('attributeValues')?.hasError('required') && orderForm.get('attributeValues')?.touched">
+                        Please add at least one attribute type and value.
+                      </mat-error>
+                  </mat-form-field>
+                  <!-- Remove button -->
+                  <button mat-icon-button color="warn" (click)="attributeValues.removeAt(i)">
+                    <mat-icon>remove_circle_outline</mat-icon>
+                  </button>
+                </div>
+              </div>
+              <!-- Add button -->
+              <button mat-raised-button color="primary" type="button" (click)="addAttribute()">
+                Add Attribute
+              </button>
+		</div>
+		<div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center" style="margin: 15px 0px;">
+            <button mat-raised-button color="primary" type="submit" [disabled]="orderForm?.invalid" (click)="manageVariant()">
+               Save
+            </button>
+			<button mat-raised-button type="button" (click)="cancel()">Cancel</button>
+		</div>
+	</form>
+</div>

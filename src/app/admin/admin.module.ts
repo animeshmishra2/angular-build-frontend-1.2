@@ -68,6 +68,14 @@ import { AddEditThresoldPurchaseOrderComponent } from './threshould-purchase-ord
 import { PackageBranchCategoryModule } from './package-branch-category/package-branch-category.module';
 import { ManageVarientComponent } from './product-master/manage-varient/manage-varient.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ProductHomeComponent } from './product-master/product-home/product-home.component';
+import { AttributeListComponent } from './product-master/attribute-list/attribute-list.component';
+import { AddAttributeNameComponent } from './product-master/attribute-list/add-attribute-name/add-attribute-name.component';
+import { AttributeValueListComponent } from './product-master/attribute-value-list/attribute-value-list.component';
+import { AddAttributeValueComponent } from './product-master/attribute-value-list/add-attribute-value/add-attribute-value.component';
+import { VariantAllComponent } from './product-master/variant-all/variant-all.component';
+import { AddNewVariantComponent } from './product-master/variant-all/add-new-variant/add-new-variant.component';
+import { DisableVariantComponent } from './product-master/variant-all/disable-variant/disable-variant.component';
 
 @NgModule({
   declarations: [
@@ -104,7 +112,15 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     ThreshouldPurchaseOrderComponent,
     AddEditSlotsComponent,
     AddEditThresoldPurchaseOrderComponent,
-    ManageVarientComponent
+    ManageVarientComponent,
+    ProductHomeComponent,
+    AttributeListComponent,
+    AddAttributeNameComponent,
+    AttributeValueListComponent,
+    AddAttributeValueComponent,
+    VariantAllComponent,
+    AddNewVariantComponent,
+    DisableVariantComponent
   ],
   imports: [
     DirectiveModule,

@@ -178,4 +178,22 @@ export class BannerOfferService {
           return throwError(err);
         }));
   }
+  getAttributeList() {
+    return this.http.get<any>(AppSetting.API_ENDPOINT + '/api/attribute')
+      .pipe(map(data => {
+        return data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
+  getAttributeValueList() {
+    return this.http.get<any>(AppSetting.API_ENDPOINT + '/api/attribute-value')
+      .pipe(map(data => {
+        return data;
+      }),
+        catchError(err => {
+          return throwError(err);
+        }));
+  }
 }

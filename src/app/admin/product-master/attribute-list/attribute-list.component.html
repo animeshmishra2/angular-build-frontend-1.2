@@ -1,0 +1,95 @@
+<app-header></app-header>
+<div class="adm-container">
+  <div class="main-card">
+    <div
+      fxLayout="row"
+      fxLayoutGap="20px"
+      class="outline-div"
+      fxLayoutAlign="space-around start"
+    >
+      <div fxFlex="100" fxLayout="column">
+        <div fxFlex fxLayoutAlign="space-between center" class="orderNum">
+          <div fxFlex="40" class="h1-txt">
+            <a appBackButton><mat-icon>arrow_back</mat-icon></a> 
+            Attribute List
+          </div>
+          <div fxFlex="15" class="info-text" fxLayoutAlign="center center">
+            <button mat-raised-button color="primary" (click)="editItem({})">
+              <mat-icon>add_circle_outline</mat-icon>
+              Add New
+            </button>
+          </div>
+        </div>
+        <div fxFlex fxLayout="row">
+          <div fxFlex="98" fxLayout="column" class="leftCol">
+            <div class="mat-elevation-z8" fxFlex>
+              <table mat-table [dataSource]="dataSource" matSort>
+                <ng-container matColumnDef="name">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Attribute Name</th>
+                  <td mat-cell *matCellDef="let row">
+                    {{ row.name }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="created">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Created At
+                  </th>
+                  <td mat-cell *matCellDef="let row">{{ row.created_at }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="updateby">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Updated At
+                  </th>
+                  <td mat-cell *matCellDef="let row">{{ row.updated_at | date}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                  <th mat-header-cell *matHeaderCellDef>Action</th>
+                  <td mat-cell *matCellDef="let row">
+                    <button
+                      mat-mini-fab
+                      color="primary"
+                      aria-label="Edit"
+                      matTooltip="Edit"
+                      (click)="editItem(row)"
+                    >
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <!-- &nbsp;
+                    <button
+                      mat-mini-fab
+                      color="primary"
+                      aria-label="Delete"
+                      matTooltip="Delete"
+                      (click)="deleteItem(row)"
+                    >
+                      <mat-icon>delete</mat-icon>
+                    </button> -->
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr
+                  mat-row
+                  *matRowDef="let row; columns: displayedColumns"
+                ></tr>
+                <!-- Row shown when there is no matching data. -->
+                <tr class="mat-row" *matNoDataRow>
+                  <td class="mat-cell" colspan="4">
+                    No data matching the filter Data
+                  </td>
+                </tr>
+              </table>
+              <mat-paginator
+                [pageSizeOptions]="[5, 10,50,100,200]"
+                aria-label="Select page of results"
+              >
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

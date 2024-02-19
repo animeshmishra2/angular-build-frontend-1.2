@@ -24,7 +24,11 @@ export class MarginReportComponent implements OnInit {
     first: 0,
     searchTerm: '',
     rows: 10,
-    idstore_warehouse: 1
+    idstore_warehouse: 1,
+    additional_filter: '',
+    margin_type: '',
+    filter_filed_1: '',
+    filter_filed_2: ''
   }
   fieldsArray = [
     {
@@ -48,6 +52,114 @@ export class MarginReportComponent implements OnInit {
       name: "Brand"
     }
   ]
+
+  additionalfields = [
+    {
+      id: "purchase_margin",
+      name: "Purchase Margin"
+    },
+    {
+      id: "profit_margin",
+      name: "Profit Margin"
+    },
+    {
+      id: "discount_margin",
+      name: "Discount Margin"
+    }
+  ]
+
+  margintype = [
+    {
+      id: "with_tax",
+      name: "With Tax"
+    },
+    {
+      id: "without_tax",
+      name: "Without Tax"
+    }
+  ]
+  filterpercent = [
+    {
+      id: "0-5",
+      name: "0-5%"
+    },
+    {
+      id: "5-10",
+      name: "5-10%"
+    },
+    {
+      id: "10-15",
+      name: "10-15%"
+    },
+    {
+      id: "15-20",
+      name: "15-20%"
+    },{
+      id: "20-25",
+      name: "20-25%"
+    },
+    {
+      id: "25-30",
+      name: "25-30%"
+    },
+    {
+      id: "30-35",
+      name: "30-35%"
+    },
+    {
+      id: "35-40",
+      name: "35-40%"
+    },
+    {
+      id: "40-45",
+      name: "40-45%"
+    },
+    {
+      id: "45-50",
+      name: "45-50%"
+    },
+    {
+      id: "50-55",
+      name: "50-55%"
+    },
+    {
+      id: "55-60",
+      name: "55-60%"
+    },
+    {
+      id: "60-65",
+      name: "60-65%"
+    },
+    {
+      id: "65-70",
+      name: "65-70%"
+    },
+    {
+      id: "70-75",
+      name: "70-75%"
+    },
+    {
+      id: "75-80",
+      name: "75-80%"
+    },
+    {
+      id: "80-85",
+      name: "80-85%"
+    },
+    {
+      id: "85-90",
+      name: "85-90%"
+    },
+    {
+      id: "90-95",
+      name: "90-95%"
+    },
+    {
+      id: "95-100",
+      name: "95-100%"
+    }
+  ]
+
   totalRecords: any
   first = 0
   stats: any;
@@ -166,7 +278,9 @@ export class MarginReportComponent implements OnInit {
     this.getProductReportStateDate()
     this.apiService.getProductReport(tempobject).subscribe(
       (response) => {
-        let tableData = response.data
+        let tableData = response.data;
+        console.log("tableData",tableData);
+        
         const excelData = tableData.map((x) => {
 
           return {
@@ -177,15 +291,33 @@ export class MarginReportComponent implements OnInit {
             "Sub Category Name": x.sub_category_name,
             "HSN": x.hsn,
             "Selling Price": x.selling_price,
+            "Selling Price With GST" : x.selling_price_with_gst,
             "Purchase Price": x.purchase_price,
+            "Purchase Price With GST" : x.purchase_price_with_gst,
             "MRP": x.mrp,
-            "Discount": x.discount,
-            "Selling Margin age": x.selling_margin_percentage,
-            "Selling Margin amount": x.selling_margin_rupees,
-            "Purchase Margin age": x.purchase_margin_percentage,
-            "Purchase Margin amount": x.purchase_margin_rupees,
-            "Discount Margin age": x.discount_pr,
-            "Discount Margin amount": x.discount_amount,
+            "Profit Margin With Tax %": x.unit_profit_margin_with_tax_pr,
+            "Profit Margin With Tax Rs": x.unit_profit_margin_with_tax_rupees,
+
+            "Profit Margin Without Tax %": x.unit_profit_margin_without_tax_pr,
+            "Profit Margin Without Tax Rs": x.unit_profit_margin_without_tax_rupees,
+
+            "Purchase Margin With Tax Rs": x.unit_purchase_margin_with_tax_rupees,
+            "Purchase Margin With Tax %": x.unit_purchase_margin_with_tax_pr,
+
+            "Purchase Margin Without Tax Rs": x.unit_purchase_margin_without_tax_rupees,
+            "Purchase Margin Without Tax %": x.unit_purchase_margin_without_tax_pr,
+
+            "Discount Margin With Tax %": x.discount_per_unit_with_tax_pr,
+            "Discount Margin With Tax Rs": x.discount_per_unit_with_tax_rupees,
+
+            "Discount Margin Without Tax %": x.discount_per_unit_without_tax_pr,
+            "Discount Margin Without Tax Rs": x.discount_per_unit_without_tax_rupees,
+            // // "Selling Margin age": x.selling_margin_percentage,
+            // // "Selling Margin amount": x.selling_margin_rupees,
+            // // "Purchase Margin age": x.purchase_margin_percentage,
+            // // "Purchase Margin amount": x.purchase_margin_rupees,
+            // // "Discount Margin age": x.discount_pr,
+            // // "Discount Margin amount": x.discount_amount,
           };
         })
 
@@ -210,7 +342,7 @@ export class MarginReportComponent implements OnInit {
           }
         }
         console.log(body)
-        this.excelService.marginReport('Margin Report', excelData, body)
+        this.excelService.marginReportNew('Margin Report', excelData, body)
         this.spinner.hide();
       },
       (error) => {
@@ -284,6 +416,26 @@ export class MarginReportComponent implements OnInit {
   }
   selectFields(event) {
     this.params.field = event.value
+    this.searchTerm = undefined
+
+  }
+  additionalFilter(event) {
+    this.params.additional_filter = event.value
+    this.searchTerm = undefined
+
+  }
+  margintypeFields(event) {
+    this.params.margin_type = event.value
+    this.searchTerm = undefined
+
+  }
+  percentageFields(event) {
+    console.log("value",event);
+    
+    // this.params.field = event.value;
+    const range = event.value.split('-').map(item => parseInt(item));
+    this.params.filter_filed_1 = range[0]; // value of lower bound
+    this.params.filter_filed_2 = range[1];
     this.searchTerm = undefined
 
   }

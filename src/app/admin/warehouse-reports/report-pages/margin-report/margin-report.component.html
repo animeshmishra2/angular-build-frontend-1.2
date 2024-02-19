@@ -22,6 +22,15 @@
                 <p-dropdown [options]="fieldsArray" class="p-1" optionValue="id" optionLabel="name"
                     [(ngModel)]="params.field" (onChange)="selectFields($event)"
                     placeholder="Select a fields"></p-dropdown>
+                <p-dropdown [options]="additionalfields" class="p-1" optionValue="id" optionLabel="name"
+                    [(ngModel)]="params.additional_filter" (onChange)="additionalFilter($event)"
+                    placeholder="Additional Filter"></p-dropdown>
+                <p-dropdown [options]="margintype" class="p-1" optionValue="id" optionLabel="name"
+                    [(ngModel)]="params.margin_type" (onChange)="margintypeFields($event)"
+                    placeholder="Margin Type"></p-dropdown>
+                <p-dropdown [options]="filterpercent" class="p-1" optionValue="id" optionLabel="name"
+                   (onChange)="percentageFields($event)"
+                    placeholder="Percentage"></p-dropdown>
                 <mat-form-field style="margin-top: 15px ">
                     <mat-icon matPrefix>search</mat-icon>
                     <input [disabled]="!params.field" [(ngModel)]="searchTerm" matInput type="search"
@@ -47,7 +56,7 @@
             style="display: flex; align-items: center; flex-direction: row;flex-wrap:wrap; justify-content: center;">
 
             <mat-card class="example-card">
-                <mat-card-title class="example-header">Total Product</mat-card-title>
+                <mat-card-title class="example-header">Total Articles</mat-card-title>
                 <mat-card-content class="example-content">
                     <div style="display: flex;justify-content: center;">
                         <img src="../../../../../assets/icons/image (2).png" alt="">
@@ -60,27 +69,29 @@
                 </mat-card-content>
             </mat-card>
             <mat-card class="example-card ">
-                <mat-card-title class="example-header">Avg purchase margin with tax (Rs)</mat-card-title>
+                <mat-card-title class="example-header">Avg purchase margin with tax (%)(Rs)</mat-card-title>
                 <mat-card-content class="example-content">
                     <div style="display: flex;justify-content: center;">
                         <img src="../../../../../assets/icons/image (2).png" alt="">
                     </div>
                     <div class="example-text">
                         <div class="example-row" style="display: flex;justify-content: center;">
-                            <span class="example-value">{{stats?.avg_purchase_margin_with_tax}}</span>
+                            <span class="example-value">({{stats?.avg_purchase_margin_with_tax_pr}} %) / </span> &nbsp;
+                            <span class="example-value">({{stats?.avg_purchase_margin_with_tax  | currency: 'INR'}})</span>
                         </div>
                     </div>
                 </mat-card-content>
             </mat-card>
             <mat-card class="example-card ">
-                <mat-card-title class="example-header">Avg purchase margin without tax (Rs)</mat-card-title>
+                <mat-card-title class="example-header">Avg purchase margin without tax (%)(Rs)</mat-card-title>
                 <mat-card-content class="example-content">
                     <div style="display: flex;justify-content: center;">
                         <img src="../../../../../assets/icons/image (2).png" alt="">
                     </div>
                     <div class="example-text">
                         <div class="example-row" style="display: flex;justify-content: center;">
-                            <span class="example-value">{{stats?.avg_purchase_margin_without_tax}}</span>
+                            <span class="example-value">{{stats?.avg_purchase_margin_without_tax_pr}} %</span> &nbsp;
+                            <span class="example-value">{{stats?.avg_purchase_margin_without_tax  | currency: 'INR'}}</span>
                         </div>
                     </div>
                 </mat-card-content>
@@ -88,58 +99,62 @@
 
 
             <mat-card class="example-card ">
-                <mat-card-title class="example-header">Avg profit margin with tax(Rs)</mat-card-title>
+                <mat-card-title class="example-header">Avg profit margin with tax (%)(Rs)</mat-card-title>
                 <mat-card-content class="example-content">
                     <div style="display: flex;justify-content: center;">
                         <img src="../../../../../assets/icons/image (2).png" alt="">
                     </div>
                     <div class="example-text">
                         <div class="example-row" style="display: flex;justify-content: center;">
-                            <span class="example-value">{{stats?.avg_profit_margin_with_tax}}</span>
+                            <span class="example-value">{{stats?.avg_profit_margin_with_tax_pr}} %</span> &nbsp;
+                            <span class="example-value">{{stats?.avg_profit_margin_with_tax  | currency: 'INR'}}</span>
                         </div>
                     </div>
                 </mat-card-content>
             </mat-card>
             <mat-card class="example-card ">
-                <mat-card-title class="example-header">Avg profit margin without tax(Rs)</mat-card-title>
+                <mat-card-title class="example-header">Avg profit margin without tax (%)(Rs)</mat-card-title>
                 <mat-card-content class="example-content">
                     <div style="display: flex;justify-content: center;">
                         <img src="../../../../../assets/icons/image (2).png" alt="">
                     </div>
                     <div class="example-text">
                         <div class="example-row" style="display: flex;justify-content: center;">
-                            <span class="example-value">{{stats?.avg_profit_margin_without_tax}}</span>
+                            <span class="example-value">{{stats?.avg_profit_margin_without_tax_pr}}%</span> &nbsp;
+                            <span class="example-value">{{stats?.avg_profit_margin_without_tax  | currency: 'INR'}}</span>
                         </div>
                     </div>
                 </mat-card-content>
             </mat-card>
             <mat-card class="example-card ">
-                <mat-card-title class="example-header">Avg discount margin with tax(Rs)</mat-card-title>
+                <mat-card-title class="example-header">Avg discount margin with tax (%)(Rs)</mat-card-title>
                 <mat-card-content class="example-content">
                     <div style="display: flex;justify-content: center;">
                         <img src="../../../../../assets/icons/image (2).png" alt="">
                     </div>
                     <div class="example-text">
                         <div class="example-row" style="display: flex;justify-content: center;">
-                            <span class="example-value">{{stats?.avg_discount_margin_with_tax}}</span>
+                            <span class="example-value">{{stats?.avg_discount_margin_with_tax_pr}}%</span> &nbsp;
+                            <span class="example-value">{{stats?.avg_discount_margin_with_tax  | currency: 'INR'}}</span>
                         </div>
                     </div>
                 </mat-card-content>
             </mat-card>
             <mat-card class="example-card ">
-                <mat-card-title class="example-header">Avg discount margin without tax(Rs)</mat-card-title>
+                <mat-card-title class="example-header">Avg discount margin without tax (%)(Rs)</mat-card-title>
                 <mat-card-content class="example-content">
                     <div style="display: flex;justify-content: center;">
                         <img src="../../../../../assets/icons/image (2).png" alt="">
                     </div>
                     <div class="example-text">
                         <div class="example-row" style="display: flex;justify-content: center;">
-                            <span class="example-value">{{stats?.avg_discount_margin_without_tax}}</span>
+                            <span class="example-value">{{stats?.avg_discount_margin_without_tax_pr}}%</span> &nbsp;
+                            <span class="example-value">{{stats?.avg_discount_margin_without_tax  | currency: 'INR'}}</span>
                         </div>
                     </div>
                 </mat-card-content>
             </mat-card>
-            <mat-card class="example-card ">
+            <!-- <mat-card class="example-card ">
                 <mat-card-title class="example-header">Average Purchase Margin With Tax(%)</mat-card-title>
                 <mat-card-content class="example-content">
                     <div style="display: flex;justify-content: center;">
@@ -151,8 +166,8 @@
                         </div>
                     </div>
                 </mat-card-content>
-            </mat-card>
-            <mat-card class="example-card ">
+            </mat-card> -->
+            <!-- <mat-card class="example-card ">
                 <mat-card-title class="example-header">Average Purchase Margin Without Tax(%)</mat-card-title>
                 <mat-card-content class="example-content">
                     <div style="display: flex;justify-content: center;">
@@ -164,8 +179,8 @@
                         </div>
                     </div>
                 </mat-card-content>
-            </mat-card>
-            <mat-card class="example-card ">
+            </mat-card> -->
+            <!-- <mat-card class="example-card ">
                 <mat-card-title class="example-header">Average Profit Margin With Tax(%)</mat-card-title>
                 <mat-card-content class="example-content">
                     <div style="display: flex;justify-content: center;">
@@ -177,8 +192,8 @@
                         </div>
                     </div>
                 </mat-card-content>
-            </mat-card>
-            <mat-card class="example-card ">
+            </mat-card> -->
+            <!-- <mat-card class="example-card ">
                 <mat-card-title class="example-header">Average Profit Margin Without Tax(%)</mat-card-title>
                 <mat-card-content class="example-content">
                     <div style="display: flex;justify-content: center;">
@@ -190,8 +205,8 @@
                         </div>
                     </div>
                 </mat-card-content>
-            </mat-card>
-            <mat-card class="example-card ">
+            </mat-card> -->
+            <!-- <mat-card class="example-card ">
                 <mat-card-title class="example-header">Average Discount Margin With Tax(%)</mat-card-title>
                 <mat-card-content class="example-content">
                     <div style="display: flex;justify-content: center;">
@@ -203,8 +218,8 @@
                         </div>
                     </div>
                 </mat-card-content>
-            </mat-card>
-            <mat-card class="example-card ">
+            </mat-card> -->
+            <!-- <mat-card class="example-card ">
                 <mat-card-title class="example-header">Average Discount Margin Without Tax(%)</mat-card-title>
                 <mat-card-content class="example-content">
                     <div style="display: flex;justify-content: center;">
@@ -216,7 +231,7 @@
                         </div>
                     </div>
                 </mat-card-content>
-            </mat-card>
+            </mat-card> -->
             <mat-card class="example-card ">
                 <mat-card-title class="example-header">Average Selling Cost Without Tax(Rs)</mat-card-title>
                 <mat-card-content class="example-content">
@@ -225,7 +240,7 @@
                     </div> 
                     <div class="example-text">
                         <div class="example-row" style="display: flex;justify-content: center;">
-                            <span class="example-value">{{stats?.avg_selling_cost_without_tax}}</span>
+                            <span class="example-value">{{stats?.avg_selling_cost_without_tax  | currency: 'INR'}}</span>
                         </div>
                     </div>
                 </mat-card-content>
@@ -238,7 +253,7 @@
                     </div> 
                     <div class="example-text">
                         <div class="example-row" style="display: flex;justify-content: center;">
-                            <span class="example-value">{{stats?.avg_selling_cost_with_tax}}</span>
+                            <span class="example-value">{{stats?.avg_selling_cost_with_tax | currency: 'INR'}}</span>
                         </div>
                     </div>
                 </mat-card-content>
@@ -251,7 +266,7 @@
                     </div> 
                     <div class="example-text">
                         <div class="example-row" style="display: flex;justify-content: center;">
-                            <span class="example-value">{{stats?.avg_purchase_cost_without_tax}}</span>
+                            <span class="example-value">{{stats?.avg_purchase_cost_without_tax | currency: 'INR'}}</span>
                         </div>
                     </div>
                 </mat-card-content>
@@ -264,7 +279,7 @@
                     </div> 
                     <div class="example-text">
                         <div class="example-row" style="display: flex;justify-content: center;">
-                            <span class="example-value">{{stats?.avg_purchase_cost_with_tax}}</span>
+                            <span class="example-value">{{stats?.avg_purchase_cost_with_tax | currency: 'INR'}}</span>
                         </div>
                     </div>
                 </mat-card-content>
@@ -272,7 +287,14 @@
         </div>
         <div class="ml-2" style="display: flex; align-items: center; justify-content: space-between;">
             <div class="h1-txt p-2">
-                Margin Report Table
+                <span *ngIf="!params.field"></span>Margin Report Table  <br/><br/>
+                <span *ngIf="params.field">
+                    Filter By 
+                    <span style="color: blue; font-family: Arial;">{{params.field}}</span> &nbsp;
+                    <span style="color: red; font-family: 'Times New Roman';">{{searchTerm}}</span>  &nbsp;
+                    Total Records Found
+                    <span style="color: green; font-family: Verdana;">{{totalRecords}}</span>
+                </span>
             </div> 
 
         </div>
@@ -308,16 +330,22 @@
                         <th rowspan="2">Product Name</th>
                         <th rowspan="2">Category Name</th>
                         <th rowspan="2">Sub Category Name</th>
-                        <th rowspan="2">hsn</th>
+                        <th rowspan="2">HSN</th>
                         <th rowspan="2">Selling Price</th>
+                        <th rowspan="2">Selling Price With Gst</th>
                         <th rowspan="2">Purchase Price</th>
+                        <th rowspan="2">Purchase Price With Gst</th>
                         <th rowspan="2">MRP</th>
-                        <th rowspan="2">Discount</th>
-                        <th class="text-center" colspan="2">Selling Margin</th>
-                        <th class="text-center" colspan="2">Purchase Margin</th>
-                        <th class="text-center" colspan="2">Discount Margin</th>
+                        <!-- <th rowspan="2">Discount</th> -->
+                       
+                        <th class="text-center" colspan="2">Purchase Margin With Tax (%)(Rs)</th>
+                        <th class="text-center" colspan="2">Purchase Margin Without Tax (%)(Rs)</th>
+                        <th class="text-center" colspan="2">Profit Margin  With Tax (%)(Rs)</th>
+                        <th class="text-center" colspan="2">Profit Margin  Without Tax (%)(Rs)</th>
+                        <th class="text-center" colspan="2">Discount Margin  With Tax (%)(Rs)</th>
+                        <th class="text-center" colspan="2">Discount Margin  Without Tax (%)(Rs)</th>
                     </tr>
-                    <tr class="text-center">
+                    <!-- <tr class="text-center">
                         <th>%age</th>
                         <th>Amount</th>
                         <th>%age</th>
@@ -325,7 +353,7 @@
                         <th>%age</th>
                         <th>Amount</th>
 
-                    </tr>
+                    </tr> -->
                 </ng-template>
                 <ng-template pTemplate="body" let-record>
                     <tr>
@@ -336,15 +364,32 @@
                         <td>{{ record.sub_category_name }}</td>
                         <td>{{ record.hsn }}</td>
                         <td>{{ record.selling_price | number:'1.2-2' }}</td>
-                        <td>{{ record.purchase_price | number:'1.2-2'}}</td>
+                       
+                        <td>{{ record.selling_price_with_gst | number:'1.2-2'}}</td>
+                        <td>{{ record.purchase_price_with_gst | number:'1.2-2' }}</td>
                         <td>{{ record.mrp | number:'1.2-2'}}</td>
-                        <td>{{ record.discount | number:'1.2-2'}}</td>
-                        <td>{{ record.selling_margin_percentage | number:'1.2-2'}}</td>
-                        <td>{{ record.selling_margin_rupees | number:'1.2-2' }}</td>
-                        <td>{{ record.purchase_margin_percentage | number:'1.2-2' }}</td>
+                        <!-- <td>{{ record.discount | number:'1.2-2'}}</td> -->
+
+
+                        <td>{{ record.unit_purchase_margin_with_tax_pr}}%</td>
+                        <td>{{ record.unit_purchase_margin_with_tax_rupees | currency:'INR':'symbol':'1.2-2' }}</td>
+                        <td>{{ record.unit_purchase_margin_without_tax_pr}}%</td>
+                        <td>{{ record.unit_purchase_margin_without_tax_rupees | currency:'INR':'symbol':'1.2-2' }}</td>
+
+                        <td>{{ record.unit_profit_margin_with_tax_pr}}%</td>
+                        <td>{{ record.unit_profit_margin_with_tax_rupees | currency:'INR':'symbol':'1.2-2' }}</td>
+                        <td>{{ record.unit_profit_margin_without_tax_pr}}%</td>
+                        <td>{{ record.unit_profit_margin_without_tax_rupees | currency:'INR':'symbol':'1.2-2' }}</td>
+
+                        <td>{{ record.discount_per_unit_with_tax_pr}}%</td>
+                        <td>{{ record.discount_per_unit_with_tax_rupees | currency:'INR':'symbol':'1.2-2' }}</td>
+                        <td>{{ record.discount_per_unit_without_tax_pr}}%</td>
+                        <td>{{ record.discount_per_unit_without_tax_rupees | currency:'INR':'symbol':'1.2-2' }}</td>
+                        
+                        <!-- <td>{{ record.purchase_margin_percentage | number:'1.2-2' }}</td>
                         <td>{{ record.purchase_margin_rupees | number:'1.2-2'}}</td>
                         <td>{{ record.discount_pr | number:'1.2-2'}}</td>
-                        <td>{{ record.discount_amount | number:'1.2-2'}}</td>
+                        <td>{{ record.discount_amount | number:'1.2-2'}}</td> -->
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">

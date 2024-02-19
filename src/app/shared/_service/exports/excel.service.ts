@@ -125,6 +125,39 @@ public exportAsExcelFile(fileName:string,List:any[],sheet:string): void {
     })
    
   }
+  marginReportNew(fileName,json,body){
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet('My Sheet');
+    sheet.addRow([`Report Type- ${body.reportName}`])
+    sheet.addRow([`Stort/warehouse Name - ${body.warehouseName.name}`])
+    sheet.addRow([` `])
+    const header:any = Object.keys(json[0])
+    let heading=sheet.addRow(header);
+    heading.eachCell((cell, number) => {
+
+      cell.font = { family: 4, size: 12, bold: true };
+      cell.alignment = { horizontal: 'center' }
+    })
+    sheet.mergeCells('A1:G1');
+    sheet.mergeCells('A2:G2');
+    json.forEach((row: any) => {
+      sheet.addRow(Object.values(row))
+    })
+   
+    sheet.columns.forEach((column:any) => {
+      const lengths = column.values.map(v => v.toString().length);
+      const maxLength = Math.max(...lengths.filter(v => typeof v === 'number'));
+      column.width = maxLength;
+    });
+
+    workbook.xlsx.writeBuffer().then(data=>{
+      let blob = new Blob([data],{
+        type: EXCEL_TYPE
+      })
+      FileSaver.saveAs(blob, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+    })
+   
+  }
   purchaseReport(fileName,json,body){
     const workbook = new ExcelJS.Workbook();
     const sheet = workbook.addWorksheet('My Sheet');
@@ -407,6 +440,41 @@ public exportAsExcelFile(fileName:string,List:any[],sheet:string): void {
     })
    
   }
+
+  OrderReportNew(fileName,json,body){
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet('My Sheet');
+    sheet.addRow([`Report Type- ${body.reportName}`])
+    sheet.addRow([`Stort/warehouse Name - ${body.warehouseName.name}`])
+    sheet.addRow([` `])
+    const header:any = Object.keys(json[0])
+    let heading=sheet.addRow(header);
+    heading.eachCell((cell, number) => {
+
+      cell.font = { family: 4, size: 12, bold: true };
+      cell.alignment = { horizontal: 'center' }
+    })
+    sheet.mergeCells('A1:G1');
+    sheet.mergeCells('A2:G2');
+    json.forEach((row: any) => {
+      sheet.addRow(Object.values(row))
+    })
+   
+    sheet.columns.forEach((column:any) => {
+      const lengths = column.values.map(v => v.toString().length);
+      const maxLength = Math.max(...lengths.filter(v => typeof v === 'number'));
+      column.width = maxLength;
+    });
+
+    workbook.xlsx.writeBuffer().then(data=>{
+      let blob = new Blob([data],{
+        type: EXCEL_TYPE
+      })
+      FileSaver.saveAs(blob, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+    })
+   
+  }
+
   yearOverYeraReport(fileName,json,body){
     const workbook = new ExcelJS.Workbook();
     const sheet = workbook.addWorksheet('My Sheet');

@@ -63,40 +63,48 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th rowspan="2">Order ID</th>
-                        <th rowspan="2">Customer Name</th>
-                        <th rowspan="2">Store</th>
-                        <th rowspan="2">Quantity</th>
-                        <th rowspan="2">Discount Type</th>
-                        <th rowspan="2">Total Discount</th>
-                        <th class="text-center" colspan="2">GST</th>
-                        <th class="text-center" colspan="2">Profit</th>
-                        <th rowspan="2">Price</th>          
-                        <th rowspan="2">Created Date</th>          
-                        <th rowspan="2">Products Details</th>
+                        <th rowspan="2">Bill No / Bill Date</th>
+                        <th rowspan="2">Customer Name / Phone No</th>
+                        <th rowspan="2">Store Name</th>
+                        <th rowspan="2">Order Type</th>
+                        <th rowspan="2">Payment Type</th>
+                        <th rowspan="2">Delivery Type</th>
+                        <th rowspan="2">Membership Type</th>
+                        <th rowspan="2">Total Quantity</th> 
+                        <th rowspan="2">Total MRP</th>          
+                        <th rowspan="2">Total Extra Discount</th>
+                        <th colspan="2">Unit Discount</th>         
+                        <th colspan="3">Total GST (%)(Rs)</th>
+                        <th rowspan="2">Total Paid Amount</th>
+                        <th rowspan="2">Product Details</th>
                     </tr>
                     <tr class="text-center">
-                        <th>CGST %</th>
-                        <th>SGST %</th>
-                        <th>Profit %</th>
-                        <th>Profit(Rs)</th>
+                        <th>Discount Type</th>
+                        <th>Discount</th>
+                        <th>CGST(%)(Rs)</th>
+                        <th>SGST(%)(Rs)</th>
+                        <th>IGST(%)(Rs)</th>
                        
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-record>
                     <tr [ngClass]="{'low-rated':record.billed_in_loss==1}">
-                        <td>{{ record.idcustomer_order }}</td>
-                        <td>{{ record.customer_name}}</td>
-                        <td>{{ record.store_warehouse}}</td>
-                        <td>{{ record.quantity}}</td>
-                        <td>{{ record.discount_type}}</td>
-                        <td>{{ record.total_discount | number:'1.2-2'}}</td>
-                        <td>{{ record.cgst | number:'1.2-2'}}</td>
-                        <td>{{ record.sgst | number:'1.2-2'}}</td>
-                        <td>{{ record.profit_pr | number:'1.2-2' }}</td>
-                        <td>{{ record.profit_rs | number:'1.2-2'}}</td>
-                        <td>{{ record.price| number:'1.2-2'}}</td>
-                        <td>{{ record.created_at | date}}</td>
+                        <td>{{ record.idcustomer_order }} / {{record?.bill_date | date}}</td>
+                        <td>{{ record.customer_name ? record.customer_name : 'NA'}} / {{record?.phone_no ? record?.phone_no : 'NA'}}</td>
+                        <td>{{ record.store_name}}</td>
+                        <td>{{ record.order_type ? record.order_type : 'NA'}}</td>
+                        <td>{{ record.payment_type}}</td>
+                        <td>{{ record.delivery_type}}</td>
+                        <td>{{ record.membership_type ? record.membership_type : 'NA'}}</td>
+                        <td>{{ record.total_quantity}}</td>
+                        <td>{{ record.total_mrp | currency:'INR':'symbol':'1.2-2'}}</td>
+                        <td>{{( record.extraDisc | currency:'INR':'symbol':'1.2-2') ? (record.extraDisc | currency:'INR':'symbol':'1.2-2') : 'NA'}}</td>
+                        <td>{{getDiscountTypeName(record?.discount_type)}}</td>
+                        <td>{{record?.total_discount ? record?.total_discount : 'NA'}}</td>
+                        <td>({{record?.total_cgst_pr}}%) / ({{record?.total_cgst_amount | currency:'INR':'symbol':'1.2-2'}})</td>
+                        <td>({{record?.total_sgst_pr}}%) / ({{record?.total_sgst_amount | currency:'INR':'symbol':'1.2-2'}})</td>
+                        <td>({{record?.totigst_pr}}%) / ({{record?.totigst_amount ? (record?.totigst_amount | currency:'INR':'symbol':'1.2-2') : 'NA'}})</td>
+                        <td>{{record?.total_paid_amount | currency:'INR':'symbol':'1.2-2'}}</td>
                         <td style="text-align: center">
                             <button pButton type="button" class="p-button-secondary" icon="pi pi-book" (click)="OrderDetails(record)"></button>
                         </td>

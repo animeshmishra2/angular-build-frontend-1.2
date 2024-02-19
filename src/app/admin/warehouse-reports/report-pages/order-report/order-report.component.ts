@@ -12,7 +12,13 @@ import { Store, Warehouse } from '../inventory-report/inventory-report.component
 })
 export class OrderReportComponent implements OnInit {
  
-
+  discountTypes: { [key: string]: string } = {
+    'CDA': 'Cash Discount Amount',
+    'CDP': 'Cash Discount Percentage',
+    'COU': 'Coupon',
+    'DFD': 'Dynamic Fixed Discount',
+    'PKG': 'Membership Package'
+  };
   tableData!: any[];
   totalRecords = 0
   dateRange!: any[] | undefined;
@@ -100,20 +106,34 @@ export class OrderReportComponent implements OnInit {
         const excelData = tableData.map((x) => {
 
           return {
-            "Order ID": x.idcustomer_order.toString(),
-            "Customer Name": x.customer_name,
-            "Store Name": x.store_warehouse,
-            "Quantity": x.quantity,
-            "Discount Type": x.discount_type,
-            "Total Discount": x.total_discount,
-            "CGST": x.cgst,
-            "SGST": x.sgst,
-            "Profit": x.profit_pr,
-            "Profit(Rs)": x.profit_rs,
-            "Price": x.price,
-            "Created Date": x.created_at,
-            "No of Products": x.products.length,
-            "isLoss":x.billed_in_loss
+            "BillNo / Bill Date": x.idcustomer_order +'/'+x.bill_date,
+            "Customer Name / Phone No": x.customer_name + '/' + x.phone_no,
+            "Store Name": x.store_name,
+            "Order Type" : x.order_type,
+            "Payment Type": x.payment_type,
+            "Delivery Type" : x.delivery_type,
+            "Membership Type" : x.membership_type,
+            "Total Quantity" : x.total_quantity,
+            "Total MRP" : x.total_mrp,
+            "Total Discount" : x.total_discount,
+            "Discount Type" : x.discount_type,
+            "Extra Discount" : x.extraDisc,
+            "Total CGST (%)(Rs)": (x.total_cgst_pr) / (x.total_cgst_amount),
+            "Total SGST (%)(Rs)": (x.total_sgst_pr) / (x.total_sgst_amount),
+            "Total IGST (%)(Rs)" : (x.totigst_pr) / (x.igst_amount),
+            "Total Paid Amount" : x.total_paid_amount
+
+            // "Quantity": x.quantity,
+            // "Discount Type": x.discount_type,
+            // "Total Discount": x.total_discount,
+            // "CGST": x.cgst,
+            // "SGST": x.sgst,
+            // "Profit": x.profit_pr,
+            // "Profit(Rs)": x.profit_rs,
+            // "Price": x.price,
+            // "Created Date": x.created_at,
+            // "No of Products": x.products.length,
+            // "isLoss":x.billed_in_loss
           };
         })
       
@@ -138,7 +158,7 @@ export class OrderReportComponent implements OnInit {
         }
         }
         console.log(body)
-        this.excelService.OrderReport('Order Report', excelData,body)
+        this.excelService.OrderReportNew('Order Report', excelData,body)
         this.spinner.hide();
       },
       (error) => {
@@ -148,6 +168,10 @@ export class OrderReportComponent implements OnInit {
       }
     );
   }
+  getDiscountTypeName(key: string): string {
+    return this.discountTypes[key] || key;
+  }
+
   exportPdf() { }
   clearAllData(event) {
     this.params = {

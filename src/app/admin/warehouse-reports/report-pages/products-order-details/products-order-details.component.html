@@ -15,33 +15,43 @@
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th rowspan="1">Inventory ID</th>
+                        <th rowspan="1">Bar Code</th>
+                        <th rowspan="1">Brand Name</th>
+                        <th rowspan="1">Category Name</th>
                         <th rowspan="1">Product Name</th>
-                        <th rowspan="1">HSN Code</th>
-                        <th rowspan="1">Quantity</th>
-                        <th rowspan="1">Package Name</th>
-                        <th rowspan="1">CGST</th>
-                        <th rowspan="1">SGST</th>
-                        <th rowspan="1">profit %</th>
-                        <th rowspan="1">profit(Rs)</th>
+                        <th rowspan="1">HSN</th>
                         <th rowspan="1">Discount</th>
-                        <th rowspan="1">Price</th>
+                        <th rowspan="1">Profit(%)</th>
+                        <th rowspan="1">Purchase Price With Gst</th>
+                        <th rowspan="1">Purchase Price Without Gst</th>
+                        <th rowspan="1">Quantity</th>
+                        <th rowspan="1">Selling Price With Gst</th>
+                        <th rowspan="1">Selling Price Without Gst</th>
+                        <th>Sub category Name</th>
+                        <th>Unit Mrp</th>
+                        <th>Total CGST(%)(Rs)</th>
+                        <th>Total SGST (%)(Rs)</th>
                     
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-record>
                     <tr [ngClass]="{'low-rated':record.billed_in_loss==1}">
-                        <td>{{ record.idinventory}}</td>
-                        <td>{{ record.product_name}}</td>
-                        <td>{{ record.HSN_code}}</td>
-                        <td>{{ record.quantity }}</td>
-                        <td>{{ record.package_name}}</td>
-                        <td>{{ record.cgst | number:'1.2-2'}}</td>
-                        <td>{{ record.sgst | number:'1.2-2'}}</td>
-                        <td>{{ record.profit_pr | number:'1.2-2'}}</td>
-                        <td>{{ record.profit_rs | number:'1.2-2'}}</td>
-                        <td>{{ record.discount | number:'1.2-2'}}</td>
-                        <td>{{ record.price | number:'1.2-2'}}</td>
+                        <td>{{ record.barcode}}</td>
+                        <td>{{ record.brand_name}}</td>
+                        <td>{{ record.category_name}}</td>
+                        <td>{{ record.name }}</td>
+                        <td>{{ record.hsn}}</td>
+                        <td>{{record?.discount}}</td>
+                        <td>{{record?.profit}}</td>
+                        <td>{{ record.purchase_price_with_gst | number:'1.2-2'}}</td>
+                        <td>{{ record.purchase_price_without_gst | number:'1.2-2'}}</td>
+                        <td>{{record?.quantity}}</td>
+                        <td>{{ record.selling_price_with_gst | number:'1.2-2'}}</td>
+                        <td>{{ record.selling_price_without_gst | number:'1.2-2'}}</td>
+                        <td>{{record?.sub_category_name}}</td>
+                        <td>{{ record.unit_mrp | number:'1.2-2'}}</td>
+                        <td>({{ (record.total_cgst_pr | number:'1.2-2')}})/ ({{ (record.total_cgst_amount | number:'1.2-2')}})</td>
+                        <td>({{ (record.total_sgst_pr | number:'1.2-2')}})/ ({{ (record.total_sgst_amount | number:'1.2-2')}})</td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">

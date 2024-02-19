@@ -109,6 +109,7 @@ export class TotalPurchaseReportComponent implements OnInit {
 
         const exceldata = tableData.map(x => {
           return {
+            "Bill Number": x.bill_number,
             "Product Name": x.name,
             "Vendor Name": x.vendor_name,
             "Category": x.category_name,
@@ -117,6 +118,8 @@ export class TotalPurchaseReportComponent implements OnInit {
             "HSN": x.hsn,
             "Barcode": x.barcode,
             "MRP": x.mrp,
+            "Expiry": x.expiry,
+            "Purchase Price": x.unit_purchase_price,
             "Taxable Purchase Price (Rs)": x.unit_purchase_price,
             "Purchase Price with Tax": (x.unit_purchase_price + (x.cgst_amount + x.sgst_amount)/x.quantity),
             "Purchase Margin (%)": (((x.mrp -((x.unit_purchase_price + (x.cgst_amount + x.sgst_amount)/x.quantity))))/x.mrp) * 100 ,

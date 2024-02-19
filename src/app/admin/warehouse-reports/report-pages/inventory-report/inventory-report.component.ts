@@ -57,7 +57,17 @@ export class InventoryReportComponent implements OnInit {
     {
       type:"replenishment_products",
       name :"Replenishment products"
-    }
+    },
+    {
+      type:"out_of_stock",
+      name :"Out of Stock"
+    },
+    {
+      type:"near_to_threshold",
+      name :"Near to Threshold"
+    },
+    
+    
   ]
   fieldsArray = [
     {
@@ -79,6 +89,10 @@ export class InventoryReportComponent implements OnInit {
     {
       id: "brand",
       name: "Brand"
+    },
+    {
+      id: "hsn",
+      name: "HSN"
     }
   ]
   params: any = {
@@ -141,7 +155,8 @@ export class InventoryReportComponent implements OnInit {
     this.apiService.getInventoryReport(tempobject).subscribe(
       (response) => {
         const excelData = response.data.map((x) => {
-
+          console.log("x",x);
+          
           return {
             "Barcode": x.barcode,
             "Brand": x.brand_name,
@@ -151,9 +166,16 @@ export class InventoryReportComponent implements OnInit {
             "HSN": x.hsn,
             "Expiry": x.expiry,
             "MRP": x.mrp,
-            "Quantity Left": x.total_quantity,
             "Purchase Price": x.purchase_price,
-            "Purchase Cost": x.purchase_cost,
+            "Purchase Cost With Gst": x.purchase_cost_with_gst,
+            "Purchase Cost Without Gst": x.purchase_cost_without_gst,
+            "Purchase Price With Gst": x.purchase_price_with_gst,
+            "Retail Cost With Gst" : x.ratai_cost_with_gst,
+            "Retail Cost Without Gst": x.ratai_cost_without_gst,
+            "Selling Price" : x.selling_price,
+            "Selling Price With Gst" : x.selling_price_with_gst,
+            "Threshold Quantity" : x.threshold_quantity,
+            "Total Quantity Left" : x.total_quantity_left
           };
         })
         let body: any = {
@@ -400,7 +422,7 @@ export class InventoryReportComponent implements OnInit {
       }
       return formattedAmount;
     } else {
-      return amount.toFixed(0) + ' Rupee';
+      return amount?.toFixed(0) + ' Rupee';
     }
   }
   filterByStore(event) {

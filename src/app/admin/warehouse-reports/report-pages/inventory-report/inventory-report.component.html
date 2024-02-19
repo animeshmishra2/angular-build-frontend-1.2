@@ -52,7 +52,7 @@
             style="display: flex; align-items: center; flex-direction: row;flex-wrap:wrap; justify-content: center;">
 
             <mat-card class="example-card">
-                <mat-card-title class="example-header">Total Articals</mat-card-title>
+                <mat-card-title class="example-header">Total Articles</mat-card-title>
                 <mat-card-content class="example-content">
                     <div style="display: flex;justify-content: center;">
                         <img src="../../../../../assets/icons/image (2).png" alt="">
@@ -85,7 +85,8 @@
                     </div>
                     <div class="example-text">
                         <div class="example-row" style="display: flex;justify-content: center;">
-                            <span class="example-value">{{formatAmount(stats?.total_inventory_cost_with_tax )}}</span>
+                            <!-- <span class="example-value">{{formatAmount(stats?.total_inventory_cost_with_tax )}}</span> -->
+                            <span class="example-value">{{stats?.total_inventory_cost_with_tax | currency: 'INR'}}</span>
                         </div>
                     </div>
                 </mat-card-content>
@@ -98,33 +99,36 @@
                     </div>
                     <div class="example-text">
                         <div class="example-row" style="display: flex;justify-content: center;">
-                            <span class="example-value">{{formatAmount(stats?.total_inventory_cost_without_tax )}}</span>
+                            <!-- <span class="example-value">{{formatAmount(stats?.total_inventory_cost_without_tax )}}</span> -->
+                            <span class="example-value">{{stats?.total_inventory_cost_without_tax | currency: 'INR'}}</span>
                         </div>
                     </div>
                 </mat-card-content>
             </mat-card>
             <mat-card class="example-card ">
-                <mat-card-title class="example-header">Total retail Cost <br> (With tax)</mat-card-title>
+                <mat-card-title class="example-header">Total Retail Cost <br> (With tax)</mat-card-title>
                 <mat-card-content class="example-content">
                     <div style="display: flex;justify-content: center;">
                         <img src="../../../../../assets/icons/image (2).png" alt="">
                     </div>
                     <div class="example-text">
                         <div class="example-row" style="display: flex;justify-content: center;">
-                            <span class="example-value">{{formatAmount(stats?.total_ratail_cost_with_tax )}}</span>
+                            <!-- <span class="example-value">{{formatAmount(stats?.total_ratail_cost_with_tax )}}</span> -->
+                            <span class="example-value">{{stats?.total_ratail_cost_with_tax | currency: 'INR'}}</span>
                         </div>
                     </div>
                 </mat-card-content>
             </mat-card>
             <mat-card class="example-card ">
-                <mat-card-title class="example-header">Total retail Cost <br> (Without tax)</mat-card-title>
+                <mat-card-title class="example-header">Total Retail Cost <br> (Without tax)</mat-card-title>
                 <mat-card-content class="example-content">
                     <div style="display: flex;justify-content: center;">
                         <img src="../../../../../assets/icons/image (2).png" alt="">
                     </div>
                     <div class="example-text">
                         <div class="example-row" style="display: flex;justify-content: center;">
-                            <span class="example-value">{{formatAmount(stats?.total_ratail_cost_without_tax )}}</span>
+                            <!-- <span class="example-value">{{formatAmount(stats?.total_ratail_cost_without_tax )}}</span> -->
+                            <span class="example-value">{{stats?.total_ratail_cost_without_tax  | currency: 'INR'}}</span>
                         </div>
                     </div>
                 </mat-card-content>
@@ -132,7 +136,14 @@
         </div>
         <div class="ml-2" style="display: flex; align-items: center; justify-content: space-between;">
             <div class="h1-txt p-2">
-                Inventory Report Table
+                <span *ngIf="!params.field"></span> Inventory Report Table   <br/><br/>
+                <span *ngIf="params.field">
+                    Filter By 
+                    <span style="color: blue; font-family: Arial;">{{params.field}}</span> &nbsp;
+                    <span style="color: red; font-family: 'Times New Roman';">{{searchTerm}}</span>  &nbsp;
+                    Total Records Found
+                    <span style="color: green; font-family: Verdana;">{{totalRecords}}</span>
+                </span>
             </div>
 
         </div>
@@ -150,16 +161,16 @@
                         <th>Sub Category</th>
                         <th>HSN</th>
                         <th>Unit MRP (Rs)</th>
-                        <th>Unit Purchase Price</th>
-                        <th>Unit Selling Price</th>
-                        <th>Purchase Price (with GST)</th>
-                        <th>Selling Price (with GST)</th>
-                        <th>Total Quantity Left</th>
-                        <th>Threshold quantity</th>
-                        <th>Total purchase cost(with GST)</th>
-                        <th>Total purchase cost(without GST)</th>
-                        <th>Total retail cost(with GST)</th>
-                        <th>Total retail cost(without GST)</th>
+                        <th>Unit Purchase Price (Rs)</th>
+                        <th>Unit Selling Price (Rs)</th>
+                        <th>Purchase Price (with GST) (Rs)</th>
+                        <th>Selling Price (with GST) (Rs)</th>
+                        <th>Total Quantity Left(No)</th>
+                        <th>Threshold Quantity(No)</th>
+                        <th>Total Purchase Cost(with GST) (Rs)</th>
+                        <th>Total Purchase Cost(without GST) (Rs)</th>
+                        <th>Total Retail Cost(with GST) (Rs)</th>
+                        <th>Total Retail Cost(without GST) (Rs)</th>
                     </tr>
                 </ng-template>
 
